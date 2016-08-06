@@ -1,0 +1,47 @@
+<h3>Add a account</h3>
+<br>
+<% if ( locals.messages.error ) { %>
+    <div class="flash alert alert-danger" role="alert"><%= locals.messages.error %></div>
+<% } %>
+<form id="user-add-form" method="post" action="/backend/account/add">
+	<table>
+		<tr>
+			<th><label>username: </label></th>
+			<th><input name="username" type='text'></input></th>
+		</tr>
+		<tr>
+			<th><label>password: </label></th>
+			<th><input name="password" type='password'></input></th>
+		</tr>
+		<tr>
+			<th><label>type: </label></th>
+			<th>
+				<select form="user-add-form" class="selectType" data-style="btn-info" name="selectType">
+			        <optgroup label="type's ">
+			            <option name="normal" value="normal">normal</option>
+			            <option name="admin" value="admin">admin</option>
+			        </optgroup>
+			    </select>
+		    </th>
+		</tr>
+		<tr>
+			<th><label>Birthday: </label></th>
+			<th><input type="date" name="date"></input></th>
+		</tr>
+		<tr>
+			<th></th>
+			<th><input type='submit' value="add!"></input></th>
+		</tr>
+
+	<!--<label>username: </label><input name="username" type='text'></input>
+	<label>password: </label><input name="password" type='password'></input>
+	<label>type: </label>
+	<select form="user-add-form" class="selectType" data-style="btn-info" name="selectType">
+        <optgroup label="type's ">
+            <option name="user" value="user">user</option>
+            <option name="admin" value="admin">admin</option>
+        </optgroup>
+    </select>
+	<input type='submit' value="add!"></input>-->
+	</table>
+</form>

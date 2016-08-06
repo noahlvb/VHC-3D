@@ -1,0 +1,8 @@
+<% if ( locals.messages.error ) { %>
+    <div class="flash alert alert-danger" role="alert"><%= locals.messages.error %></div>
+<% } %>
+<form action='/login', method='post'>
+    <label>username</label><input type='text', name='username', placeholder='username'><br>
+    <label>password</label><input type='password', name='password', placeholder='password'><br>
+    <input type='submit', value='Sign In', data-transition='fade', data-theme='c'>
+</form>
