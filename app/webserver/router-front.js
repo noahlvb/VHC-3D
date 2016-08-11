@@ -5,6 +5,8 @@ var account = require("./../account");
 
 module.exports = function (router, passport) {
 
+    router.use('/prints', require('./router-front/router-prints.js'));
+
     // main page
     router.get('/', account.isLoggedInAsUser, function(req, res, next){
         res.set({"Content-Type": "text/html"});

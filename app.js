@@ -1,9 +1,11 @@
 // loading required libaries
 var http            = require("http"),
     util            = require("util"),
+    path            = require("path");
     ejs             = require("ejs"),
     ejsLayouts      = require("express-ejs-layouts"),
     express         = require("express"),
+    multer          = require("multer");
     bodyParser      = require("body-parser"),
     cookieParser    = require("cookie-parser"),
     expressSession  = require("express-session"),
@@ -24,6 +26,17 @@ var server = http.createServer(router);
     router.use('/static', express.static(__dirname + '/public'));
     router.set('view cache', false);
     router.use(ejsLayouts);
+
+
+    var uploadStorage = multer.diskStorage({
+        destination: function(req, file, cb){
+            cb(null, './files/tmp/');
+        },
+        filename: function(req, file, cb){
+            cb(null, file.fieldname + '-' + Date.now());
+        }
+    });
+    router.use(multer({storage: uploadStorage}).single('sltFile'));
 
     router.use(cookieParser(settings.secret));
     router.use(bodyParser.urlencoded({ extended: false }));

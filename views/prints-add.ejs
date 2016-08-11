@@ -1,0 +1,56 @@
+<h3>Upload 3D model</h3>
+<br>
+<form id="print-add-form" method="post" action="/backend/prints/add" enctype="multipart/form-data">
+    <table>
+        <tr>
+			<th><label>Project naam:</label></th>
+			<th><input name="name" type='text'></input></th>
+		</tr>
+        <tr>
+            <th><label>SLT bestand:</label></th>
+            <th><input name="sltFile" type="file"></input></th>
+        </tr>
+        <tr>
+            <th><br><h4>Cura print parameters</h4></th>
+        </tr>
+        <tr>
+            <th><label>Layer Height:</label></th>
+            <th><input name="P_layerHeight" type="number" step="any" min="0"></input></th>
+        </tr>
+        <tr>
+            <th><label>Shell Thickness:</label></th>
+            <th><input name="P_shellThickness" type="number" step="any" min="0"></input></th>
+        </tr>
+        <tr>
+            <th><label>Bottom / Top Thickness:</label></th>
+            <th><input name="P_bottomTopThickness" type="number" step="any" min="0"></input></th>
+        </tr>
+        <tr>
+            <th><label>Fill Density:</label></th>
+            <th><input name="P_fillDensity" type="number" step="any" min="0"></input></th>
+        </tr>
+        <tr>
+            <th><label>Print Speed:</label></th>
+            <th><input name="P_printSpeed" type="number" step="any" min="0"></input></th>
+        </tr>
+        <tr>
+            <th><label>Support Type:</label></th>
+            <th><select name="P_support">
+                <option value="0">None</option>
+                <option value="1">Touching Buildplate</option>
+                <option value="2">Everywhere</option>
+            </select></th>
+        </tr>
+        <tr>
+            <th><label>Platform Adhesion Type:</label></th>
+            <th><select name="P_platformAdhesionType">
+                <option value="0">None</option>
+                <option value="1">Brim</option>
+                <option value="2">Raft</option>
+            </select></th>
+        </tr>
+        <tr>
+            <th><br><input type="submit" value="Upload"></th>
+        </tr>
+    </table>
+</form>

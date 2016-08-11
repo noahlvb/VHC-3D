@@ -27,7 +27,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <% if(locals.user){ %>
-                        <!--<li><a href="/jc/home">JC</a></li>-->
+                        <li><a href="/prints/add"><b>Upload Print</b></a></li>
                     <% } %>
                     <% if(locals.user && user.type == 'admin') { %>
                         <li><a href="/admin/account">account's</a></li>
