@@ -7,12 +7,15 @@ var userSchema = mongoose.Schema({
     //Status
     //0: not commited
     //1: pending
-    //2: approved 21: Rejected
-    //3: waiting on printer
-    //4: printing
-    //5: done // 51: failed
+    //2: approved/waiting 21: Rejected
+    //3: printing
+    //4: done // 41: failed
     status: Number,
+    archive: Boolean,
+    canceled: Boolean,
     rejectingNotice: String,
+    estimatedPrintTime: Number,
+    materialAmount: Number,
 
     //printing parameters
     P_layerHeight: Number,

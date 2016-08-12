@@ -37,6 +37,10 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
         fileLocation: 'files/slt/' + req.file.filename + '.stl',
         owner: req.user._id,
         status: 0,
+        archive: false,
+        canceled: false,
+        estimatedPrintTime: 0,
+        materialAmount: 0,
 
         P_layerHeight: req.body.P_layerHeight,
         P_shellThickness: req.body.P_shellThickness,
@@ -66,7 +70,51 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
 
     req.flash('info', 'Je printje is succesvol geupload');
     res.redirect('/');
+});
 
+router.get('/list/:status/', account.isLoggedInAsUser, function(req, res){
+    printsDB.find({owner: req.user._id, status: req.params.status}, function(err, result){
+        if (err) return console.error(err);
+
+        var printsMap = {};
+
+        for (var i = 0; i < result.length; i++ ) {
+            var individualPrint = {};
+            individualPrint["id"]                    = result[i]._id;
+            individualPrint["name"]                  = result[i].name;
+            individualPrint["estimatedPrintTime"]    = result[i].estimatedPrintTime;
+            individualPrint["materialAmount"]        = result[i].materialAmount;
+            individualPrint["rejectingNotice"]       = result[i].rejectingNotice;
+            printsMap[i] = individualPrint;
+        }
+
+        res.json(printsMap);
+    });
+});
+
+router.get('/list/', account.isLoggedInAsUser, function(req, res){
+    printsDB.find({
+        $and: [
+            {owner: req.user._id},
+            {$or: [{status: 1}, {status: 2}, {status: 3}, {status: 4}]}
+        ]
+    }, function(err, result){
+        if (err) return console.error(err);
+
+        var printsMap = {};
+
+        for (var i = 0; i < result.length; i++ ) {
+            var individualPrint = {};
+            individualPrint["id"]                    = result[i]._id;
+            individualPrint["name"]                  = result[i].name;
+            individualPrint["status"]                = result[i].status;
+            individualPrint["estimatedPrintTime"]    = result[i].estimatedPrintTime;
+            individualPrint["materialAmount"]        = result[i].materialAmount;
+            printsMap[i] = individualPrint;
+        }
+
+        res.json(printsMap);
+    });
 });
 
 module.exports = router;
