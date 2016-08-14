@@ -16,10 +16,13 @@ router.get('/list', account.isLoggedInAsAdmin, function(req, res){
 
         for (var i = 0; i < users.length; i++ ) {
             var individualUser = {};
-            individualUser["id"]       = users[i]._id;
-            individualUser["username"] = users[i].username;
-            individualUser["type"]     = users[i].type;
-            individualUser["date"]     = users[i].date;
+            individualUser["id"]       					= users[i]._id;
+            individualUser["username"] 					= users[i].username;
+            individualUser["type"]     					= users[i].type;
+            individualUser["date"]     					= users[i].date;
+			individualUser["monthlyMaterial"] 			= users[i].monthlyMaterial;
+			individualUser["materialAmount"] 			= users[i].materialAmount;
+			individualUser["materialAmountReserved"] 	= users[i].materialAmountReserved;
             userMap[i] = individualUser;
         }
 
@@ -44,7 +47,11 @@ router.post('/add', account.isLoggedInAsAdmin, function (req, res) {
                     password : hashed.hashy,
                     salty : hashed.salt,
                     type : req.body.selectType,
-                    birthday : req.body.date
+                    birthday : req.body.date,
+
+					monthlyMaterial : 500,
+				    materialAmount : 500,
+				    materialAmountReserved : 0
                 };
 
                 new usersDB(data).save(function (err, data) {
@@ -77,13 +84,13 @@ router.get('/userinfo/:id/', account.isLoggedInAsAdmin, function (req, res) {
 });
 
 // update the username of a user
-router.get('/update/username/:id/:username', account.isLoggedInAsAdmin, function (req, res) {
+router.get('/update/:field/:id/:value', account.isLoggedInAsAdmin, function (req, res) {
     usersDB.findOne({ _id: req.params.id}, function (err, document) {
         if(document === null){
             req.flash('error', 'User not found');
             res.status(404).redirect('/admin/account/profile/' + req.params.id + '/');
         }else{
-            document.username = req.params.username;
+            document[req.params.field] = req.params.value;
             document.save();
             req.flash('info', 'succesfully edited');
             res.status(202).redirect('/admin/account/profile/' + req.params.id + '/');

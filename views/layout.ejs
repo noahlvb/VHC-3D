@@ -45,6 +45,9 @@
         <% if ( locals.messages.info ) { %>
             <div class="flash alert alert-success" role="alert"><%= locals.messages.info %></div>
         <% } %>
+        <% if ( locals.messages.warning ) { %>
+            <div class="flash alert alert-warning" role="alert"><%= locals.messages.warning %></div>
+        <% } %>
         <% if ( locals.messages.error ) { %>
             <div class="flash alert alert-danger" role="alert"><%= locals.messages.error %></div>
         <% } %>

@@ -7,8 +7,8 @@
             </div>
 
             <ul class="list-group">
-                <li class="list-group-item"><b>Beschikbare materiaal</b> 400 gram</li>
-                <li class="list-group-item"><b>Gereserveerd materiaal</b> 100 gram</li>
+                <li class="list-group-item"><b>Beschikbare materiaal:</b> <%= user.materialAmount %> gram</li>
+                <li class="list-group-item"><b>Gereserveerd materiaal:</b> <%= user.materialAmountReserved %> gram</li>
             </ul>
         </div>
     </div>
@@ -102,12 +102,19 @@
 		var row0 = table.insertRow(0);
 		row0.insertCell(0).innerHTML = '<b>Naam</b>';
 		row0.insertCell(1).innerHTML = '<b>Verwachte tijdsduur</b>';
-		row0.insertCell(2).innerHTML = '<b>Acties</b>';
+        row0.insertCell(2).innerHTML = '<b>Vereist matriaal</b>';
+		row0.insertCell(3).innerHTML = '<b>Acties</b>';
 		for (var i = 0; i < Object.keys(notCommittedPrints).length; i++) {
 			var row = table.insertRow(1);
 			row.insertCell(0).innerHTML = notCommittedPrints[i].name;
 			row.insertCell(1).innerHTML = notCommittedPrints[i].estimatedPrintTime + ' minuten';
-			row.insertCell(2).innerHTML = '<a href="">instellingen wijzigen</a><br><a href="">Indienden</a>';
+            row.insertCell(2).innerHTML = notCommittedPrints[i].materialAmount + ' gram';
+
+            if(notCommittedPrints[i].materialAmount > 0){
+                row.insertCell(3).innerHTML = '<a href="">instellingen wijzigen</a><br><a href="">Indienden</a>';
+            }else{
+                row.insertCell(3).innerHTML = '<a href="">instellingen wijzigen</a>';
+            }
 		}
 	}
 

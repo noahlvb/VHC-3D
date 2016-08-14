@@ -5,7 +5,11 @@ var userSchema = mongoose.Schema({
     password : String,
     salty: String,
     type: String,
-    birthday: String
+    birthday: String,
+
+    monthlyMaterial: Number,
+    materialAmount: Number,
+    materialAmountReserved: Number
 });
 
 module.exports = mongoose.model('users', userSchema);

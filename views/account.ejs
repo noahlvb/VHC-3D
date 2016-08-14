@@ -21,13 +21,17 @@
 		var table = document.getElementById('user-table');
 		var row0 = table.insertRow(0);
 		row0.insertCell(0).innerHTML = '<b>username</b>';
-		row0.insertCell(1).innerHTML = '<b>type</b>';
-		row0.insertCell(2).innerHTML = '<b>actions</b>';
+        row0.insertCell(1).innerHTML = '<b>Maandelijks materiaal</b>';
+        row0.insertCell(2).innerHTML = '<b>Materiaal(gereserveerd)</b>';
+		row0.insertCell(3).innerHTML = '<b>type</b>';
+		row0.insertCell(4).innerHTML = '<b>actions</b>';
 		for (var i = 0; i < Object.keys(users).length; i++) {
 			var row = table.insertRow(1);
 			row.insertCell(0).innerHTML = '<a href="/admin/account/profile/' + users[i].id + '/">' + users[i].username + '</a>';
-			row.insertCell(1).innerHTML = users[i].type;
-			row.insertCell(2).innerHTML = '<a href="/backend/account/del/' + users[i].id + '/">delete</a>';
+            row.insertCell(1).innerHTML = users[i].monthlyMaterial + ' gram';
+            row.insertCell(2).innerHTML = users[i].materialAmount + '(' + users[i].materialAmountReserved + ') gram';
+			row.insertCell(3).innerHTML = users[i].type;
+			row.insertCell(4).innerHTML = '<a href="/backend/account/del/' + users[i].id + '/">delete</a>';
 		}
 	}
 </script>

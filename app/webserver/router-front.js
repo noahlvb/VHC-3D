@@ -13,7 +13,9 @@ module.exports = function (router, passport) {
         res.render('home', {
             user : {
                 username : req.user.username,
-                type : req.user.type
+                type : req.user.type,
+                materialAmount: req.user.materialAmount,
+                materialAmountReserved: req.user.materialAmountReserved
             }
         });
     });
@@ -52,11 +54,14 @@ module.exports = function (router, passport) {
                 },
 
                 user_profile : {
-                    id          : document._id,
-                    username    : document.username,
-                    type        : document.type,
-                    date        : document.birthday,
-                    group       : document.group
+                    id                      : document._id,
+                    username                : document.username,
+                    type                    : document.type,
+                    date                    : document.birthday,
+                    group                   : document.group,
+                    monthlyMaterial         : document.monthlyMaterial,
+                    materialAmount          : document.materialAmount,
+                    materialAmountReserved  : document.materialAmountReserved
                 }
             });
         });

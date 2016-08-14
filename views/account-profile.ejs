@@ -21,6 +21,9 @@
 		<a href="#edit_username" class="list-group-item">name: <%= user_profile.username%></a>
 		<a href="#" class="list-group-item">birthday: <%= user_profile.date%></a>
 		<a href="#edit_type" class="list-group-item">type: <%= user_profile.type%></a>
+		<a href="#edit_monthlyMaterial" class="list-group-item">Maandelijks materiaal: <%= user_profile.monthlyMaterial%></a>
+		<a href="#edit_materialAmount" class="list-group-item">Materiaal tot beschikking: <%= user_profile.materialAmount%></a>
+		<a href="#" class="list-group-item">Gereserveerd materiaal: <%= user_profile.materialAmountReserved%></a>
 	</div>
 </div>
 
@@ -36,8 +39,16 @@
 		$('a[href="#edit_type"]').replaceWith('<a class="list-group-item">Type: <div class="btn-group"><button type="button" class="btn btn-default" onclick="update_type(\'type\', \'Normal\')">Normal</button><button type="button" class="btn btn-default" onclick="update_type(\'type\', \'admin\')">Admin</button></div></a>');
 	});
 
-	function update_username(type){
-		var value = $("input[id='edited_username']").val();
+	$('a[href="#edit_monthlyMaterial"]').click(function() {
+		$('a[href="#edit_monthlyMaterial"]').replaceWith('<div id="edit_monthlyMaterial" class="input-group"><input id="edited_monthlyMaterial" type="text" placeholder="<%= user_profile.monthlyMaterial%>" class="form-control"><span class="input-group-btn"><button id="confirm" class="btn btn-default" onclick="update_user_data(\'monthlyMaterial\')" type="button">Oke!</button></span></div>');
+	});
+
+	$('a[href="#edit_materialAmount"]').click(function() {
+		$('a[href="#edit_materialAmount"]').replaceWith('<div id="edit_materialAmount" class="input-group"><input id="edited_materialAmount" type="text" placeholder="<%= user_profile.materialAmount%>" class="form-control"><span class="input-group-btn"><button id="confirm" class="btn btn-default" onclick="update_user_data(\'materialAmount\')" type="button">Oke!</button></span></div>');
+	});
+
+	function update_user_data(type){
+		var value = $("input[id='edited_" + type + "']").val();
 		if(value.length){
 			window.location.replace("/backend/account/update/" + type + "/<%= user_profile.id%>/" + value + "/");
 		}

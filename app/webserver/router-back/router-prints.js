@@ -65,11 +65,21 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
                 res.redirect('/prints/add');
                 return;
             }
+
+            require("./../../slice")(data._id, function(response){
+                if(response == 1){
+                    data.remove(function(err){
+                        if (err) console.error(err);
+                    });
+                    req.flash('warning', 'je hebt niet meer genoeg materiaal tot je beschikking');
+                    res.redirect('/prints/add');
+                }else{
+                    req.flash('info', 'Je printje is succesvol geupload');
+                    res.redirect('/');
+                }
+            });
         });
     });
-
-    req.flash('info', 'Je printje is succesvol geupload');
-    res.redirect('/');
 });
 
 router.get('/list/:status/', account.isLoggedInAsUser, function(req, res){
