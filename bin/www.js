@@ -13,5 +13,6 @@ mongoose.connection.once('open', function callback () {
     var app = server.listen(process.env.PORT || settings.web_port, process.env.IP || settings.web_ip, function(){
         util.log("webserver listening at " + server.address().address + ":" + server.address().port);
         require("../app/socket")(server);
+        require("../app/eventListener");
     });
 });
