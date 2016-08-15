@@ -1,11 +1,12 @@
 {
   "name": "VHC-3D",
   "version": "0.0.1",
-  "description": "3D printing system for the Vathorst College",
+  "description": "3D printing frontend system for the Vathorst College",
   "author": "Noah van Bochove",
   "homepage": "https://github.com/noahlvb/VHC-3D",
   "keywords": [
     "3dprint",
+    "frontend",
     "automation"
   ],
   "repository": {
