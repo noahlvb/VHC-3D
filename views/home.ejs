@@ -1,3 +1,11 @@
+<style type="text/css">
+
+	tr:hover{
+        background: #EBEBEB;
+    }
+
+</style>
+
 <div class="row">
     <div class="col-md-3">
         <div class="panel panel-info">
@@ -15,22 +23,22 @@
     <div class="col-md-9">
         <div id="attention-table-panel" style="display: none" class="panel panel-danger">
             <div class="panel-heading">Aandacht vereist</div>
-            <table id="attention-table" class="table">
+            <table id="attention-table" class="table" data-link="row">
                 <tr>
                     <td><b>Naam</b></td>
                     <td><b>Type</b></td>
                     <td style="width: 50%"><b>Info</b></td>
-                    <td><b>Acties</b></td>
+                    <td><b>snelle acties</b></td>
                 </tr>
             </table>
         </div>
         <div class="panel panel-default">
             <div class="panel-heading">Nog niet ingestuurd</div>
-            <table id="notCommitted-table" class="table"></table>
+            <table id="notCommitted-table" class="table" data-link="row"></table>
         </div>
         <div class="panel panel-primary">
             <div class="panel-heading">Print opdrachten</div>
-            <table id="normal-table" class="table"></table>
+            <table id="normal-table" class="table" data-link="row"></table>
         </div>
     </div>
 </div>
@@ -54,10 +62,10 @@
             $("#attention-table-panel").show();
 
             var row = table.insertRow(1);
-            row.insertCell(0).innerHTML = rejectedPrints[i].name;
+            row.insertCell(0).innerHTML = '<a href="/prints/' + rejectedPrints[i].id + '">' + rejectedPrints[i].name + '</a>';
             row.insertCell(1).innerHTML = 'Afgewezen';
             row.insertCell(2).innerHTML = rejectedPrints[i].rejectingNotice;
-            row.insertCell(3).innerHTML = '<a href="">instellingen wijzigen</a><br><a href="">Verwijderen</a>';
+            row.insertCell(3).innerHTML = '<a href="/prints/' +  rejectedPrints[i].id + '">instellingen wijzigen</a><br><a href="">Verwijderen</a>';
         }
     }
 
@@ -78,10 +86,10 @@
         for (var i = 0; i < Object.keys(failedPrints).length; i++) {
             $("#attention-table-panel").show();
             var row = table.insertRow(1);
-            row.insertCell(0).innerHTML = failedPrints[i].name;
+            row.insertCell(0).innerHTML = '<a href="/prints/' + failedPrints[i].id + '">' + failedPrints[i].name + '</a>';
             row.insertCell(1).innerHTML = 'Mislukt';
             row.insertCell(2).innerHTML = 'Het printing van je project is mislukt. Probeer het later opnieuw (eventueel met nieuwe instellingen of aangepast ontwerp)';
-            row.insertCell(3).innerHTML = '<a href="">instellingen wijzigen</a><br><a href="">Archieveren</a>';
+            row.insertCell(3).innerHTML = '<a href="/prints/' +  failedPrints[i].id + '">instellingen wijzigen</a><br><a href="">Archieveren</a>';
         }
     }
 
@@ -103,17 +111,17 @@
 		row0.insertCell(0).innerHTML = '<b>Naam</b>';
 		row0.insertCell(1).innerHTML = '<b>Verwachte tijdsduur</b>';
         row0.insertCell(2).innerHTML = '<b>Vereist matriaal</b>';
-		row0.insertCell(3).innerHTML = '<b>Acties</b>';
+		row0.insertCell(3).innerHTML = '<b> Snelle acties</b>';
 		for (var i = 0; i < Object.keys(notCommittedPrints).length; i++) {
 			var row = table.insertRow(1);
-			row.insertCell(0).innerHTML = notCommittedPrints[i].name;
+			row.insertCell(0).innerHTML = '<a href="/prints/' + notCommittedPrints[i].id + '">' + notCommittedPrints[i].name + '</a>';
 			row.insertCell(1).innerHTML = notCommittedPrints[i].estimatedPrintTime + ' minuten';
             row.insertCell(2).innerHTML = notCommittedPrints[i].materialAmount + ' gram';
 
             if(notCommittedPrints[i].materialAmount > 0){
-                row.insertCell(3).innerHTML = '<a href="">instellingen wijzigen</a><br><a href="">Indienden</a>';
+                row.insertCell(3).innerHTML = '<a href="">Indienden</a>';
             }else{
-                row.insertCell(3).innerHTML = '<a href="">instellingen wijzigen</a>';
+                row.insertCell(3).innerHTML = '<a href="/prints/' +  notCommittedPrints[i].id + '">instellingen wijzigen</a>';
             }
 		}
 	}
@@ -137,10 +145,10 @@
         row0.insertCell(1).innerHTML = '<b>Status</b>';
         row0.insertCell(2).innerHTML = '<b>Verwachte tijdsduur</b>';
 		row0.insertCell(3).innerHTML = '<b>Vereist matriaal</b>';
-		row0.insertCell(4).innerHTML = '<b>Acties</b>';
+		row0.insertCell(4).innerHTML = '<b>Snelle acties</b>';
 		for (var i = 0; i < Object.keys(normalPrints).length; i++) {
 			var row = table.insertRow(1);
-			row.insertCell(0).innerHTML = normalPrints[i].name;
+			row.insertCell(0).innerHTML = '<a href="/prints/' + normalPrints[i].id + '">' + normalPrints[i].name + '</a>';
 
             if(normalPrints[i].status == 1){
                 row.insertCell(1).innerHTML = '<b style="color: grey">In afwachting</b>';

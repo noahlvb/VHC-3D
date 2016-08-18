@@ -9,17 +9,17 @@ var router = express.Router();
 
 router.post('/add', account.isLoggedInAsUser, function(req, res){
     if(req.body.name == false || req.file == undefined || req.body.P_layerHeight == false || req.body.P_shellThickness == false || req.body.P_bottomTopThickness == false || req.body.P_fillDensity == false || req.body.P_printSpeed == false || req.body.P_support == false || req.body.P_platformAdhesionType == false){
-        req.flash('error', 'niet alle velden zijn ingevuld a');
+        req.flash('error', 'niet alle velden zijn ingevuld');
         res.redirect('/prints/add');
         return;
     }
     if(req.body.P_support < 0 || req.body.P_support > 3){
-        req.flash('error', 'niet alle velden zijn ingevuld b');
+        req.flash('error', 'niet alle velden zijn ingevuld');
         res.redirect('/prints/add');
         return;
     }
     if(req.body.P_platformAdhesionType < 0 || req.body.P_platformAdhesionType > 3){
-        req.flash('error', 'niet alle velden zijn ingevuld c');
+        req.flash('error', 'niet alle velden zijn ingevuld');
         res.redirect('/prints/add');
         return;
     }
