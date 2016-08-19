@@ -30,10 +30,14 @@
                 <ul class="nav navbar-nav">
                     <% if(locals.user){ %>
                         <li><a href="/prints/add"><b>Upload Print</b></a></li>
+                        <li><a href="/prints/archived">Gearchiveerde Projecten</a></li>
+                    <% } %>
+                    <% if(locals.user && user.type == 'supervisor' || locals.user && user.type == 'admin') { %>
+                        <li><a href="/supervisor/pending">Print Verzoeken</a></li>
                     <% } %>
                     <% if(locals.user && user.type == 'admin') { %>
-                        <li><a href="/admin/account">account's</a></li>
-                    <% } else {} %>
+                        <li><a href="/admin/account">accounts</a></li>
+                    <% } %>
                 </ul>
                     <% if(locals.user){ %>
                     <p class="navbar-text navbar-right">logged in as <%= user.username %> <a href="/logout">(logout)</a></p>

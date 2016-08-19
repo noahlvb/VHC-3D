@@ -89,7 +89,7 @@
             row.insertCell(0).innerHTML = '<a href="/prints/' + failedPrints[i].id + '">' + failedPrints[i].name + '</a>';
             row.insertCell(1).innerHTML = 'Mislukt';
             row.insertCell(2).innerHTML = 'Het printing van je project is mislukt. Probeer het later opnieuw (eventueel met nieuwe instellingen of aangepast ontwerp)';
-            row.insertCell(3).innerHTML = '<a href="/prints/' +  failedPrints[i].id + '">instellingen wijzigen</a><br><a href="">Archieveren</a>';
+            row.insertCell(3).innerHTML = '<a href="/prints/' +  failedPrints[i].id + '">instellingen wijzigen</a><br><a href="/backend/prints/' + failedPrints[i].id + '/archive">Archieveren</a>';
         }
     }
 
@@ -166,7 +166,7 @@
             if(normalPrints[i].status == 1 || normalPrints[i].status == 2){
                 row.insertCell(4).innerHTML = '<a href="">Verwijderen</a>';
             }else if(normalPrints[i].status == 4){
-                row.insertCell(4).innerHTML = '<a href="">Archieveren</a>';
+                row.insertCell(4).innerHTML = '<a href="/backend/prints/' + normalPrints[i].id + '/archive">Archieveren</a>';
             }
 		}
 	}

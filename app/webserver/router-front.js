@@ -78,6 +78,21 @@ module.exports = function (router, passport) {
         });
     });
 
+    router.get('/supervisor/pending', account.isLoggedInAsUser, function (req, res) {
+        if(req.user.type == 'admin' || req.user.type == 'supervisor'){
+            res.set({"Content-Type": "text/html"});
+            res.render('supervisor-pending', {
+                user : {
+                    username : req.user.username,
+                    type : req.user.type
+                }
+            });
+        } else {
+            req.flash('error', 'Je mag hier niet zijn!');
+            res.redirect('/');
+        }
+    });
+
     // login request
     router.post('/login',
         passport.authenticate('local', {

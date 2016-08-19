@@ -82,8 +82,39 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
     });
 });
 
+router.get('/list/archived/', account.isLoggedInAsUser, function(req, res){
+    printsDB.find({
+        $and: [
+            {owner: req.user._id},
+            {archive: true}
+        ]
+    }, function(err, result){
+        if (err) return console.error(err);
+
+        var printsMap = {};
+
+        for (var i = 0; i < result.length; i++ ) {
+            var individualPrint = {};
+            individualPrint["id"]                    = result[i]._id;
+            individualPrint["name"]                  = result[i].name;
+            individualPrint["status"]                = result[i].status;
+            individualPrint["estimatedPrintTime"]    = result[i].estimatedPrintTime;
+            individualPrint["materialAmount"]        = result[i].materialAmount;
+            printsMap[i] = individualPrint;
+        }
+
+        res.json(printsMap);
+    });
+});
+
 router.get('/list/:status/', account.isLoggedInAsUser, function(req, res){
-    printsDB.find({owner: req.user._id, status: req.params.status}, function(err, result){
+    printsDB.find({
+        $and: [
+            {owner: req.user._id},
+            {status: req.params.status},
+            {archive: false}
+        ]
+    }, function(err, result){
         if (err) return console.error(err);
 
         var printsMap = {};
@@ -106,7 +137,8 @@ router.get('/list/', account.isLoggedInAsUser, function(req, res){
     printsDB.find({
         $and: [
             {owner: req.user._id},
-            {$or: [{status: 1}, {status: 2}, {status: 3}, {status: 4}]}
+            {$or: [{status: 1}, {status: 2}, {status: 3}, {status: 4}]},
+            {archive: false}
         ]
     }, function(err, result){
         if (err) return console.error(err);
@@ -124,6 +156,33 @@ router.get('/list/', account.isLoggedInAsUser, function(req, res){
         }
 
         res.json(printsMap);
+    });
+});
+
+router.get('/:id/archive', account.isLoggedInAsUser, function(req, res){
+    printsDB.findOne({
+        $and: [
+            {_id: req.params.id},
+            {owner: req.user._id}
+        ]
+    }, function(err, document){
+        if(document === null ){
+            req.flash('error', 'Je bent niet de eigenaar van dit project of het project bestaat niet.');
+            res.redirect('/');
+            return;
+        }
+
+        if(document.status == 4 || document.status == 41){
+            if (err) return console.error(err);
+            document.archive = true;
+            document.save();
+
+            req.flash('info', 'Je project is gearchiveerd');
+            res.redirect('/');
+        }else{
+            req.flash('error', 'Dit project hoort nog niet gearchiveerd te worden!');
+            res.redirect('/prints/' + req.params.id);
+        }
     });
 });
 

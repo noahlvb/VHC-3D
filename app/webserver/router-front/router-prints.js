@@ -16,6 +16,16 @@ router.get('/add', account.isLoggedInAsUser, function(req, res){
     });
 });
 
+router.get('/archived', account.isLoggedInAsUser, function(req, res){
+    res.set({"Content-Type": "text/html"});
+    res.render('prints-archived', {
+        user : {
+            username : req.user.username,
+            type : req.user.type
+        }
+    });
+});
+
 router.get('/:id', account.isLoggedInAsUser, function(req, res){
     printsDB.findOne({_id: req.params.id}, function(err, document){
         res.set({"Content-Type": "text/html"});

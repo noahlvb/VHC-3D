@@ -105,7 +105,7 @@ router.get('/update/type/:id/:type', account.isLoggedInAsAdmin, function (req, r
             req.flash('error', 'User not found');
             res.status(404).redirect('/admin/account/profile/' + req.params.id + '/');
         }else{
-            if(req.params.type == 'normal' || req.params.type == 'admin'){
+            if(req.params.type == 'normal' || req.params.type == 'supervisor' || req.params.type == 'admin'){
                 document.type = req.params.type;
                 document.save();
                 req.flash('info', 'successfully edited');
