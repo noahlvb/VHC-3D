@@ -18,8 +18,8 @@ router.get('/list', account.isLoggedInAsAdmin, function(req, res){
             var individualUser = {};
             individualUser["id"]       					= users[i]._id;
             individualUser["username"] 					= users[i].username;
+			individualUser["email"]						= users[i].email;
             individualUser["type"]     					= users[i].type;
-            individualUser["date"]     					= users[i].date;
 			individualUser["monthlyMaterial"] 			= users[i].monthlyMaterial;
 			individualUser["materialAmount"] 			= users[i].materialAmount;
 			individualUser["materialAmountReserved"] 	= users[i].materialAmountReserved;
@@ -44,10 +44,10 @@ router.post('/add', account.isLoggedInAsAdmin, function (req, res) {
 
                 data = {
                     username : req.body.username,
+					emails : req.body.email,
                     password : hashed.hashy,
                     salty : hashed.salt,
                     type : req.body.selectType,
-                    birthday : req.body.date,
 
 					monthlyMaterial : 500,
 				    materialAmount : 500,

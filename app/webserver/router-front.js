@@ -26,6 +26,7 @@ module.exports = function (router, passport) {
         res.render('login', {});
     });
 
+    router.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'], /*hd : 'vathorstcollege.nl'*/ }));
 
     // logout request
     router.get('/logout', function (req, res) {
@@ -56,9 +57,8 @@ module.exports = function (router, passport) {
                 user_profile : {
                     id                      : document._id,
                     username                : document.username,
+                    email                   : document.email,
                     type                    : document.type,
-                    date                    : document.birthday,
-                    group                   : document.group,
                     monthlyMaterial         : document.monthlyMaterial,
                     materialAmount          : document.materialAmount,
                     materialAmountReserved  : document.materialAmountReserved
@@ -94,11 +94,19 @@ module.exports = function (router, passport) {
     });
 
     // login request
-    router.post('/login',
+    router.post('/auth/local',
         passport.authenticate('local', {
             successRedirect: '/',
             failureRedirect: '/login',
             failureFlash: true,
+        })
+    );
+
+    router.get('/auth/google/callback',
+        passport.authenticate('google', {
+            successRedirect: '/',
+            failureRedirect: '/login',
+            failureFlash: true
         })
     );
 };

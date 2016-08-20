@@ -1,8 +1,20 @@
 <% if ( locals.messages.error ) { %>
     <div class="flash alert alert-danger" role="alert"><%= locals.messages.error %></div>
 <% } %>
-<form action='/login', method='post'>
-    <label>username</label><input type='text', name='username', placeholder='username'><br>
-    <label>password</label><input type='password', name='password', placeholder='password'><br>
-    <input type='submit', value='Sign In', data-transition='fade', data-theme='c'>
-</form>
+
+<div class="container" style="width: 500px;">
+    <form class="form-signin" action='/auth/local', method='post'>
+        <h2 class="form-signin-heading">Inloggen vereist</h2>
+        <br>
+        <a class="btn btn-block btn-social btn-google" style="width: 260px;" onClick="location.href='/auth/google'">
+            <span class="fa fa-google-plus"></span> Gebruik google om in te loggen
+        </a>
+        <hr>
+        <label for="inputNaam" class="sr-only">Naam: </label>
+        <input type="text" id="inputNaam" name='username' class="form-control" placeholder="Naam" required="" autofocus="">
+        <label for="inputPassword" class="sr-only">Wachtwoord</label>
+        <input type="password" id="inputPassword" name='password' class="form-control" placeholder="Password" required="">
+        <br>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">inloggen</button>
+    </form>
+</div>
