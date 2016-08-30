@@ -7,7 +7,7 @@
     //Table NotCommitted
     $.ajax({
         dataTypeL: "json",
-        url: "/backend/prints/list/1",
+        url: "/backend/prints/list/pending/",
         beforeSend: function( xhr ) {
             xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
         }

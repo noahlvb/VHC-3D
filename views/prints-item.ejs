@@ -41,18 +41,18 @@
 
             <ul class="list-group">
                 <%if (print.status == 0) {%>
-                    <b><a href="#" class="list-group-item list-group-item-success">Indienden</a></b>
+                    <b><a href="/backend/prints/<%= print._id %>/apply" class="list-group-item list-group-item-success">Indienden</a></b>
                 <% } %>
 
                 <%if (user.type !== 'normal' && print.status == 1) { %>
-                    <a href="#" class="list-group-item list-group-item-success">Goedkeuren</a>
-                    <a href="#" class="list-group-item list-group-item-danger">Afkeuren</a>
+                    <a href="/backend/prints/<%= print._id %>/accept/true" class="list-group-item list-group-item-success">Goedkeuren</a>
+                    <a href="/backend/prints/<%= print._id %>/accept/false" class="list-group-item list-group-item-danger">Afkeuren</a>
                 <% } %>
 
                 <%if (print.archive == false && print.status == 4 || print.archive == false && print.status == 41) {%>
                     <a href="/backend/prints/<%= print._id %>/archive" class="list-group-item list-group-item-info">Archieveren</a>
                 <% }else if (print.status == 0 || print.status == 1 || print.status == 2 || print.status == 21 ) { %>
-                    <a href="#" class="list-group-item list-group-item-danger">Verwijderen</a>
+                    <a href="/backend/prints/<%= print._id %>/delete" class="list-group-item list-group-item-danger">Verwijderen</a>
                 <% } %>
             </ul>
         </div>

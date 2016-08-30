@@ -38,7 +38,6 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
         owner: req.user._id,
         status: 0,
         archive: false,
-        canceled: false,
         estimatedPrintTime: 0,
         materialAmount: 0,
 
@@ -80,6 +79,33 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
             });
         });
     });
+});
+
+router.get('/list/pending/', account.isLoggedInAsUser, function(req, res){
+    if(req.user.type == 'supervisor' || req.user.type == 'admin'){
+        printsDB.find({
+            $and: [
+                {status: 1},
+                {archive: false}
+            ]
+        }, function(err, result){
+            if (err) return console.error(err);
+
+            var printsMap = {};
+
+            for (var i = 0; i < result.length; i++ ) {
+                var individualPrint = {};
+                individualPrint["id"]                    = result[i]._id;
+                individualPrint["name"]                  = result[i].name;
+                individualPrint["estimatedPrintTime"]    = result[i].estimatedPrintTime;
+                individualPrint["materialAmount"]        = result[i].materialAmount;
+                individualPrint["rejectingNotice"]       = result[i].rejectingNotice;
+                printsMap[i] = individualPrint;
+            }
+
+            res.json(printsMap);
+        });
+    }
 });
 
 router.get('/list/archived/', account.isLoggedInAsUser, function(req, res){
@@ -181,6 +207,104 @@ router.get('/:id/archive', account.isLoggedInAsUser, function(req, res){
             res.redirect('/');
         }else{
             req.flash('error', 'Dit project hoort nog niet gearchiveerd te worden!');
+            res.redirect('/prints/' + req.params.id);
+        }
+    });
+});
+
+router.get('/:id/delete', account.isLoggedInAsUser, function(req, res){
+    printsDB.findOne({
+        $and: [
+            {_id: req.params.id},
+            {owner: req.user._id}
+        ]
+    }, function(err, document){
+        if(document === null){
+            req.flash('error', 'Je bent niet de eigenaar van dit project of het project bestaat niet.');
+            res.redirect('/');
+            return;
+        }
+
+        if(document.status == 0 || document.status == 1 || document.status == 2 || document.status == 21){
+            if (err) return console.error(err);
+
+            var fileLocation = document.fileLocation;
+            var materialAmount = document.materialAmount;
+            document.remove(function(err){
+                if (err) return console.error(err);
+
+                req.user.materialAmountReserved = req.user.materialAmountReserved - materialAmount;
+                req.user.materialAmount = req.user.materialAmount + materialAmount;
+                req.user.save();
+
+                fs.unlink('./' + fileLocation, function(err){
+                    if (err) return console.error(err);
+
+                    req.flash('info', 'je project is verwijderd');
+                    res.redirect('/');
+                });
+            });
+        }else{
+            req.flash('error', 'Dit project hoort nog niet verwijderd te worden!');
+            res.redirect('/prints/' + req.params.id);
+        }
+    });
+});
+
+router.get('/:id/apply', account.isLoggedInAsUser, function(req, res){
+    printsDB.findOne({
+        $and: [
+            {_id: req.params.id},
+            {owner: req.user._id}
+        ]
+    }, function(err, document){
+        if (err) return console.error(err);
+        if(document === null){
+            req.flash('error', 'Je bent niet de eigenaar van dit project of het project bestaat niet.');
+            res.redirect('/');
+            return;
+        }
+
+        if(document.status == 0 && document.archive == false){
+            document.status = 1;
+            document.save();
+
+            req.flash('info', 'Je project is ingediend');
+            res.redirect('/');
+        }else{
+            req.flash('error', 'Dit project hoort nog niet ingediend te worden!');
+            res.redirect('/prints/' + req.params.id);
+        }
+    });
+});
+
+router.get('/:id/accept/:boolean', account.isLoggedInAsUser, function(req, res){
+    if(req.user.type == 'normal'){
+        req.flash('error', 'Je hoort dit niet te doen');
+        res.redirect('/');
+        return;
+    }
+
+    printsDB.findOne({_id: req.params.id}, function(err, document){
+        if(document.status == 1 && document.archive == false){
+            if(req.params.boolean == 'true'){
+                document.status = 2;
+                document.save();
+
+                req.flash('info', 'project "' + document.name + '" is goedgekeurd');
+                res.redirect('/supervisor/pending');
+            }else if(req.params.boolean == 'false'){
+                document.status = 21;
+                document.rejectingNotice = "je project is afgewezen";
+                document.save();
+
+                req.flash('info', 'project "' + document.name + '" is afgekeurd');
+                res.redirect('/supervisor/pending');
+            }else{
+                util.log('nor false nor true');
+            }
+        }else{
+            req.flash('error', 'Dit project hoort nog niet ingediend te worden!');
             res.redirect('/prints/' + req.params.id);
         }
     });

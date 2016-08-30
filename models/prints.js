@@ -12,7 +12,6 @@ var userSchema = mongoose.Schema({
     //4: done // 41: failed
     status: Number,
     archive: Boolean,
-    canceled: Boolean,
     rejectingNotice: String,
     estimatedPrintTime: Number,
     materialAmount: Number,
