@@ -58,7 +58,7 @@
         </div>
     </div>
     <div class="col-md-5">
-        <form id="print-update-parameters-form" method="post" action="/backend/prints/update/parameters">
+        <form id="print-update-parameters-form" method="post" action="/backend/prints/reslice/<%= print._id %>">
             <table>
                 <tr>
                     <th><h4>Cura print parameters</h4></th>
@@ -124,10 +124,14 @@
         $('#' + formID + ' th').children(':input').attr('disabled', 'disabled');
     }
 
-    if('<%= user.type %>' == 'normal' && <%= print.status%> !== 0 && <%= print.status%> !== 21 && <%= print.status%> !== 41){
+    function enableForm(formID){
+        $('#' + formID + ' th').children(':input').removeAttr('disabled');
+    }
+
+    if(<%= print.status%> !== 0 && <%= print.status%> !== 21 && <%= print.status%> !== 41){
         disableForm('print-update-parameters-form');
     }
-    if('<%= user.type %>' !== 'normal' && <%= print.status%> !== 1){
-        disableForm('print-update-parameters-form');
+    if('<%= user.type %>' !== 'normal' && <%= print.status%> == 1){
+        enableForm('print-update-parameters-form');
     }
 </script>

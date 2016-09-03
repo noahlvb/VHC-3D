@@ -26,7 +26,7 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
 
     var originalName = String(req.file.originalname);
     var fileExtension = originalName.split(".")[1];
-    if(fileExtension != 'stl'){
+    if(fileExtension.toLowerCase() != 'stl'){
         req.flash('error', 'Geuploade bestand is geen STL bestand');
         res.redirect('/prints/add');
         return;
@@ -65,7 +65,7 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
                 return;
             }
 
-            require("./../../slice")(data._id, function(response){
+            require("./../../slice")(data._id, true, function(response){
                 if(response == 1){
                     data.remove(function(err){
                         if (err) console.error(err);
@@ -78,6 +78,59 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
                 }
             });
         });
+    });
+});
+
+router.post('/reslice/:id/', account.isLoggedInAsUser, function(req, res){
+    if(req.body.P_layerHeight == false || req.body.P_shellThickness == false || req.body.P_bottomTopThickness == false || req.body.P_fillDensity == false || req.body.P_printSpeed == false || req.body.P_support == false || req.body.P_platformAdhesionType == false){
+        req.flash('error', 'niet alle velden zijn ingevuld');
+        res.redirect('/prints/' + document._id);
+        return;
+    }
+    if(req.body.P_support < 0 || req.body.P_support > 3){
+        req.flash('error', 'niet alle velden zijn ingevuld');
+        res.redirect('/prints/' + document._id);
+        return;
+    }
+    if(req.body.P_platformAdhesionType < 0 || req.body.P_platformAdhesionType > 3){
+        req.flash('error', 'niet alle velden zijn ingevuld');
+        res.redirect('/prints/' + document._id);
+        return;
+    }
+
+    printsDB.findOne({_id: req.params.id}, function(err, document){
+        var oldDocument = document;
+        if(document.owner == req.user._id || req.user.type == 'supervisor' || req.user.type == 'admin'){
+            document.P_layerHeight = req.body.P_layerHeight;
+            document.P_shellThickness = req.body.P_shellThickness;
+            document.P_bottomTopThickness = req.body.P_bottomTopThickness;
+            document.P_fillDensity = req.body.P_fillDensity;
+            document.P_printSpeed = req.body.P_printSpeed;
+            document.P_support = req.body.P_support;
+            document.P_platformAdhesionType = req.body.P_platformAdhesionType;
+            document.save();
+
+            require("./../../slice")(document._id, true, function(response){
+                if(response == 1){
+                    document = oldDocument;
+                    document.save();
+
+                    req.flash('warning', 'je hebt niet meer genoeg materiaal tot je beschikking');
+                    res.redirect('/prints/' + document._id);
+                }else{
+                    if(document.status == 21 || document.status == 41){
+                        document.status = 0;
+                        document.save();
+                    }
+
+                    req.flash('info', 'Je printje is succesvol gehersliced');
+                    res.redirect('/prints/' + document._id);
+                }
+            });
+        }else{
+            req.flash('error', 'Je hoort niets met dit project te doen!');
+            res.redirect('/');
+        }
     });
 });
 
