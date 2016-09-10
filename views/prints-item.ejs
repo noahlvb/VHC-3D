@@ -1,0 +1,137 @@
+<div class="row">
+    <div class="col-md-3">
+        <h3>Print opdracht: <%= print.name %></h3>
+    </div>
+    <div class="col-md-9">
+        <h4>Print tijd: <b><%= print.estimatedPrintTime %></b> minuten</h4><h4> Materiaal kosten: <b><%= print.materialAmount %></b> gram</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="panel panel-info">
+            <div class="panel-heading"><h3 class="panel-title">Info</h3></div>
+            <div class="panel-body">
+                <p>
+                    <%if (print.status == 0) {%>
+                        <h4><b style="color: grey">Nog niet ingediend</b></h4><br>
+                        Je project is momenteel nog niet ingediend
+                    <% } else if (print.status == 1) { %>
+                        <h4><b style="color: grey">In afwachting</b></h4><br>
+                        In afwachting van goedkeuring
+                    <% } else if (print.status == 2) { %>
+                        <h4><b style="color: orange">geaccepteerd | In wachtrij</b><h4><br>
+                        Je project is goedgekeurd en in de wachtrij voor de printer
+                    <% } else if (print.status == 21) { %>
+                        <h4><b style="color: red">Afgewezen</b></h4><br>
+                        Je project is afgewezen
+                    <% } else if (print.status == 3) { %>
+                        <h4><b style="color: blue">Wordt geprint</b></h4><br>
+                        Je project wordt momenteel geprint
+                    <% } else if (print.status == 4) { %>
+                        <h4><b style="color: green">Klaar</b></h4><br>
+                        Je project is klaar
+                    <% } else if (print.status == 41) { %>
+                        <h4><b style="color: red">Mislukt</b></h4><br>
+                        Er is iets mis gegaan tijdens het printen van je project
+                    <% } %>
+                    <b><a href="/prints/download/<%= print._id %>"><h5>Download STL bestand</h5></a></b>
+                </p>
+            </div>
+
+            <ul class="list-group">
+                <%if (print.status == 0) {%>
+                    <b><a href="/backend/prints/<%= print._id %>/apply" class="list-group-item list-group-item-success">Indienden</a></b>
+                <% } %>
+
+                <%if (user.type !== 'normal' && print.status == 1) { %>
+                    <a href="/backend/prints/<%= print._id %>/accept/true" class="list-group-item list-group-item-success">Goedkeuren</a>
+                    <a href="/backend/prints/<%= print._id %>/accept/false" class="list-group-item list-group-item-danger">Afkeuren</a>
+                <% } %>
+
+                <%if (print.archive == false && print.status == 4 || print.archive == false && print.status == 41) {%>
+                    <a href="/backend/prints/<%= print._id %>/archive" class="list-group-item list-group-item-info">Archieveren</a>
+                <% }else if (print.status == 0 || print.status == 1 || print.status == 2 || print.status == 21 ) { %>
+                    <a href="/backend/prints/<%= print._id %>/delete" class="list-group-item list-group-item-danger">Verwijderen</a>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <form id="print-update-parameters-form" method="post" action="/backend/prints/reslice/<%= print._id %>">
+            <table>
+                <tr>
+                    <th><h4>Cura print parameters</h4></th>
+                </tr>
+                <tr>
+                    <th><label>Layer Height:</label></th>
+                    <th><input name="P_layerHeight" type="number" step="any" min="0" value="<%= print.P_layerHeight %>"></input></th>
+                </tr>
+                <tr>
+                    <th><label>Shell Thickness:</label></th>
+                    <th><input name="P_shellThickness" type="number" step="any" min="0" value="<%= print.P_shellThickness %>"></input></th>
+                </tr>
+                <tr>
+                    <th><label>Bottom / Top Thickness:</label></th>
+                    <th><input name="P_bottomTopThickness" type="number" step="any" min="0" value="<%= print.P_bottomTopThickness %>"></input></th>
+                </tr>
+                <tr>
+                    <th><label>Fill Density:</label></th>
+                    <th><input name="P_fillDensity" type="number" step="any" min="0" value="<%= print.P_fillDensity %>"></input></th>
+                </tr>
+                <tr>
+                    <th><label>Print Speed:</label></th>
+                    <th><input name="P_printSpeed" type="number" step="any" min="0" value="<%= print.P_printSpeed %>"></input></th>
+                </tr>
+                <tr>
+                    <th><label>Support Type:</label></th>
+                    <th><select name="P_support">
+                        <option value="0" <%if (print.P_support = 0) { %> selected <% } %> >None</option>
+                        <option value="1" <%if (print.P_support = 1) { %> selected <% } %> >Touching Buildplate</option>
+                        <option value="2" <%if (print.P_support = 2) { %> selected <% } %> >Everywhere</option>
+                    </select></th>
+                </tr>
+                <tr>
+                    <th><label>Platform Adhesion Type:</label></th>
+                    <th><select name="P_platformAdhesionType">
+                        <option value="0" <%if (print.P_platformAdhesionType = 0) { %> selected <% } %> >None</option>
+                        <option value="1" <%if (print.P_platformAdhesionType = 1) { %> selected <% } %> >Brim</option>
+                        <option value="2" <%if (print.P_platformAdhesionType = 2) { %> selected <% } %> >Raft</option>
+                    </select></th>
+                </tr>
+                <tr>
+                    <th><br><input type="submit" value="ReSlice"></th>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <%if (print.rejectingNotice) { %>
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Afwijzings bericht</h3>
+                </div>
+                <div class="panel-body">
+                    <%= print.rejectingNotice %>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function disableForm(formID){
+        $('#' + formID + ' th').children(':input').attr('disabled', 'disabled');
+    }
+
+    function enableForm(formID){
+        $('#' + formID + ' th').children(':input').removeAttr('disabled');
+    }
+
+    if(<%= print.status%> !== 0 && <%= print.status%> !== 21 && <%= print.status%> !== 41){
+        disableForm('print-update-parameters-form');
+    }
+    if('<%= user.type %>' !== 'normal' && <%= print.status%> == 1){
+        enableForm('print-update-parameters-form');
+    }
+</script>

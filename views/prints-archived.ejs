@@ -1,0 +1,53 @@
+<style type="text/css">
+
+	tr:hover{
+        background: #EBEBEB;
+    }
+
+</style>
+
+<h3>Gearchiveerde project</h3>
+<div class="panel panel-default">
+    <div class="panel-heading">gearchiveerde project</div>
+    <table id="archived-table" class="table" data-link="row"></table>
+</div>
+
+<script type="text/javascript">
+    //Table Normal
+    $.ajax({
+        dataTypeL: "json",
+        url: "/backend/prints/list/archived/",
+        beforeSend: function( xhr ) {
+            xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+        }
+    }).done(function (data) {
+        var normalPrints = $.parseJSON(data);
+        drawTableNormal(normalPrints);
+    });
+
+    function drawTableNormal (normalPrints) {
+        var table = document.getElementById('archived-table');
+        var row0 = table.insertRow(0);
+        row0.insertCell(0).innerHTML = '<b>Naam</b>';
+        row0.insertCell(1).innerHTML = '<b>Status</b>';
+        row0.insertCell(2).innerHTML = '<b>Verwachte tijdsduur</b>';
+        row0.insertCell(3).innerHTML = '<b>Vereist matriaal</b>';
+        for (var i = 0; i < Object.keys(normalPrints).length; i++) {
+            var row = table.insertRow(1);
+            row.insertCell(0).innerHTML = '<a href="/prints/' + normalPrints[i].id + '">' + normalPrints[i].name + '</a>';
+
+            if(normalPrints[i].status == 1){
+                row.insertCell(1).innerHTML = '<b style="color: grey">In afwachting</b>';
+            }else if(normalPrints[i].status == 2){
+                row.insertCell(1).innerHTML = '<b style="color: orange">geaccepteerd | In wachtrij</b>';
+            }else if(normalPrints[i].status == 3){
+                row.insertCell(1).innerHTML = '<b style="color: blue">Wordt geprint</b>';
+            }else if(normalPrints[i].status == 4){
+                row.insertCell(1).innerHTML = '<b style="color: green">Klaar</b>';
+            }
+
+            row.insertCell(2).innerHTML = normalPrints[i].estimatedPrintTime + ' minuten';
+            row.insertCell(3).innerHTML = normalPrints[i].materialAmount + ' gram';
+        }
+    }
+</script>
