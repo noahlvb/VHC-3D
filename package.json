@@ -15,7 +15,7 @@
   },
   "bugs": "https://github.com/noahlvb/VHC-3D/issues",
   "contributors": "https://github.com/noahlvb/VHC-3D/graphs/contributors",
-  "license": "ISC",
+  "license": "GPLv3",
   "main": "bin/www.js",
   "scripts": {
     "start": "node bin/www",
