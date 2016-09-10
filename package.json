@@ -1,6 +1,6 @@
 {
   "name": "VHC-3D",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "3D printing frontend system for the Vathorst College",
   "author": "Noah van Bochove",
   "homepage": "https://github.com/noahlvb/VHC-3D",
@@ -15,7 +15,7 @@
   },
   "bugs": "https://github.com/noahlvb/VHC-3D/issues",
   "contributors": "https://github.com/noahlvb/VHC-3D/graphs/contributors",
-  "license": "ISC",
+  "license": "GPLv3",
   "main": "bin/www.js",
   "scripts": {
     "start": "node bin/www",
