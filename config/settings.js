@@ -10,6 +10,7 @@ module.exports = {
     'googleOauth' : {
         'clientID' : process.env.VHC3D_GOAUTH_CLIENTID,
         'clientSecret' : process.env.VHC3D_GOAUTH_CLIENTSECRET,
-        'callbackURL' : 'http://127.0.0.1:3000/auth/google/callback'
+        'callbackURL' : 'http://127.0.0.1:3000/auth/google/callback',
+        'hd' : ''
     }
 };
