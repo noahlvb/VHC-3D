@@ -61,6 +61,7 @@ module.exports = function(projectID, hypothesis, callback){
                 formData: formData
             }, function(err, response, body){
                 if (err) return console.error(err);
+                if (response.statusCode != 201) return callback(2);
 
                 request.post({
                     url: settings.octo_addr + 'api/files/local/' + documentPrint.fileLocation.substr(-25),
@@ -68,6 +69,7 @@ module.exports = function(projectID, hypothesis, callback){
                     json: sliceRawBody
                 }, function(err, response, body){
                     if (err) return console.error(err);
+                    if (response.statusCode != 202) return callback(2);
 
                     var checkForGCODE = setInterval(function(){
                         request.get({
@@ -76,6 +78,8 @@ module.exports = function(projectID, hypothesis, callback){
                             json: true
                         }, function(err, response, body){
                             if (err) return console.error(err);
+                            if (response.statusCode != 200) return callback(2);
+
                             if(response.statusCode == 200 && body.gcodeAnalysis){
                                 var estimatedPrintTimeNonRound = body.gcodeAnalysis.estimatedPrintTime / 60;
                                 estimatedPrintTime = estimatedPrintTimeNonRound.toFixedDown(2);

@@ -1,1 +1,3 @@
-email notifications
+- Printer fault handler
+- email notifications
+- stl viewer on review page

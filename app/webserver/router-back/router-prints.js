@@ -72,6 +72,12 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
                     });
                     req.flash('warning', 'je hebt niet meer genoeg materiaal tot je beschikking');
                     res.redirect('/prints/add');
+                }else if(response == 2){
+                    data.remove(function(err){
+                        if (err) console.error(err);
+                    });
+                    req.flash('error', 'De verbinding met de printer is verbroken!!');
+                    res.redirect('/');
                 }else{
                     req.flash('info', 'Je printje is succesvol geupload');
                     res.redirect('/');
@@ -116,6 +122,12 @@ router.post('/reslice/:id/', account.isLoggedInAsUser, function(req, res){
                     document.save();
 
                     req.flash('warning', 'je hebt niet meer genoeg materiaal tot je beschikking');
+                    res.redirect('/prints/' + document._id);
+                }else if(response == 2){
+                    document = oldDocument;
+                    document.save();
+
+                    req.flash('error', 'De verbinding met de printer is verbroken!!');
                     res.redirect('/prints/' + document._id);
                 }else{
                     if(document.status == 21 || document.status == 41){
