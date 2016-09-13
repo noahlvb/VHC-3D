@@ -2,6 +2,7 @@ var util = require("util");
 var CronJob = require('cron').CronJob;
 var nconf = require("nconf");
 var request = require("request");
+var nodemailer = require("nodemailer");
 
 var usersDB = require("./../models/users");
 var printsDB = require("./../models/prints");
@@ -9,6 +10,13 @@ var settings = require("./../config/settings");
 
 var date = new Date();
 var printerFault = false;
+var smtpTransport = nodemailer.createTransport("smtp", {
+    service: "Gmail",
+    auth: {
+        user: settings.mail.gmailAddr,
+        pass: settings.mail.gmailAppPassword
+    }
+});
 
 nconf.use('file', { file: './config/settings.json' });
 nconf.load();
@@ -95,6 +103,31 @@ new CronJob('01 */1 * * * *', function() {
                     document.save();
                 });
                 printerFault = true;
+
+                smtpTransport.sendMail({
+                    from: settings.mail.gmailAddr,
+                    to: settings.mail.sysadmin,
+                    subject: 'VHC3D: printerFault!!!',
+                    text: 'A print job failed and the system needs your attention!!!'
+                }, function(err, response){
+                    if(err){
+                        console.error(err);
+                    }
+                });
+
+                usersDB.findOne({_id: document.owner}, function(err, documentUser){
+                    smtpTransport.sendMail({
+                        from: settings.mail.gmailAddr,
+                        to: documentUser.email,
+                        subject: 'VHC3D: Print opdracht mislukt',
+                        html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is mislukt en is niet geprint of niet goedgeprint.<br>Je kunt de overblijfselen komen ophalen als je dat wilt.<br><br>Vriendlijke groet VHC 3d print Team</p>'
+                    }, function(err, response){
+                        if(err){
+                            console.error(err);
+                        }
+                    });
+                });
+
             }else if(bodyPrinter.state.flags.operational === true || bodyPrinter.state.flags.ready === true || bodyPrinter.state.flags.printing === false){
                 if(bodyJob.progress.completion === null){
                     startNewPrint();
@@ -102,6 +135,20 @@ new CronJob('01 */1 * * * *', function() {
                     printsDB.findOne({fileLocation: jobFile}, function(err, document){
                         document.status = 4;
                         document.save();
+
+                        usersDB.findOne({_id: document.owner}, function(err, documentUser){
+                            smtpTransport.sendMail({
+                                from: settings.mail.gmailAddr,
+                                to: documentUser.email,
+                                subject: 'VHC3D: Print opdracht voltooid',
+                                html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is voltooid.<br>Je kunt de het project komen ophalen.<br><br>Vriendlijke groet VHC 3d print Team</p>'
+                            }, function(err, response){
+                                if(err){
+                                    console.error(err);
+                                }
+                            });
+                        });
+
                         startNewPrint();
                     });
                 }

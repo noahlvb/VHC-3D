@@ -11,6 +11,11 @@ module.exports = {
         'clientID' : process.env.VHC3D_GOAUTH_CLIENTID,
         'clientSecret' : process.env.VHC3D_GOAUTH_CLIENTSECRET,
         'callbackURL' : 'http://127.0.0.1:3000/auth/google/callback',
-        'hd' : ''
+        'hd' : process.env.VHC3D_GOAUTH_HD
+    },
+    'mail' : {
+        'gmailAddr' : process.env.VHC3D_MAIL_GMAILADDR,
+        'gmailAppPassword' : process.env.VHC3D_MAIL_GMAILAPPPASSWORD,
+        'sysadmin' : process.env.VHC3D_MAIL_SYSADMIN
     }
 };
