@@ -52,7 +52,7 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
 
     fs.rename(req.file.path, 'files/slt/' + req.file.filename + '.stl', function(err){
         if(err){
-            console.error(err);
+            logger.error(err);
             req.flash('error', 'Uploaden mislukt');
             res.redirect('/prints/add');
             return;
@@ -68,13 +68,13 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
             require("./../../slice")(data._id, true, function(response){
                 if(response == 1){
                     data.remove(function(err){
-                        if (err) console.error(err);
+                        if (err) logger.error(err);
                     });
                     req.flash('warning', 'je hebt niet meer genoeg materiaal tot je beschikking');
                     res.redirect('/prints/add');
                 }else if(response == 2){
                     data.remove(function(err){
-                        if (err) console.error(err);
+                        if (err) logger.error(err);
                     });
                     req.flash('error', 'De verbinding met de printer is verbroken!!');
                     res.redirect('/');
@@ -154,7 +154,7 @@ router.get('/list/pending/', account.isLoggedInAsUser, function(req, res){
                 {archive: false}
             ]
         }, function(err, result){
-            if (err) return console.error(err);
+            if (err) return logger.error(err);
 
             var printsMap = {};
 
@@ -180,7 +180,7 @@ router.get('/list/archived/', account.isLoggedInAsUser, function(req, res){
             {archive: true}
         ]
     }, function(err, result){
-        if (err) return console.error(err);
+        if (err) return logger.error(err);
 
         var printsMap = {};
 
@@ -206,7 +206,7 @@ router.get('/list/:status/', account.isLoggedInAsUser, function(req, res){
             {archive: false}
         ]
     }, function(err, result){
-        if (err) return console.error(err);
+        if (err) return logger.error(err);
 
         var printsMap = {};
 
@@ -232,7 +232,7 @@ router.get('/list/', account.isLoggedInAsUser, function(req, res){
             {archive: false}
         ]
     }, function(err, result){
-        if (err) return console.error(err);
+        if (err) return logger.error(err);
 
         var printsMap = {};
 
@@ -264,7 +264,7 @@ router.get('/:id/archive', account.isLoggedInAsUser, function(req, res){
         }
 
         if(document.status == 4 || document.status == 41){
-            if (err) return console.error(err);
+            if (err) return logger.error(err);
             document.archive = true;
             document.save();
 
@@ -291,19 +291,19 @@ router.get('/:id/delete', account.isLoggedInAsUser, function(req, res){
         }
 
         if(document.status == 0 || document.status == 1 || document.status == 2 || document.status == 21){
-            if (err) return console.error(err);
+            if (err) return logger.error(err);
 
             var fileLocation = document.fileLocation;
             var materialAmount = document.materialAmount;
             document.remove(function(err){
-                if (err) return console.error(err);
+                if (err) return logger.error(err);
 
                 req.user.materialAmountReserved = req.user.materialAmountReserved - materialAmount;
                 req.user.materialAmount = req.user.materialAmount + materialAmount;
                 req.user.save();
 
                 fs.unlink('./' + fileLocation, function(err){
-                    if (err) return console.error(err);
+                    if (err) return logger.error(err);
 
                     req.flash('info', 'je project is verwijderd');
                     res.redirect('/');
@@ -323,7 +323,7 @@ router.get('/:id/apply', account.isLoggedInAsUser, function(req, res){
             {owner: req.user._id}
         ]
     }, function(err, document){
-        if (err) return console.error(err);
+        if (err) return logger.error(err);
         if(document === null){
             req.flash('error', 'Je bent niet de eigenaar van dit project of het project bestaat niet.');
             res.redirect('/');
@@ -366,7 +366,7 @@ router.get('/:id/accept/:boolean', account.isLoggedInAsUser, function(req, res){
                 req.flash('info', 'project "' + document.name + '" is afgekeurd');
                 res.redirect('/supervisor/pending');
             }else{
-                util.log('nor false nor true');
+                logger.info('nor false nor true');
             }
         }else{
             req.flash('error', 'Dit project hoort nog niet ingediend te worden!');

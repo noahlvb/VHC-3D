@@ -49,7 +49,7 @@ function startNewPrint() {
                                         url: settings.octo_addr + 'api/files/local/' + document.fileLocation.substr(-25) + '.gcode',
                                         headers: {'X-Api-Key': settings.octo_key}
                                     }, function(err, response, body){
-                                        if (err) return console.error(err);
+                                        if (err) return logger.error(err);
                                     });
                                 }, 5000);
                             }
@@ -69,12 +69,12 @@ new CronJob('01 */5 * 1 * *', function() {
             user.save();
         })
         .on('error', function(err){
-            return console.error(err);
+            return logger.error(err);
         })
         .on('end', function(){
             nconf.set('lastRenewel', String((date.getMonth()+1) + '-' + date.getFullYear()));
             nconf.save(function(err){
-                if (err) return console.error(err);
+                if (err) return logger.error(err);
             });
         });
     }
@@ -86,7 +86,7 @@ new CronJob('01 */1 * * * *', function() {
         headers: {'X-Api-Key': settings.octo_key},
         json: true
     }, function(err, responsePrinter, bodyPrinter){
-        if (err) return console.error(err);
+        if (err) return logger.error(err);
 
         request.get({
             url: settings.octo_addr + 'api/job',
@@ -111,7 +111,7 @@ new CronJob('01 */1 * * * *', function() {
                     text: 'A print job failed and the system needs your attention!!!'
                 }, function(err, response){
                     if(err){
-                        console.error(err);
+                        logger.error(err);
                     }
                 });
 
@@ -123,7 +123,7 @@ new CronJob('01 */1 * * * *', function() {
                         html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is mislukt en is niet geprint of niet goedgeprint.<br>Je kunt de overblijfselen komen ophalen als je dat wilt.<br><br>Vriendlijke groet VHC 3d print Team</p>'
                     }, function(err, response){
                         if(err){
-                            console.error(err);
+                            logger.error(err);
                         }
                     });
                 });
@@ -144,7 +144,7 @@ new CronJob('01 */1 * * * *', function() {
                                 html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is voltooid.<br>Je kunt de het project komen ophalen.<br><br>Vriendlijke groet VHC 3d print Team</p>'
                             }, function(err, response){
                                 if(err){
-                                    console.error(err);
+                                    logger.error(err);
                                 }
                             });
                         });
@@ -157,6 +157,6 @@ new CronJob('01 */1 * * * *', function() {
     });
 
     if(printerFault === true){
-        console.log("------ Printer Fault!!!!!!! -------");
+        logger.info("------ Printer Fault!!!!!!! -------");
     }
 }, null, true, 'Europe/Amsterdam');

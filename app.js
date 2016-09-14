@@ -13,6 +13,8 @@ var http            = require("http"),
     connectMongo    = require("connect-mongo")(expressSession),
     passport        = require("passport");
 
+var logger = require('./app/logger');
+
 // loading Auth system and settings
 var settings = require("./config/settings");
 require("./app/passport")(passport, settings);
@@ -26,7 +28,6 @@ var server = http.createServer(router);
     router.use('/static', express.static(__dirname + '/public'));
     router.set('view cache', false);
     router.use(ejsLayouts);
-
 
     var uploadStorage = multer.diskStorage({
         destination: function(req, file, cb){
@@ -49,6 +50,7 @@ var server = http.createServer(router);
         saveUninitialized : false
     }));
     router.use(Flash());
+    router.use(require("morgan")("combined", {"stream": logger.streamExpress}));
 
     // initializing passport
     router.use(passport.initialize());

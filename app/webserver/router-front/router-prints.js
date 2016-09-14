@@ -49,7 +49,7 @@ router.get('/download/:id', account.isLoggedInAsUser, function(req, res){
         if(req.user.type == "admin" || req.user.type == "supervisor" || req.user._id == document.owner){
             res.download('./' + document.fileLocation, function(err){
                 if (err) {
-                    console.log(err);
+                    logger.info(err);
                 }
             });
         }else{

@@ -60,7 +60,7 @@ module.exports = function(projectID, hypothesis, callback){
                 json: true,
                 formData: formData
             }, function(err, response, body){
-                if (err) return console.error(err);
+                if (err) return logger.error(err);
                 if (response.statusCode != 201) return callback(2);
 
                 request.post({
@@ -68,7 +68,7 @@ module.exports = function(projectID, hypothesis, callback){
                     headers: {'X-Api-Key': settings.octo_key},
                     json: sliceRawBody
                 }, function(err, response, body){
-                    if (err) return console.error(err);
+                    if (err) return logger.error(err);
                     if (response.statusCode != 202) return callback(2);
 
                     var checkForGCODE = setInterval(function(){
@@ -77,7 +77,7 @@ module.exports = function(projectID, hypothesis, callback){
                             headers: {'X-Api-Key': settings.octo_key},
                             json: true
                         }, function(err, response, body){
-                            if (err) return console.error(err);
+                            if (err) return logger.error(err);
                             if (response.statusCode != 200) return callback(2);
 
                             if(response.statusCode == 200 && body.gcodeAnalysis){
@@ -91,7 +91,7 @@ module.exports = function(projectID, hypothesis, callback){
                                             url: settings.octo_addr + 'api/files/local/' + documentPrint.fileLocation.substr(-25) + '.gcode',
                                             headers: {'X-Api-Key': settings.octo_key}
                                         }, function(err, response, body){
-                                            if (err) return console.error(err);
+                                            if (err) return logger.error(err);
                                         });
                                     }, 5000);
                                 }

@@ -15,7 +15,7 @@
   },
   "bugs": "https://github.com/noahlvb/VHC-3D/issues",
   "contributors": "https://github.com/noahlvb/VHC-3D/graphs/contributors",
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "main": "bin/www.js",
   "scripts": {
     "start": "node bin/www",
@@ -34,6 +34,7 @@
     "express-flash": "0.0.2",
     "express-session": "^1.7.5",
     "mongoose": "^3.8.15",
+    "morgan": "^1.7.0",
     "multer": "^1.2.0",
     "nconf": "^0.8.4",
     "nodemailer": "^2.6.0",
@@ -41,6 +42,7 @@
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",
     "request": "^2.74.0",
-    "socket.io": "^1.0.6"
+    "socket.io": "^1.0.6",
+    "winston": "^2.2.0"
   }
 }
