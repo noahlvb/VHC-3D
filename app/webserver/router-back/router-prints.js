@@ -8,17 +8,18 @@ var account = require("./../../account");
 var router = express.Router();
 
 router.post('/add', account.isLoggedInAsUser, function(req, res){
-    if(req.body.name == false || req.file == undefined || req.body.P_layerHeight == false || req.body.P_shellThickness == false || req.body.P_bottomTopThickness == false || req.body.P_fillDensity == false || req.body.P_printSpeed == false || req.body.P_support == false || req.body.P_platformAdhesionType == false){
+    if(req.body.name == false || req.file == undefined || req.body.P_layerHeight == false || req.body.P_shellThickness == false || req.body.P_bottomTopThickness == false || req.body.P_fillDensity == false || req.body.P_printSpeed == false){
         req.flash('error', 'niet alle velden zijn ingevuld');
         res.redirect('/prints/add');
         return;
     }
-    if(req.body.P_support < 0 || req.body.P_support > 3){
-        req.flash('error', 'niet alle velden zijn ingevuld');
+
+    if(req.body.P_support != 0 && req.body.P_support != 1 && req.body.P_support != 2){
+        req.flash('error', 'a niet alle velden zijn ingevuld');
         res.redirect('/prints/add');
         return;
     }
-    if(req.body.P_platformAdhesionType < 0 || req.body.P_platformAdhesionType > 3){
+    if(req.body.P_platformAdhesionType != 0 && req.body.P_platformAdhesionType != 1 && req.body.P_platformAdhesionType != 2){
         req.flash('error', 'niet alle velden zijn ingevuld');
         res.redirect('/prints/add');
         return;
@@ -88,19 +89,19 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
 });
 
 router.post('/reslice/:id/', account.isLoggedInAsUser, function(req, res){
-    if(req.body.P_layerHeight == false || req.body.P_shellThickness == false || req.body.P_bottomTopThickness == false || req.body.P_fillDensity == false || req.body.P_printSpeed == false || req.body.P_support == false || req.body.P_platformAdhesionType == false){
+    if(req.body.P_layerHeight == false || req.body.P_shellThickness == false || req.body.P_bottomTopThickness == false || req.body.P_fillDensity == false || req.body.P_printSpeed == false){
         req.flash('error', 'niet alle velden zijn ingevuld');
-        res.redirect('/prints/' + document._id);
+        res.redirect('/prints/' + req.params.id);
         return;
     }
-    if(req.body.P_support < 0 || req.body.P_support > 3){
+    if(req.body.P_support != 0 && req.body.P_support != 1 && req.body.P_support != 2){
         req.flash('error', 'niet alle velden zijn ingevuld');
-        res.redirect('/prints/' + document._id);
+        res.redirect('/prints/' + req.params.id);
         return;
     }
-    if(req.body.P_platformAdhesionType < 0 || req.body.P_platformAdhesionType > 3){
+    if(req.body.P_platformAdhesionType != 0 && req.body.P_platformAdhesionType != 1 && req.body.P_platformAdhesionType != 2){
         req.flash('error', 'niet alle velden zijn ingevuld');
-        res.redirect('/prints/' + document._id);
+        res.redirect('/prints/' + req.params.id);
         return;
     }
 

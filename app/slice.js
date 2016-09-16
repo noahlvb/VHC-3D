@@ -39,7 +39,7 @@ module.exports = function(projectID, hypothesis, callback){
                 "slicer": "cura",
                 "gcode": documentPrint.fileLocation.substr(-25) + '.gcode',
                 "printerProfile": "Default",
-                "profile": "defaultprintprofile",
+                "profile": "printer",
                 "profile.layer_height": documentPrint.P_layerHeight,
                 "profile.wall_thickness": documentPrint.P_shellThickness,
                 "profile.solid_layer_thickness": documentPrint.P_bottomTopThickness,
@@ -78,7 +78,7 @@ module.exports = function(projectID, hypothesis, callback){
                             json: true
                         }, function(err, response, body){
                             if (err) return logger.error(err);
-                            if (response.statusCode != 200) return callback(2);
+                            if (response.statusCode != 200 && response.statusCode != 404) return callback(2);
 
                             if(response.statusCode == 200 && body.gcodeAnalysis){
                                 var estimatedPrintTimeNonRound = body.gcodeAnalysis.estimatedPrintTime / 60;

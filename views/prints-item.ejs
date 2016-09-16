@@ -104,17 +104,17 @@
                 <tr>
                     <th><label>Support Type:</label></th>
                     <th><select name="P_support">
-                        <option value="0" <%if (print.P_support = 0) { %> selected <% } %> >None</option>
-                        <option value="1" <%if (print.P_support = 1) { %> selected <% } %> >Touching Buildplate</option>
-                        <option value="2" <%if (print.P_support = 2) { %> selected <% } %> >Everywhere</option>
+                        <option value="0" <%if (print.P_support == 0) { %> selected <% } %> >None</option>
+                        <option value="1" <%if (print.P_support == 1) { %> selected <% } %> >Touching Buildplate</option>
+                        <option value="2" <%if (print.P_support == 2) { %> selected <% } %> >Everywhere</option>
                     </select></th>
                 </tr>
                 <tr>
                     <th><label>Platform Adhesion Type:</label></th>
                     <th><select name="P_platformAdhesionType">
-                        <option value="0" <%if (print.P_platformAdhesionType = 0) { %> selected <% } %> >None</option>
-                        <option value="1" <%if (print.P_platformAdhesionType = 1) { %> selected <% } %> >Brim</option>
-                        <option value="2" <%if (print.P_platformAdhesionType = 2) { %> selected <% } %> >Raft</option>
+                        <option value="0" <%if (print.P_platformAdhesionType == 0) { %> selected <% } %> >None</option>
+                        <option value="1" <%if (print.P_platformAdhesionType == 1) { %> selected <% } %> >Brim</option>
+                        <option value="2" <%if (print.P_platformAdhesionType == 2) { %> selected <% } %> >Raft</option>
                     </select></th>
                 </tr>
                 <tr>
