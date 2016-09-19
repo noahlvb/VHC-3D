@@ -10,7 +10,7 @@ var router = express.Router();
 router.get('/list', account.isLoggedInAsAdmin, function(req, res){
 	usersDB.find({}, function (err, users) {
 
-		if (err) return util.error(err);
+		if (err) return logger.error(err);
 
         var userMap = {};
 

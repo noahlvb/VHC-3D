@@ -2,6 +2,7 @@ var util = require("util");
 
 var usersDB = require("./../../models/users");
 var account = require("./../account");
+var settings = require("./../../config/settings");
 
 module.exports = function (router, passport) {
 
@@ -26,7 +27,7 @@ module.exports = function (router, passport) {
         res.render('login', {});
     });
 
-    router.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'], /*hd : 'vathorstcollege.nl'*/ }));
+    router.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'], hd : settings.googleOauth.hd }));
 
     // logout request
     router.get('/logout', function (req, res) {

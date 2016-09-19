@@ -1,3 +1,11 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r68/three.min.js"></script>
+<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/controls/TrackballControls.js"></script>
+<script type='text/javascript' >
+  var projectID = '<%= print._id %>';
+</script>
+<script src="/static/js/stl-loader.js"></script>
+<script src="/static/js/stl.js"></script>
+
 <div class="row">
     <div class="col-md-3">
         <h3>Print opdracht: <%= print.name %></h3>
@@ -56,6 +64,16 @@
                 <% } %>
             </ul>
         </div>
+        <%if (print.rejectingNotice) { %>
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Afwijzings bericht</h3>
+                </div>
+                <div class="panel-body">
+                    <%= print.rejectingNotice %>
+                </div>
+            </div>
+        <% } %>
     </div>
     <div class="col-md-5">
         <form id="print-update-parameters-form" method="post" action="/backend/prints/reslice/<%= print._id %>">
@@ -86,17 +104,17 @@
                 <tr>
                     <th><label>Support Type:</label></th>
                     <th><select name="P_support">
-                        <option value="0" <%if (print.P_support = 0) { %> selected <% } %> >None</option>
-                        <option value="1" <%if (print.P_support = 1) { %> selected <% } %> >Touching Buildplate</option>
-                        <option value="2" <%if (print.P_support = 2) { %> selected <% } %> >Everywhere</option>
+                        <option value="0" <%if (print.P_support == 0) { %> selected <% } %> >None</option>
+                        <option value="1" <%if (print.P_support == 1) { %> selected <% } %> >Touching Buildplate</option>
+                        <option value="2" <%if (print.P_support == 2) { %> selected <% } %> >Everywhere</option>
                     </select></th>
                 </tr>
                 <tr>
                     <th><label>Platform Adhesion Type:</label></th>
                     <th><select name="P_platformAdhesionType">
-                        <option value="0" <%if (print.P_platformAdhesionType = 0) { %> selected <% } %> >None</option>
-                        <option value="1" <%if (print.P_platformAdhesionType = 1) { %> selected <% } %> >Brim</option>
-                        <option value="2" <%if (print.P_platformAdhesionType = 2) { %> selected <% } %> >Raft</option>
+                        <option value="0" <%if (print.P_platformAdhesionType == 0) { %> selected <% } %> >None</option>
+                        <option value="1" <%if (print.P_platformAdhesionType == 1) { %> selected <% } %> >Brim</option>
+                        <option value="2" <%if (print.P_platformAdhesionType == 2) { %> selected <% } %> >Raft</option>
                     </select></th>
                 </tr>
                 <tr>
@@ -106,16 +124,7 @@
         </form>
     </div>
     <div class="col-md-4">
-        <%if (print.rejectingNotice) { %>
-            <div class="panel panel-danger">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Afwijzings bericht</h3>
-                </div>
-                <div class="panel-body">
-                    <%= print.rejectingNotice %>
-                </div>
-            </div>
-        <% } %>
+        <div id="view"></div>
     </div>
 </div>
 
