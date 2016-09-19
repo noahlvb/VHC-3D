@@ -15,6 +15,8 @@ module.exports = function(projectID, hypothesis, callback){
     printsDB.findOne({ _id: projectID }, function(err, documentPrint){
         usersDB.findOne({ _id: documentPrint.owner}, function(err, documentUser){
 
+            var randomIdentifier = Math.floor(Math.random() * (1000 - 1) + 1);
+
             var formData = {
                 file: fs.createReadStream('./' + documentPrint.fileLocation),
                 select: 'false',
@@ -37,9 +39,9 @@ module.exports = function(projectID, hypothesis, callback){
             var sliceRawBody = {
                 "command": "slice",
                 "slicer": "cura",
-                "gcode": documentPrint.fileLocation.substr(-25) + '.gcode',
+                "gcode": documentPrint.fileLocation.substr(-25) + randomIdentifier + '.gcode',
                 "printerProfile": "Default",
-                "profile": "defaultprintprofile",
+                "profile": "printer",
                 "profile.layer_height": documentPrint.P_layerHeight,
                 "profile.wall_thickness": documentPrint.P_shellThickness,
                 "profile.solid_layer_thickness": documentPrint.P_bottomTopThickness,
@@ -73,12 +75,12 @@ module.exports = function(projectID, hypothesis, callback){
 
                     var checkForGCODE = setInterval(function(){
                         request.get({
-                            url: settings.octo_addr + 'api/files/local/' + documentPrint.fileLocation.substr(-25) + '.gcode',
+                            url: settings.octo_addr + 'api/files/local/' + documentPrint.fileLocation.substr(-25) + randomIdentifier + '.gcode',
                             headers: {'X-Api-Key': settings.octo_key},
                             json: true
                         }, function(err, response, body){
                             if (err) return logger.error(err);
-                            if (response.statusCode != 200) return callback(2);
+                            if (response.statusCode != 200 && response.statusCode != 404) return callback(2);
 
                             if(response.statusCode == 200 && body.gcodeAnalysis){
                                 var estimatedPrintTimeNonRound = body.gcodeAnalysis.estimatedPrintTime / 60;
@@ -88,7 +90,7 @@ module.exports = function(projectID, hypothesis, callback){
                                 if(hypothesis === true){
                                     setTimeout(function(){
                                         request.delete({
-                                            url: settings.octo_addr + 'api/files/local/' + documentPrint.fileLocation.substr(-25) + '.gcode',
+                                            url: settings.octo_addr + 'api/files/local/' + documentPrint.fileLocation.substr(-25) + randomIdentifier + '.gcode',
                                             headers: {'X-Api-Key': settings.octo_key}
                                         }, function(err, response, body){
                                             if (err) return logger.error(err);
