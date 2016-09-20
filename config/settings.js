@@ -2,7 +2,7 @@
 // replace the env variables with your data or use env variables.
 module.exports = {
     'web_port' : process.env.VHC3D_PORT || 3000,
-    'web_ip' : '0.0.0.0',
+    'web_ip' : process.env.VHC3D_IP|| '0.0.0.0',
     'db' : process.env.VHC3D_DB,
     'secret' : process.env.VHC3D_SECRET,
     'octo_addr' : process.env.VHC3D_OCTO_ADDR,
