@@ -12,6 +12,7 @@ var http            = require("http"),
     Flash           = require("express-flash"),
     connectMongo    = require("connect-mongo")(expressSession),
     passport        = require("passport");
+    compression     = require('compression');
 
 var logger = require('./app/logger');
 
@@ -23,10 +24,10 @@ require("./app/passport")(passport, settings);
 var router = express();
 var server = http.createServer(router);
 
+    router.use(compression());
     router.set('view engine', 'ejs');
     router.set('views', __dirname + '/views');
     router.use('/static', express.static(__dirname + '/public'));
-    router.set('view cache', false);
     router.use(ejsLayouts);
 
     var uploadStorage = multer.diskStorage({
