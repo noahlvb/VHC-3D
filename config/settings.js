@@ -13,6 +13,7 @@ module.exports = {
         'callbackURL' : process.env.VHC3D_GOAUTH_CALLBACKURL,
         'hd' : process.env.VHC3D_GOAUTH_HD
     },
+    'googleAnalytics': process.env.VHC3D_ANALYTICS,
     'mail' : {
         'gmailAddr' : process.env.VHC3D_MAIL_GMAILADDR,
         'gmailAppPassword' : process.env.VHC3D_MAIL_GMAILAPPPASSWORD,

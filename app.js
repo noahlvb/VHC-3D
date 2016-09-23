@@ -29,6 +29,7 @@ var server = http.createServer(router);
     router.set('views', __dirname + '/views');
     router.use('/static', express.static(__dirname + '/public'));
     router.use(ejsLayouts);
+    router.locals.trackingcode = settings.googleAnalytics;
 
     var uploadStorage = multer.diskStorage({
         destination: function(req, file, cb){
