@@ -4,7 +4,6 @@ var settings = require("../config/settings");
 logger = require('./../app/logger');
 
 var mongoose = require("mongoose");
-var util = require("util");
 
 mongoose.connect(settings.db, {auto_reconnect: true});
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
