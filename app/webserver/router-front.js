@@ -1,5 +1,3 @@
-var util = require("util");
-
 var usersDB = require("./../../models/users");
 var account = require("./../account");
 var settings = require("./../../config/settings");

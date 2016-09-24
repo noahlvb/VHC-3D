@@ -1,4 +1,3 @@
-var util = require("util");
 var CronJob = require('cron').CronJob;
 var nconf = require("nconf");
 var request = require("request");

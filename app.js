@@ -1,6 +1,5 @@
 // loading required libaries
 var http            = require("http"),
-    util            = require("util"),
     path            = require("path");
     ejs             = require("ejs"),
     ejsLayouts      = require("express-ejs-layouts"),
@@ -47,6 +46,7 @@ var server = http.createServer(router);
     router.use(expressSession({
         secret : process.env.SESSION_SECRET || settings.secret,
         key : 'connect.sid',
+        cookie: {maxAge: 24 * 60 * 60 * 1000},
         store : new connectMongo({url: settings.db}),
         resave : false,
         saveUninitialized : false

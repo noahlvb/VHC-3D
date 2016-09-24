@@ -1,5 +1,4 @@
 var express = require("express");
-var util = require("util");
 var fs = require("fs");
 
 var printsDB = require("./../../../models/prints");

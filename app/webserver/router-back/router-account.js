@@ -1,5 +1,4 @@
 var express = require("express");
-var util = require("util");
 
 var usersDB = require("./../../../models/users");
 var account = require("./../../account");
