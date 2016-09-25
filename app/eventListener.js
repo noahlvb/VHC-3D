@@ -131,7 +131,7 @@ new CronJob('01 */1 * * * *', function() {
                     request.post({
                         url: settings.octo_addr + 'api/job',
                         headers: {'X-Api-Key': settings.octo_key},
-                        json: cancelRawBody = {
+                        json: {
                             "command": "cancel"
                         }
                     }, function(err, responseCancel, bodyCancel){
@@ -162,7 +162,7 @@ new CronJob('01 */1 * * * *', function() {
                             request.post({
                                 url: settings.octo_addr + 'api/job',
                                 headers: {'X-Api-Key': settings.octo_key},
-                                json: cancelRawBody = {
+                                json: {
                                     "command": "cancel"
                                 }
                             }, function(err, responseCancel, bodyCancel){
