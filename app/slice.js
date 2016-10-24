@@ -1,5 +1,6 @@
 var fs = require("fs");
 var request = require("request");
+var nodeStl = require("node-stl");
 
 var printsDB = require("./../models/prints.js");
 var usersDB = require("./../models/users.js");
@@ -16,6 +17,11 @@ module.exports = function(projectID, hypothesis, callback){
         usersDB.findOne({ _id: documentPrint.owner}, function(err, documentUser){
 
             var randomIdentifier = Math.floor(Math.random() * (1000 - 1) + 1);
+            var stl = nodeStl('./' + documentPrint.fileLocation);
+
+            if(stl.boundingBox[0] > 178.0 || stl.boundingBox[1] > 178.0 || stl.boundingBox[2] > 185.0){
+                return callback(3);
+            }
 
             var formData = {
                 file: fs.createReadStream('./' + documentPrint.fileLocation),

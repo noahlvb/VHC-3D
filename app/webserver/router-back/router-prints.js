@@ -78,6 +78,12 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
                     });
                     req.flash('error', 'De verbinding met de printer is verbroken!!');
                     res.redirect('/');
+                }else if(response == 3){
+                    data.remove(function(err){
+                        if (err) logger.error(err);
+                    });
+                    req.flash('error', 'Je model is groter dan X=177; Y=177; Z=185 en dat past niet in de printer!');
+                    res.redirect('/');
                 }else{
                     req.flash('info', 'Je printje is succesvol geupload');
                     res.redirect('/');
