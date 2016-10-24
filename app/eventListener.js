@@ -2,6 +2,7 @@ var CronJob = require('cron').CronJob;
 var nconf = require("nconf");
 var request = require("request");
 var nodemailer = require("nodemailer");
+var nodeStl = require("nodeStl");
 
 var usersDB = require("./../models/users");
 var printsDB = require("./../models/prints");
@@ -159,6 +160,8 @@ new CronJob('01 */1 * * * *', function() {
                                 });
                             });
 
+                            stl = nodeStl('./' + document.fileLocation);
+
                             request.post({
                                 url: settings.octo_addr + 'api/job',
                                 headers: {'X-Api-Key': settings.octo_key},
@@ -166,10 +169,26 @@ new CronJob('01 */1 * * * *', function() {
                                     "command": "cancel"
                                 }
                             }, function(err, responseCancel, bodyCancel){
-
+                                request.post({
+                                    url: settings.octo_addr + 'api/printer/command',
+                                    headers: {'X-Api-Key': settings.octo_key},
+                                    json: {
+                                        "command": [
+                                            "M104 S0",
+                                            "M140 S0",
+                                            "G1 X97.5",
+                                            "G1 Y200",
+                                            ( if stl.boundingBox[2] <= 6 ? "G1 Z6" : "G1 Z" + stl.boundingBox[2] + "-45"),
+                                            "G4 P360000",
+                                            "G1 Y0 F6000"
+                                        ]
+                                    }
+                                }, function(err, responsePushOff, bodyPushOff){
+                                    if(responsePushOff.statusCode == 204){
+                                        startNewPrint();
+                                    }
+                                });
                             });
-
-                            startNewPrint();
                         });
                     }
                 }
