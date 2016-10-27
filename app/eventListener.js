@@ -2,7 +2,7 @@ var CronJob = require('cron').CronJob;
 var nconf = require("nconf");
 var request = require("request");
 var nodemailer = require("nodemailer");
-var nodeStl = require("nodeStl");
+var nodeStl = require("node-stl");
 
 var usersDB = require("./../models/users");
 var printsDB = require("./../models/prints");
@@ -160,7 +160,7 @@ new CronJob('01 */1 * * * *', function() {
                                 });
                             });
 
-                            stl = nodeStl('./' + document.fileLocation);
+                            var stl = nodeStl('./' + document.fileLocation);
 
                             request.post({
                                 url: settings.octo_addr + 'api/job',
@@ -178,7 +178,7 @@ new CronJob('01 */1 * * * *', function() {
                                             "M140 S0",
                                             "G1 X97.5",
                                             "G1 Y200",
-                                            ( if stl.boundingBox[2] <= 6 ? "G1 Z6" : "G1 Z" + stl.boundingBox[2] + "-45"),
+                                            ( stl.boundingBox[2] <= 6 ? "G1 Z6" : "G1 Z" + stl.boundingBox[2] + "-45"),
                                             "G4 P360000",
                                             "G1 Y0 F6000"
                                         ]
