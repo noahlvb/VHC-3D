@@ -94,7 +94,7 @@ new CronJob('01 */1 * * * *', function() {
             });
         },
         function(responsePrinter, bodyPrinter, callback){
-            if(responsePrinter.statusCode === 200){
+            if(responsePrinter && responsePrinter.statusCode === 200){
                 request.get({
                     url: settings.octo_addr + 'api/job',
                     headers: {'X-Api-Key': settings.octo_key},
