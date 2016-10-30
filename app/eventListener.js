@@ -2,7 +2,8 @@ var CronJob = require('cron').CronJob;
 var nconf = require("nconf");
 var request = require("request");
 var nodemailer = require("nodemailer");
-var nodeStl = require("nodeStl");
+var async = require("async");
+var nodeStl = require("node-stl");
 
 var usersDB = require("./../models/users");
 var printsDB = require("./../models/prints");
@@ -81,118 +82,133 @@ new CronJob('01 */5 * 1 * *', function() {
 }, null, true, 'Europe/Amsterdam');
 
 new CronJob('01 */1 * * * *', function() {
-    request.get({
-        url: settings.octo_addr + 'api/printer?exclude=temperature,sd/',
-        headers: {'X-Api-Key': settings.octo_key},
-        json: true
-    }, function(err, responsePrinter, bodyPrinter){
-        if (err) return logger.error(err);
-
-        if(responsePrinter.statusCode === 200){
+    async.waterfall([
+        function(callback){
             request.get({
-                url: settings.octo_addr + 'api/job',
+                url: settings.octo_addr + 'api/printer?exclude=temperature,sd/',
                 headers: {'X-Api-Key': settings.octo_key},
                 json: true
-            }, function(err, responseJob, bodyJob){
-                if(bodyJob.job.file.name !== null){
-                    var jobFile = 'files/slt/' + bodyJob.job.file.name.slice(0, -6);
+            }, function(err, responsePrinter, bodyPrinter){
+                if (err) callback(err);
+                callback(null, responsePrinter, bodyPrinter);
+            });
+        },
+        function(responsePrinter, bodyPrinter, callback){
+            if(responsePrinter && responsePrinter.statusCode === 200){
+                request.get({
+                    url: settings.octo_addr + 'api/job',
+                    headers: {'X-Api-Key': settings.octo_key},
+                    json: true
+                }, function(err, responseJob, bodyJob){
+                    if (err) callback(err);
+                    callback(null, responsePrinter, bodyPrinter, responseJob, bodyJob);
+                });
+            }else{
+                callback('noConnection');
+            }
+        }
+    ],function(err, responsePrinter, bodyPrinter, responseJob, bodyJob){
+        if(err == 'noConnection'){
+            return;
+        }else if(err){
+            return logger.error(err);
+        }
+
+        if(bodyJob.job.file.name !== null){
+            var jobFile = 'files/slt/' + bodyJob.job.file.name.slice(0, -6);
+        }
+
+        if(bodyPrinter.state.flags.closedOnError === true || bodyPrinter.state.flags.error === true){
+            printsDB.findOne({fileLocation: jobFile}, function(err, document){
+                document.status = 41;
+                document.save();
+            });
+            printerFault = true;
+
+            smtpTransport.sendMail({
+                from: settings.mail.gmailAddr,
+                to: settings.mail.sysadmin,
+                subject: 'VHC3D: printerFault!!!',
+                text: 'A print job failed and the system needs your attention!!!'
+            }, function(err, response){
+                if(err){
+                    logger.error(err);
                 }
+            });
 
-                if(bodyPrinter.state.flags.closedOnError === true || bodyPrinter.state.flags.error === true){
-                    printsDB.findOne({fileLocation: jobFile}, function(err, document){
-                        document.status = 41;
-                        document.save();
-                    });
-                    printerFault = true;
+            usersDB.findOne({_id: document.owner}, function(err, documentUser){
+                smtpTransport.sendMail({
+                    from: settings.mail.gmailAddr,
+                    to: documentUser.email,
+                    subject: 'VHC3D: Print opdracht mislukt',
+                    html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is mislukt en is niet geprint of niet goedgeprint.<br>Je kunt de overblijfselen komen ophalen als je dat wilt.<br><br>Vriendlijke groet VHC 3d print Team</p>'
+                }, function(err, response){
+                    if(err){
+                        logger.error(err);
+                    }
+                });
+            });
 
+            request.post({
+                url: settings.octo_addr + 'api/job',
+                headers: {'X-Api-Key': settings.octo_key},
+                json: {
+                    "command": "cancel"
+                }
+            }, function(err, responseCancel, bodyCancel){
+
+            });
+
+        }else if(bodyPrinter.state.flags.operational === true && bodyPrinter.state.flags.ready === true && bodyPrinter.state.flags.printing === false && bodyJob.progress.completion == 100){
+            printsDB.findOne({fileLocation: jobFile}, function(err, document){
+                document.status = 4;
+                document.save();
+
+                usersDB.findOne({_id: document.owner}, function(err, documentUser){
                     smtpTransport.sendMail({
                         from: settings.mail.gmailAddr,
-                        to: settings.mail.sysadmin,
-                        subject: 'VHC3D: printerFault!!!',
-                        text: 'A print job failed and the system needs your attention!!!'
+                        to: documentUser.email,
+                        subject: 'VHC3D: Print opdracht voltooid',
+                        html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is voltooid.<br>Je kunt de het project komen ophalen.<br><br>Vriendlijke groet VHC 3d print Team</p>'
                     }, function(err, response){
                         if(err){
                             logger.error(err);
                         }
                     });
+                });
 
-                    usersDB.findOne({_id: document.owner}, function(err, documentUser){
-                        smtpTransport.sendMail({
-                            from: settings.mail.gmailAddr,
-                            to: documentUser.email,
-                            subject: 'VHC3D: Print opdracht mislukt',
-                            html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is mislukt en is niet geprint of niet goedgeprint.<br>Je kunt de overblijfselen komen ophalen als je dat wilt.<br><br>Vriendlijke groet VHC 3d print Team</p>'
-                        }, function(err, response){
-                            if(err){
-                                logger.error(err);
-                            }
-                        });
-                    });
+                var stl = nodeStl('./' + document.fileLocation);
 
+                request.post({
+                    url: settings.octo_addr + 'api/job',
+                    headers: {'X-Api-Key': settings.octo_key},
+                    json: {
+                        "command": "cancel"
+                    }
+                }, function(err, responseCancel, bodyCancel){
                     request.post({
-                        url: settings.octo_addr + 'api/job',
+                        url: settings.octo_addr + 'api/printer/command',
                         headers: {'X-Api-Key': settings.octo_key},
                         json: {
-                            "command": "cancel"
+                            "command": [
+                                "M104 S0",
+                                "M140 S0",
+                                "G1 X97.5",
+                                "G1 Y200",
+                                ( stl.boundingBox[2] <= 6 ? "G1 Z6" : "G1 Z" + stl.boundingBox[2] + "-45"),
+                                "G4 P360000",
+                                "G1 Y0 F6000"
+                            ]
                         }
-                    }, function(err, responseCancel, bodyCancel){
-
+                    }, function(err, responsePushOff, bodyPushOff){
+                        if(responsePushOff.statusCode == 204){
+                            startNewPrint();
+                        }
                     });
-
-                }else if(bodyPrinter.state.flags.operational === true || bodyPrinter.state.flags.ready === true || bodyPrinter.state.flags.printing === false){
-                    if(bodyJob.progress.completion === null){
-                        startNewPrint();
-                    }else if(bodyJob.progress.completion == 100){
-                        printsDB.findOne({fileLocation: jobFile}, function(err, document){
-                            document.status = 4;
-                            document.save();
-
-                            usersDB.findOne({_id: document.owner}, function(err, documentUser){
-                                smtpTransport.sendMail({
-                                    from: settings.mail.gmailAddr,
-                                    to: documentUser.email,
-                                    subject: 'VHC3D: Print opdracht voltooid',
-                                    html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is voltooid.<br>Je kunt de het project komen ophalen.<br><br>Vriendlijke groet VHC 3d print Team</p>'
-                                }, function(err, response){
-                                    if(err){
-                                        logger.error(err);
-                                    }
-                                });
-                            });
-
-                            stl = nodeStl('./' + document.fileLocation);
-
-                            request.post({
-                                url: settings.octo_addr + 'api/job',
-                                headers: {'X-Api-Key': settings.octo_key},
-                                json: {
-                                    "command": "cancel"
-                                }
-                            }, function(err, responseCancel, bodyCancel){
-                                request.post({
-                                    url: settings.octo_addr + 'api/printer/command',
-                                    headers: {'X-Api-Key': settings.octo_key},
-                                    json: {
-                                        "command": [
-                                            "M104 S0",
-                                            "M140 S0",
-                                            "G1 X97.5",
-                                            "G1 Y200",
-                                            ( if stl.boundingBox[2] <= 6 ? "G1 Z6" : "G1 Z" + stl.boundingBox[2] + "-45"),
-                                            "G4 P360000",
-                                            "G1 Y0 F6000"
-                                        ]
-                                    }
-                                }, function(err, responsePushOff, bodyPushOff){
-                                    if(responsePushOff.statusCode == 204){
-                                        startNewPrint();
-                                    }
-                                });
-                            });
-                        });
-                    }
-                }
+                });
             });
+        }else if(bodyPrinter.state.flags.operational === true && bodyPrinter.state.flags.ready === true && bodyPrinter.state.flags.printing === false && bodyJob.progress.completion == null){
+            startNewPrint();
         }
     });
 
