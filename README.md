@@ -33,7 +33,7 @@ For the database I choose MongoDB because its NoSQL and I had good experiences w
 
 ## TODO
 
-- [ ] Auto create a admin user at first use.
+- [x] Auto create a admin user at first use.
 - [ ] Auto create the files folder and the config files at first use.
 - [ ] adding more advanced Cura parameters for more experienced users.
 - [ ] Writing the code in a why that it can use different size 3d printers. And make de size configurable.
