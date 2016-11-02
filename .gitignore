@@ -1,4 +1,5 @@
 node_modules/
-files/tmp/sltFile-*
-files/slt/sltFile-*
 logs/
+config/*.js
+config/*.json
+files/

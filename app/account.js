@@ -39,9 +39,7 @@ function isLoggedInAsUser(req, res, next) {
 
 usersDB.findOne({type: "admin"}, function(err, document){
     if(!document){
-
         var hashed = generateHash('VHC-3D');
-
         var data = {
             username : "admin",
             emails : "Unknown",
