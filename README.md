@@ -33,10 +33,10 @@ For the database I choose MongoDB because its NoSQL and I had good experiences w
 
 ## TODO
 
-- [ ] Auto create a admin user at first use.
-- [ ] Auto create the files folder and the config files at first use.
+- [x] Auto create a admin user at first use.
+- [x] Auto create the files folder and the config files at first use.
 - [ ] adding more advanced Cura parameters for more experienced users.
-- [ ] Writing the code in a why that it can use different size 3d printers. And make de size configurable.
+- [x] Writing the code in a why that it can use different size 3d printers. And make de size configurable.
 - [ ] More will come
 
 ## Run it for your self
@@ -57,7 +57,7 @@ note that the project is not yet fully production ready, I would like to have it
 1. clone/pull the repo.
 2. Set the environment variable as mentioned in the settings file under the config folder.
 3. download all the Dependencies using 'npm install'.
-4. run 'node bin/www.js'.
+4. run 'node start.js'.
     - it is recommended to use something like PM2 to make sure the app will run forever.
 
 

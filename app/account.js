@@ -1,5 +1,7 @@
 var crypto = require("crypto");
 
+var usersDB = require("../models/users");
+
 function generateHash (password){
     var saltPre = crypto.randomBytes(64);
     var salt = saltPre.toString('hex');
@@ -34,6 +36,31 @@ function isLoggedInAsUser(req, res, next) {
         res.status(403).redirect('/login');
     }
 }
+
+usersDB.findOne({type: "admin"}, function(err, document){
+    if(!document){
+        var hashed = generateHash('VHC-3D');
+        var data = {
+            username : "admin",
+            emails : "Unknown",
+            password : hashed.hashy,
+            salty : hashed.salt,
+            type : "admin",
+
+            monthlyMaterial : 500,
+            materialAmount : 500,
+            materialAmountReserved : 0
+        };
+
+        new usersDB(data).save(function(err, data){
+            if(err){
+                logger.error('Could not make admin account');
+            }else{
+                logger.info('Admin account is created. Username: admin Password: VHC-3D');
+            }
+        });
+    }
+});
 
 exports.isLoggedInAsUser = isLoggedInAsUser;
 exports.isLoggedInAsAdmin = isLoggedInAsAdmin;

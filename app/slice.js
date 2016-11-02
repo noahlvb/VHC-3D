@@ -6,6 +6,9 @@ var printsDB = require("./../models/prints.js");
 var usersDB = require("./../models/users.js");
 var settings = require("./../config/settings");
 
+nconf.use('file', { file: './../config/settings.json' });
+nconf.load();
+
 Number.prototype.toFixedDown = function(digits) {
     var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
         m = this.toString().match(re);
@@ -19,7 +22,7 @@ module.exports = function(projectID, hypothesis, callback){
             var randomIdentifier = Math.floor(Math.random() * (1000 - 1) + 1);
             var stl = nodeStl('./' + documentPrint.fileLocation);
 
-            if(stl.boundingBox[0] > 178.0 || stl.boundingBox[1] > 178.0 || stl.boundingBox[2] > 185.0){
+            if(stl.boundingBox[0] > nconf.get('printerDimensionX') || stl.boundingBox[1] > nconf.get('printerDimensionY') || stl.boundingBox[2] > nconf.get('printerDimensionZ')){
                 return callback(3);
             }
 

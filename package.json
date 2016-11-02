@@ -18,7 +18,7 @@
   "license": "GPL-3.0",
   "main": "bin/www.js",
   "scripts": {
-    "start": "node bin/www",
+    "start": "node start.js",
     "test": ""
   },
   "dependencies": {
