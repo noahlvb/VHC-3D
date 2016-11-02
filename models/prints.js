@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 
-var userSchema = mongoose.Schema({
+var printsSchema = mongoose.Schema({
     name: String,
     fileLocation: String,
     owner: String,
@@ -36,4 +36,4 @@ var userSchema = mongoose.Schema({
     P_platformAdhesionType: Number,
 });
 
-module.exports = mongoose.model('prints', userSchema);
+module.exports = mongoose.model('prints', printsSchema);
