@@ -50,7 +50,7 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
         P_platformAdhesionType: req.body.P_platformAdhesionType
     };
 
-    fs.rename(__dirname + '/' + req.file.path, __dirname + '/files/slt/' + req.file.filename + '.stl', function(err){
+    fs.rename(__dirname + '/../../../' + req.file.path, __dirname + '/../../../files/slt/' + req.file.filename + '.stl', function(err){
         if(err){
             logger.error(err);
             req.flash('error', 'Uploaden mislukt');
