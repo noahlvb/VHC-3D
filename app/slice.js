@@ -1,6 +1,7 @@
 var fs = require("fs");
 var request = require("request");
 var nodeStl = require("node-stl");
+var nconf = require("nconf");
 
 var printsDB = require("./../models/prints.js");
 var usersDB = require("./../models/users.js");
