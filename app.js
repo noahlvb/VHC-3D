@@ -38,7 +38,7 @@ var server = http.createServer(router);
             cb(null, file.fieldname + '-' + Date.now());
         }
     });
-    router.use(multer({storage: uploadStorage}).single('sltFile'));
+    router.use(multer({storage: uploadStorage}).single('stlFile'));
 
     router.use(cookieParser(settings.secret));
     router.use(bodyParser.urlencoded({ extended: false }));

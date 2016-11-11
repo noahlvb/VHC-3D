@@ -115,7 +115,7 @@ new CronJob('01 */1 * * * *', function() {
         }
 
         if(bodyJob.job.file.name !== null){
-            var jobFile = 'files/slt/' + bodyJob.job.file.name.slice(0, -6);
+            var jobFile = 'files/stl/' + bodyJob.job.file.name.slice(0, -6);
         }
 
         if(bodyPrinter.state.flags.closedOnError === true || bodyPrinter.state.flags.error === true){
