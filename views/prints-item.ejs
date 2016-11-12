@@ -34,7 +34,12 @@
                         <h4><b style="color: red">Afgewezen</b></h4><br>
                         Je project is afgewezen
                     <% } else if (print.status == 3) { %>
-                        <h4><b style="color: blue">Wordt geprint</b></h4><br>
+                        <h4><b style="color: blue">Wordt geprint</b></h4>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="<%= progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= progress %>%;">
+                                <%= progress %>%
+                            </div>
+                        </div>
                         Je project wordt momenteel geprint
                     <% } else if (print.status == 4) { %>
                         <h4><b style="color: green">Klaar</b></h4><br>
