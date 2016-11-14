@@ -106,6 +106,9 @@ module.exports = function(projectID, hypothesis, callback){
                                             if (err) return logger.error(err);
                                         });
                                     }, 5000);
+                                }else{
+                                    documentPrint.randomIdentifier = randomIdentifier;
+                                    documentPrint.save();
                                 }
                                 clearInterval(checkForGCODE);
                                 applyValues();

@@ -29,7 +29,7 @@ function startNewPrint() {
                 require("./slice")(document._id, false, function(response){
                     if(response == 0){
                         request.post({
-                            url: settings.octo_addr + 'api/files/local/' + document.fileLocation.substr(-25) + '.gcode',
+                            url: settings.octo_addr + 'api/files/local/' + document.fileLocation.substr(-25) + document.randomIdentifier + '.gcode',
                             headers: {'X-Api-Key': settings.octo_key},
                             json: {
                                 "command": "select",
@@ -47,7 +47,7 @@ function startNewPrint() {
                             }else if(response.statusCode === 409){
                                 setTimeout(function(){
                                     request.delete({
-                                        url: settings.octo_addr + 'api/files/local/' + document.fileLocation.substr(-25) + '.gcode',
+                                        url: settings.octo_addr + 'api/files/local/' + document.fileLocation.substr(-25) + document.randomIdentifier + '.gcode',
                                         headers: {'X-Api-Key': settings.octo_key}
                                     }, function(err, response, body){
                                         if (err) return logger.error(err);
@@ -115,7 +115,7 @@ new CronJob('01 */1 * * * *', function() {
         }
 
         if(bodyJob.job.file.name !== null){
-            var jobFile = 'files/stl/' + bodyJob.job.file.name.slice(0, -6);
+            var jobFile = 'files/stl/' + bodyJob.job.file.name.slice(0, -9);
         }
 
         if(bodyPrinter.state.flags.closedOnError === true || bodyPrinter.state.flags.error === true){

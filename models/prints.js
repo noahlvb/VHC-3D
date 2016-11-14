@@ -3,6 +3,7 @@ var mongoose = require("mongoose");
 var printsSchema = mongoose.Schema({
     name: String,
     fileLocation: String,
+    randomIdentifier: Number,
     owner: String,
     //Status
     //0: not commited
