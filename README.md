@@ -24,9 +24,10 @@ This project started of as a PWS, standing for Profile Work Piece in Dutch. It i
 
 ## Inner workings
 
-The project is written in Javascript running in Nodejs. To communicate with the printer I use Octoprint. I did this 3 reasons and these are:
-1. Octoprint was already very reliable, stable and had good api.
-2. This why you can host the project outside the school and have VHC-3D talking to Octoprint running on a computer on location.
+The project is written in Javascript running in Nodejs. To communicate with the printer I use Octoprint. I did this for 3 reasons and these are:
+
+1. Octoprint was already very reliable, stable and had a good api.
+2. So that you can host the project outside the location the printer is at and have VHC-3D talking to Octoprint running on a computer on location.
 3. I'am lazy
 
 For the database I choose MongoDB because its NoSQL and I had good experiences with it. The slicing of STL files is also handled via Octoprint.
