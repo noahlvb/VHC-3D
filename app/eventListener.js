@@ -164,47 +164,39 @@ new CronJob('01 */1 * * * *', function() {
                 document.status = 4;
                 document.save();
 
-                usersDB.findOne({_id: document.owner}, function(err, documentUser){
-                    smtpTransport.sendMail({
-                        from: settings.mail.gmailAddr,
-                        to: documentUser.email,
-                        subject: 'VHC3D: Print opdracht voltooid',
-                        html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is voltooid.<br>Je kunt de het project komen ophalen.<br><br>Vriendlijke groet VHC 3d print Team</p>'
-                    }, function(err, response){
-                        if(err){
-                            logger.error(err);
-                        }
-                    });
-                });
-
                 var stl = nodeStl('./' + document.fileLocation);
 
                 request.post({
-                    url: settings.octo_addr + 'api/job',
+                    url: settings.octo_addr + 'api/printer/command',
                     headers: {'X-Api-Key': settings.octo_key},
                     json: {
-                        "command": "cancel"
+                        "command": [
+                            "M104 S0",
+                            "M140 S0",
+                            "G1 X97.5",
+                            "G1 Y200",
+                            ( stl.boundingBox[2] <= 6 ? "G1 Z6" : "G1 Z" + stl.boundingBox[2] + "-45"),
+                            "G4 P360000",
+                            "G1 Y0 F6000"
+                        ]
                     }
-                }, function(err, responseCancel, bodyCancel){
-                    request.post({
-                        url: settings.octo_addr + 'api/printer/command',
-                        headers: {'X-Api-Key': settings.octo_key},
-                        json: {
-                            "command": [
-                                "M104 S0",
-                                "M140 S0",
-                                "G1 X97.5",
-                                "G1 Y200",
-                                ( stl.boundingBox[2] <= 6 ? "G1 Z6" : "G1 Z" + stl.boundingBox[2] + "-45"),
-                                "G4 P360000",
-                                "G1 Y0 F6000"
-                            ]
-                        }
-                    }, function(err, responsePushOff, bodyPushOff){
-                        if(responsePushOff.statusCode == 204){
-                            startNewPrint();
-                        }
+                }, function(err, responsePushOff, bodyPushOff){
+                    usersDB.findOne({_id: document.owner}, function(err, documentUser){
+                        smtpTransport.sendMail({
+                            from: settings.mail.gmailAddr,
+                            to: documentUser.email,
+                            subject: 'VHC3D: Print opdracht voltooid',
+                            html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is voltooid.<br>Je kunt de het project komen ophalen.<br><br>Vriendlijke groet VHC 3d print Team</p>'
+                        }, function(err, response){
+                            if(err){
+                                logger.error(err);
+                            }
+                        });
                     });
+
+                    if(responsePushOff.statusCode == 204){
+                        startNewPrint();
+                    }
                 });
             });
         }else if(bodyPrinter.state.flags.operational === true && bodyPrinter.state.flags.ready === true && bodyPrinter.state.flags.printing === false && bodyJob.progress.completion == null || bodyJob.progress.completion == 0){
