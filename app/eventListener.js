@@ -207,7 +207,7 @@ new CronJob('01 */1 * * * *', function() {
                     });
                 });
             });
-        }else if(bodyPrinter.state.flags.operational === true && bodyPrinter.state.flags.ready === true && bodyPrinter.state.flags.printing === false && bodyJob.progress.completion == null){
+        }else if(bodyPrinter.state.flags.operational === true && bodyPrinter.state.flags.ready === true && bodyPrinter.state.flags.printing === false && bodyJob.progress.completion == null || bodyJob.progress.completion == 0){
             startNewPrint();
         }
     });
