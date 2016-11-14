@@ -55,7 +55,7 @@
 	}
 
 	function update_type (type, value) {
-		if(value == 'Normal' || value == 'Supervisor' || value == 'admin'){
+		if(value == 'normal' || value == 'supervisor' || value == 'admin'){
 			window.location.replace("/backend/account/update/" + type + "/<%= user_profile.id%>/" + value + "/");
 		}
 	}
