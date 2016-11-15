@@ -20,7 +20,7 @@ module.exports = function(projectID, hypothesis, callback){
     printsDB.findOne({ _id: projectID }, function(err, documentPrint){
         usersDB.findOne({ _id: documentPrint.owner}, function(err, documentUser){
 
-            var randomIdentifier = Math.floor(Math.random() * (1000 - 1) + 1);
+            var randomIdentifier = Math.floor(100000 + Math.random() * 900000);
             var stl = nodeStl('./' + documentPrint.fileLocation);
 
             if(stl.boundingBox[0] > nconf.get('printerDimensionX') || stl.boundingBox[1] > nconf.get('printerDimensionY') || stl.boundingBox[2] > nconf.get('printerDimensionZ')){
@@ -106,6 +106,9 @@ module.exports = function(projectID, hypothesis, callback){
                                             if (err) return logger.error(err);
                                         });
                                     }, 5000);
+                                }else{
+                                    documentPrint.randomIdentifier = randomIdentifier;
+                                    documentPrint.save();
                                 }
                                 clearInterval(checkForGCODE);
                                 applyValues();
