@@ -178,7 +178,7 @@ new CronJob('01 */1 * * * *', function() {
                             "G1 X97.5",
                             "G1 Y200",
                             ( stl.boundingBox[2] <= 6 ? "G1 Z6" : "G1 Z" + stl.boundingBox[2] + "-45"),
-                            "G4 P360000",
+                            "G4 P360",
                             "G1 Y0 F6000"
                         ]
                     }
