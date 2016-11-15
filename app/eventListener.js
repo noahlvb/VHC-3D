@@ -10,7 +10,6 @@ var printsDB = require("./../models/prints");
 var settings = require("./../config/settings");
 
 var date = new Date();
-var printerFault = false;
 var smtpTransport = nodemailer.createTransport({
     service: "Gmail",
     auth: {
@@ -23,7 +22,7 @@ nconf.use('file', { file: './config/settings.json' });
 nconf.load();
 
 function startNewPrint() {
-    if(printerFault !== true){
+    if(nconf.get('printerFault') !== true){
         printsDB.findOne({status: 2 }, function(err, document){
             if(document !== null){
                 require("./slice")(document._id, false, function(response){
@@ -123,7 +122,7 @@ new CronJob('01 */1 * * * *', function() {
                 document.status = 41;
                 document.save();
             });
-            printerFault = true;
+            nconf.set('printFault', true);
 
             smtpTransport.sendMail({
                 from: settings.mail.gmailAddr,
@@ -206,7 +205,7 @@ new CronJob('01 */1 * * * *', function() {
         }
     });
 
-    if(printerFault === true){
+    if(nconf.get('printerFault') === true){
         logger.info("------ Printer Fault!!!!!!! -------");
     }
 }, null, true, 'Europe/Amsterdam');
