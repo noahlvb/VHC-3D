@@ -37,6 +37,7 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
         fileLocation: 'files/stl/' + req.file.filename + '.stl',
         owner: req.user._id,
         status: 0,
+        finished: false,
         archive: false,
         estimatedPrintTime: 0,
         materialAmount: 0,
