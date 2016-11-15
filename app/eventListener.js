@@ -170,7 +170,9 @@ new CronJob('01 */1 * * * *', function() {
                     url: settings.octo_addr + 'api/printer/command',
                     headers: {'X-Api-Key': settings.octo_key},
                     json: {
-                        "command": [
+                        "commands": [
+                            "G90",
+                            "G1 Z100",
                             "M104 S0",
                             "M140 S0",
                             "G1 X97.5",
