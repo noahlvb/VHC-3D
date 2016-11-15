@@ -165,6 +165,7 @@ new CronJob('01 */1 * * * *', function() {
                     document.save();
 
                     var stl = nodeStl('./' + document.fileLocation);
+                    var requiredBedHeight = ( stl.boundingBox[2] <= 6 ? 6 : Math.max(0, stl.boundingBox[2] - 45));
 
                     request.post({
                         url: settings.octo_addr + 'api/printer/command',
@@ -175,10 +176,10 @@ new CronJob('01 */1 * * * *', function() {
                                 "G1 Z100",
                                 "M104 S0",
                                 "M140 S0",
-                                "G4 P360",
+                                "G4 P360000",
                                 "G1 X97.5",
                                 "G1 Y200",
-                                ( stl.boundingBox[2] <= 6 ? "G1 Z6" : "G1 Z" + stl.boundingBox[2] + "-45"),
+                                String("G1 Z" + requiredBedHeight),
                                 "G1 Y0 F6000"
                             ]
                         }
