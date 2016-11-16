@@ -5,6 +5,12 @@ var account = require("./../../account");
 var printsDB = require("./../../../models/prints");
 var settings = require("./../../../config/settings");
 
+Number.prototype.toFixedDown = function(digits) {
+    var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
+        m = this.toString().match(re);
+    return m ? parseFloat(m[1]) : this.valueOf();
+};
+
 var router = express.Router();
 
 router.get('/add', account.isLoggedInAsUser, function(req, res){
@@ -44,7 +50,7 @@ router.get('/:id', account.isLoggedInAsUser, function(req, res){
                             type : req.user.type
                         },
                         print : document,
-                        progress : body.progress.completion
+                        progress : body.progress.completion.toFixedDown(2)
                     });
                 }else{
                     res.render('prints-item', {

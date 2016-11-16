@@ -180,7 +180,9 @@ new CronJob('01 */1 * * * *', function() {
                                 "G1 X97.5",
                                 "G1 Y200",
                                 String("G1 Z" + requiredBedHeight),
-                                "G1 Y0 F6000"
+                                "G1 Y0 F3000",
+                                "G4 P1000",
+                                "G28"
                             ]
                         }
                     }, function(err, responsePushOff, bodyPushOff){
