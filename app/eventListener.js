@@ -202,7 +202,7 @@ new CronJob('01 */1 * * * *', function() {
                                 document.finished = true;
                                 document.save();
                                 startNewPrint();
-                            }, 400);
+                            }, 420000);
                         }
                     });
                 }else if(document.finished === true && document.status == 4){
