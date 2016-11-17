@@ -34,10 +34,12 @@ For the database I choose MongoDB because its NoSQL and I had good experiences w
 
 ## TODO
 
+- [ ] adding more advanced Cura parameters for more experienced users.
+- [ ] Fine tune the pushoff process
+- [ ] Make slicing and printer simultaneously
+- [x] Writing the code in a why that it can use different size 3d printers. And make de size configurable.
 - [x] Auto create a admin user at first use.
 - [x] Auto create the files folder and the config files at first use.
-- [ ] adding more advanced Cura parameters for more experienced users.
-- [x] Writing the code in a why that it can use different size 3d printers. And make de size configurable.
 - [ ] More will come
 
 ## Run it for your self
