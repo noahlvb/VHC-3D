@@ -11,7 +11,8 @@ var http            = require("http"),
     Flash           = require("express-flash"),
     connectMongo    = require("connect-mongo")(expressSession),
     passport        = require("passport");
-    compression     = require('compression');
+    compression     = require("compression");
+    gitRev          = require("git-rev");
 
 var logger = require('./app/logger');
 
@@ -29,6 +30,9 @@ var server = http.createServer(router);
     router.use('/static', express.static(__dirname + '/public'));
     router.use(ejsLayouts);
     router.locals.trackingcode = settings.googleAnalytics;
+    gitRev.short(function(str){
+        router.locals.commit = str;
+    });
 
     var uploadStorage = multer.diskStorage({
         destination: function(req, file, cb){
