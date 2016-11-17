@@ -121,30 +121,30 @@ router.post('/reslice/:id/', account.isLoggedInAsUser, function(req, res){
             document.P_printSpeed = req.body.P_printSpeed;
             document.P_support = req.body.P_support;
             document.P_platformAdhesionType = req.body.P_platformAdhesionType;
-            document.save();
-
-            require("./../../slice")(document._id, true, function(response){
-                if(response == 1){
-                    document = oldDocument;
-                    document.save();
-
-                    req.flash('warning', 'je hebt niet meer genoeg materiaal tot je beschikking');
-                    res.redirect('/prints/' + document._id);
-                }else if(response == 2){
-                    document = oldDocument;
-                    document.save();
-
-                    req.flash('error', 'De verbinding met de printer is verbroken!!');
-                    res.redirect('/prints/' + document._id);
-                }else{
-                    if(document.status == 21 || document.status == 41){
-                        document.status = 0;
+            document.save(function(err){
+                require("./../../slice")(document._id, true, function(response){
+                    if(response == 1){
+                        document = oldDocument;
                         document.save();
-                    }
 
-                    req.flash('info', 'Je printje is succesvol gehersliced');
-                    res.redirect('/prints/' + document._id);
-                }
+                        req.flash('warning', 'je hebt niet meer genoeg materiaal tot je beschikking');
+                        res.redirect('/prints/' + document._id);
+                    }else if(response == 2){
+                        document = oldDocument;
+                        document.save();
+
+                        req.flash('error', 'De verbinding met de printer is verbroken!!');
+                        res.redirect('/prints/' + document._id);
+                    }else{
+                        if(document.status == 21 || document.status == 41){
+                            document.status = 0;
+                            document.save();
+                        }
+
+                        req.flash('info', 'Je printje is succesvol gehersliced');
+                        res.redirect('/prints/' + document._id);
+                    }
+                });
             });
         }else{
             req.flash('error', 'Je hoort niets met dit project te doen!');

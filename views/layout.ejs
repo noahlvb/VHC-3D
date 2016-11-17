@@ -53,7 +53,12 @@
                     <% } %>
                 </ul>
                     <% if(locals.user){ %>
-                    <p class="navbar-text navbar-right">logged in as <%= user.username %> <a href="/logout">(logout)</a></p>
+                    <p class="navbar-text navbar-right">
+                        <% if(locals.user && user.type == 'admin'){ %>
+                        Commit SHA: <%= locals.commit %>
+                        <% } %>
+                        logged in as <%= user.username %> <a href="/logout">(logout)</a>
+                    </p>
                     <% } else { %>
                     <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="window.location.href='/login'" >Sign in</button>
                     <% } %>
