@@ -175,38 +175,55 @@ new CronJob('01 */1 * * * *', function() {
                                 "G90",
                                 "G1 Z100",
                                 "M104 S0",
-                                "M190 S30",
-                                "G1 X97.5",
-                                "G1 Y200",
-                                String("G1 Z" + requiredBedHeight),
-                                "G1 Y0 F3000",
-                                "G4 P1000",
-                                "M140",
-                                "G1 Z50",
-                                "G28"
+                                "M140 S0"
                             ]
                         }
                     }, function(err, responsePushOff, bodyPushOff){
-                        usersDB.findOne({_id: document.owner}, function(err, documentUser){
-                            smtpTransport.sendMail({
-                                from: settings.mail.gmailAddr,
-                                to: documentUser.email,
-                                subject: 'VHC3D: Print opdracht voltooid',
-                                html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is voltooid.<br>Je kunt de het project komen ophalen.<br><br>Vriendlijke groet VHC 3d print Team</p>'
-                            }, function(err, response){
-                                if(err){
-                                    logger.error(err);
+                        var checkForTemp = setInterval(function(){
+                            request.get({
+                                url: settings.octo_addr + 'api/printer?history=false',
+                                headers: {'X-Api-Key': settings.octo_key},
+                                json: true
+                            }, function(err, responseTemp, bodyTemp){
+                                if (err) return logger.error(err);
+                                if(bodyTemp.temperature.bed.actual <= 35){
+                                    clearInterval(checkForTemp);
+                                    request.post(url: settings.octo_addr + 'api/printer/command',
+                                    headers: {'X-Api-Key': settings.octo_key},
+                                    json: {
+                                        "commands": [
+                                            "G1 X97.5",
+                                            "G1 Y200",
+                                            String("G1 Z" + requiredBedHeight),
+                                            "G1 Y0 F3000",
+                                            "G4 P1000",
+                                            "M140",
+                                            "G1 Z50",
+                                            "G28"
+                                        ]
+                                    }, function(err, responsePushOff, bodyPushOff){
+                                        usersDB.findOne({_id: document.owner}, function(err, documentUser){
+                                            smtpTransport.sendMail({
+                                                from: settings.mail.gmailAddr,
+                                                to: documentUser.email,
+                                                subject: 'VHC3D: Print opdracht voltooid',
+                                                html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is voltooid.<br>Je kunt de het project komen ophalen.<br><br>Vriendlijke groet VHC 3d print Team</p>'
+                                            }, function(err, response){
+                                                if(err){
+                                                    logger.error(err);
+                                                }
+                                            });
+                                        });
+
+                                        if(responsePushOff.statusCode == 204){
+                                            document.finished = true;
+                                            document.save();
+                                            startNewPrint();
+                                        }
+                                    });
                                 }
                             });
-                        });
-
-                        if(responsePushOff.statusCode == 204){
-                            setTimeout(function(){
-                                document.finished = true;
-                                document.save();
-                                startNewPrint();
-                            }, 610000);
-                        }
+                        }, 20000);
                     });
                 }else if(document.finished === true && document.status == 4){
                     startNewPrint();
