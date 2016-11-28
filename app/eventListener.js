@@ -188,19 +188,21 @@ new CronJob('01 */1 * * * *', function() {
                                 if (err) return logger.error(err);
                                 if(bodyTemp.temperature.bed.actual <= 35){
                                     clearInterval(checkForTemp);
-                                    request.post(url: settings.octo_addr + 'api/printer/command',
-                                    headers: {'X-Api-Key': settings.octo_key},
-                                    json: {
-                                        "commands": [
-                                            "G1 X97.5",
-                                            "G1 Y200",
-                                            String("G1 Z" + requiredBedHeight),
-                                            "G1 Y0 F3000",
-                                            "G4 P1000",
-                                            "M140",
-                                            "G1 Z50",
-                                            "G28"
-                                        ]
+                                    request.post({
+                                        url: settings.octo_addr + 'api/printer/command',
+                                        headers: {'X-Api-Key': settings.octo_key},
+                                        json: {
+                                            "commands": [
+                                                "G1 X97.5",
+                                                "G1 Y200",
+                                                String("G1 Z" + requiredBedHeight),
+                                                "G1 Y0 F3000",
+                                                "G4 P1000",
+                                                "M140",
+                                                "G1 Z50",
+                                                "G28"
+                                            ]
+                                        }
                                     }, function(err, responsePushOff, bodyPushOff){
                                         usersDB.findOne({_id: document.owner}, function(err, documentUser){
                                             smtpTransport.sendMail({
