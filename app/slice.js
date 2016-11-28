@@ -93,6 +93,7 @@ module.exports = function(projectID, hypothesis, callback){
                             if (response.statusCode != 200 && response.statusCode != 404) return callback(2);
 
                             if(response.statusCode == 200 && body.gcodeAnalysis){
+                                clearInterval(checkForGCODE);
                                 var estimatedPrintTimeNonRound = body.gcodeAnalysis.estimatedPrintTime / 60;
                                 estimatedPrintTime = estimatedPrintTimeNonRound.toFixedDown(2);
                                 materialAmount = body.gcodeAnalysis.filament.tool0.volume.toFixedDown(2);
@@ -110,11 +111,10 @@ module.exports = function(projectID, hypothesis, callback){
                                     documentPrint.randomIdentifier = randomIdentifier;
                                     documentPrint.save();
                                 }
-                                clearInterval(checkForGCODE);
                                 applyValues();
                             }
                         });
-                    }, 250);
+                    }, 1000);
                 });
             });
 
