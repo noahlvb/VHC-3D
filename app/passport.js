@@ -1,9 +1,13 @@
 var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var nconf = require("nconf");
 
 var usersDB = require("./../models/users");
 var account = require("./account");
 var settings = require("./../config/settings");
+
+nconf.use('file', { file: './config/settings.json' });
+nconf.load();
 
 module.exports = function (passport) {
 
@@ -62,7 +66,7 @@ module.exports = function (passport) {
                     newUser.type            = 'normal';
                     newUser.email           = profile.emails[0].value;
 
-                    newUser.monthlyMaterial = 500;
+                    newUser.monthlyMaterial = nconf.get('defaultMonthlyMaterial');
                     newUser.materialAmount  = newUser.monthlyMaterial;
                     newUser.materialAmountReserved  = 0;
 

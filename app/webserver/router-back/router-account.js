@@ -1,7 +1,11 @@
 var express = require("express");
+var nconf = require("nconf");
 
 var usersDB = require("./../../../models/users");
 var account = require("./../../account");
+
+nconf.use('file', { file: './config/settings.json' });
+nconf.load();
 
 var router = express.Router();
 
@@ -48,8 +52,8 @@ router.post('/add', account.isLoggedInAsAdmin, function (req, res) {
                     salty : hashed.salt,
                     type : req.body.selectType,
 
-					monthlyMaterial : 500,
-				    materialAmount : 500,
+					monthlyMaterial : nconf.get('defaultMonthlyMaterial'),
+				    materialAmount : nconf.get('defaultMonthlyMaterial'),
 				    materialAmountReserved : 0
                 };
 
