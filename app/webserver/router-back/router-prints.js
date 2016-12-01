@@ -1,10 +1,23 @@
 var express = require("express");
 var fs = require("fs");
 var request = require("request");
+var nodemailer = require("nodemailer");
+var nconf = require("nconf");
 
 var printsDB = require("./../../../models/prints");
 var account = require("./../../account");
 var settings = require("./../../../config/settings");
+
+var smtpTransport = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+        user: settings.mail.gmailAddr,
+        pass: settings.mail.gmailAppPassword
+    }
+});
+
+nconf.use('file', { file: './config/settings.json' });
+nconf.load();
 
 var router = express.Router();
 
@@ -404,6 +417,7 @@ router.get('/cancel', account.isLoggedInAsUser, function(req, res){
                     "command": "cancel"
                 }
             }, function(err, responseCancel, bodyCancel){
+                nconf.set('printFault', true);
                 printsDB.findOne({ fileLocation: jobFile }, function(err, document){
                     document.status = 41;
                     document.save();
