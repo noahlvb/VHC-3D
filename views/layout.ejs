@@ -47,6 +47,7 @@
                     <% } %>
                     <% if(locals.user && user.type == 'supervisor' || locals.user && user.type == 'admin') { %>
                         <li><a href="/supervisor/pending">Print Verzoeken</a></li>
+                        <li><a href="/dashboard">Dashboard</a></li>
                     <% } %>
                     <% if(locals.user && user.type == 'admin') { %>
                         <li><a href="/admin/account">accounts</a></li>

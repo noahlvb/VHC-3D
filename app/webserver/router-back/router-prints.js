@@ -1,8 +1,10 @@
 var express = require("express");
 var fs = require("fs");
+var request = require("request");
 
 var printsDB = require("./../../../models/prints");
 var account = require("./../../account");
+var settings = require("./../../../config/settings");
 
 var router = express.Router();
 
@@ -380,6 +382,53 @@ router.get('/:id/accept/:boolean', account.isLoggedInAsUser, function(req, res){
             res.redirect('/prints/' + req.params.id);
         }
     });
+});
+
+router.get('/cancel', account.isLoggedInAsUser, function(req, res){
+    if(req.user.type == 'admin' || req.user.type == 'supervisor'){
+        request.get({
+            url: settings.octo_addr + 'api/job',
+            headers: {'X-Api-Key': settings.octo_key},
+            json: true
+        }, function(err, responseJob, bodyJob){
+            if (err) callback(err);
+
+            if(bodyJob.job.file.name !== null){
+                var jobFile = 'files/stl/' + bodyJob.job.file.name.slice(0, -12);
+            }
+
+            request.post({
+                url: settings.octo_addr + 'api/job',
+                headers: {'X-Api-Key': settings.octo_key},
+                json: {
+                    "command": "cancel"
+                }
+            }, function(err, responseCancel, bodyCancel){
+                printsDB.findOne({ fileLocation: jobFile }, function(err, document){
+                    document.status = 41;
+                    document.save();
+
+                    usersDB.findOne({_id: document.owner}, function(err, documentUser){
+                        smtpTransport.sendMail({
+                            from: settings.mail.gmailAddr,
+                            to: documentUser.email,
+                            subject: 'VHC3D: Print opdracht mislukt',
+                            html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is mislukt en is niet geprint of niet goedgeprint.<br>Je kunt de overblijfselen komen ophalen als je dat wilt.<br><br>Vriendlijke groet VHC 3d print Team</p>'
+                        }, function(err, response){
+                            if(err){
+                                logger.error(err);
+                            }
+                        });
+                    });
+
+                    res.redirect('/dashboard');
+                });
+            });
+        });
+    }else{
+        req.flash('error', 'Je mag hier niet zijn!');
+        res.redirect('/');
+    }
 });
 
 module.exports = router;
