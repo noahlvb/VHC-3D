@@ -418,6 +418,9 @@ router.get('/cancel', account.isLoggedInAsUser, function(req, res){
                 }
             }, function(err, responseCancel, bodyCancel){
                 nconf.set('printFault', true);
+                nconf.save(function(err){
+                    if (err) return logger.error(err);
+                });
                 printsDB.findOne({ fileLocation: jobFile }, function(err, document){
                     document.status = 41;
                     document.save();

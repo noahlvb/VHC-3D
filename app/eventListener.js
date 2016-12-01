@@ -123,6 +123,9 @@ new CronJob('01 */1 * * * *', function() {
                 document.save();
             });
             nconf.set('printFault', true);
+            nconf.save(function(err){
+                if (err) return logger.error(err);
+            });
 
             smtpTransport.sendMail({
                 from: settings.mail.gmailAddr,

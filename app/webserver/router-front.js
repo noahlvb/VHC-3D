@@ -1,10 +1,14 @@
 var async = require("async");
 var request = require("request");
+var nconf = require("nconf");
 
 var usersDB = require("./../../models/users");
 var printsDB = require("./../../models/prints");
 var account = require("./../account");
 var settings = require("./../../config/settings");
+
+nconf.use('file', { file: './config/settings.json' });
+nconf.load();
 
 Number.prototype.toFixedDown = function(digits) {
     var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
@@ -138,6 +142,7 @@ module.exports = function (router, passport) {
                     print : null,
                     printOwner: null,
                     progress : null,
+                    printerStatus: nconf.get('printerFault')
                 };
 
                 if(err != 'noPrint'){
