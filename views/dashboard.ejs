@@ -1,14 +1,19 @@
 <div class="row">
     <div class="col-md-3">
+        <h4>Printer status: <% if(printerStatus === true) { %><span style="color: red;">Gestopt</span><% }else{ %><span style="color: green;">Operationeel</span><% } %></h4>
+        <a href="/backend/printer/toggle" id="dashboardStopButton" class="btn btn-info btn-block">
+            <% if(printerStatus === true) { %>Printer hervatten<% }else{ %>Printer stopzetten<% } %>
+        </a>
         <div class="panel panel-info">
             <div class="panel-heading"><h3 class="panel-title">Huidig project</h3></div>
             <div class="panel-body">
                 <p>
+                    <% if(print) {%>
                     <h5><b>Print opdracht:</b> <%= print.name %></h5>
                     <h5><b>Print tijd:</b> <%= print.estimatedPrintTime %> minuten</h5>
                     <h5><b>Materiaal kosten:</b> <%= print.materialAmount %> gram</h5>
                     <h5><b>Geupload door:</b> <%= printOwner %></h5>
-                    <a href="/backend/prints/cancel" id="dashboardStopButton" class="btn btn-danger btn-block">Stop printje</a>
+                    <a href="/backend/prints/cancel" id="dashboardStopButton" class="btn btn-danger btn-block">Print opdracht afbreken</a>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" aria-valuenow="<%= progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= progress %>%;">
                             <%= progress %>%
@@ -16,6 +21,9 @@
                     </div>
                     Je project wordt momenteel geprint
                     <b><a href="/prints/download/<%= print._id %>"><h5>Download STL bestand</h5></a></b>
+                    <% }else{ %>
+                    <h4>Er wordt momenteel niets geprint</h4>
+                    <% } %>
                 </p>
             </div>
         </div>

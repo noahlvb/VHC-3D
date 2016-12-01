@@ -123,6 +123,9 @@ new CronJob('01 */1 * * * *', function() {
                 document.save();
             });
             nconf.set('printFault', true);
+            nconf.save(function(err){
+                if (err) return logger.error(err);
+            });
 
             smtpTransport.sendMail({
                 from: settings.mail.gmailAddr,
@@ -173,7 +176,7 @@ new CronJob('01 */1 * * * *', function() {
                         json: {
                             "commands": [
                                 "G90",
-                                "G1 Z100",
+                                "G1 Z197",
                                 "M104 S0",
                                 "M140 S0"
                             ]
@@ -193,8 +196,8 @@ new CronJob('01 */1 * * * *', function() {
                                         headers: {'X-Api-Key': settings.octo_key},
                                         json: {
                                             "commands": [
-                                                "G1 X97.5",
                                                 "G1 Y200",
+                                                "G1 X97.5",
                                                 String("G1 Z" + requiredBedHeight),
                                                 "G1 Y0 F3000",
                                                 "G4 P1000",
