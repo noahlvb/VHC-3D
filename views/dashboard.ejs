@@ -4,6 +4,7 @@
             <div class="panel-heading"><h3 class="panel-title">Huidig project</h3></div>
             <div class="panel-body">
                 <p>
+                    <% if(print) {%>
                     <h5><b>Print opdracht:</b> <%= print.name %></h5>
                     <h5><b>Print tijd:</b> <%= print.estimatedPrintTime %> minuten</h5>
                     <h5><b>Materiaal kosten:</b> <%= print.materialAmount %> gram</h5>
@@ -16,6 +17,9 @@
                     </div>
                     Je project wordt momenteel geprint
                     <b><a href="/prints/download/<%= print._id %>"><h5>Download STL bestand</h5></a></b>
+                    <% }else{ %>
+                    <h4>Er wordt momenteel niets geprint</h4>
+                    <% } %>
                 </p>
             </div>
         </div>
