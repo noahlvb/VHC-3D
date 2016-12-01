@@ -1,6 +1,16 @@
+var async = require("async");
+var request = require("request");
+
 var usersDB = require("./../../models/users");
+var printsDB = require("./../../models/prints");
 var account = require("./../account");
 var settings = require("./../../config/settings");
+
+Number.prototype.toFixedDown = function(digits) {
+    var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
+        m = this.toString().match(re);
+    return m ? parseFloat(m[1]) : this.valueOf();
+};
 
 module.exports = function (router, passport) {
 
@@ -87,6 +97,65 @@ module.exports = function (router, passport) {
                 }
             });
         } else {
+            req.flash('error', 'Je mag hier niet zijn!');
+            res.redirect('/');
+        }
+    });
+
+    router.get('/dashboard', account.isLoggedInAsUser, function(req, res) {
+        if(req.user.type == 'admin' || req.user.type == 'supervisor'){
+            async.waterfall([
+                function(callback){
+                    printsDB.findOne({ status: 3 }, function(err, documentPrint){
+                        callback(null, documentPrint);
+                    });
+                },
+                function(documentPrint, callback){
+                    if(documentPrint){
+                        usersDB.findOne({_id: documentPrint.owner}, function(err, documentUser){
+                            callback(null, documentPrint, documentUser);
+                        });
+                    }else{
+                        callback('noPrint');
+                    }
+                },
+                function(documentPrint, documentUser, callback){
+                    request.get({
+                        url: settings.octo_addr + 'api/job',
+                        headers: {'X-Api-Key': settings.octo_key},
+                        json: true
+                    }, function(err, response, body){
+                        if (err) logger.error(err);
+                        callback(null, documentPrint, documentUser, body);
+                    });
+                }
+            ], function(err, documentPrint, documentUser, body){
+                renderData = {
+                    user : {
+                        username : req.user.username,
+                        type : req.user.type
+                    },
+                    print : null,
+                    printOwner: null,
+                    progress : null,
+                };
+
+                if(err != 'noPrint'){
+                    renderData.print = documentPrint;
+                    renderData.printOwner = documentUser.username;
+                }else if(err == 'noPrint'){
+
+                }else if(err){
+                    return logger.error(err);
+                }
+
+                if(body && body.progress.completion != null){
+                    renderData.progress = body.progress.completion.toFixedDown(2);
+                }
+
+                res.render('dashboard', renderData);
+            });
+        }else{
             req.flash('error', 'Je mag hier niet zijn!');
             res.redirect('/');
         }
