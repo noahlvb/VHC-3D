@@ -142,7 +142,8 @@ module.exports = function (router, passport) {
                     print : null,
                     printOwner: null,
                     progress : null,
-                    printerStatus: nconf.get('printerFault')
+                    printerStatus: nconf.get('printerFault'),
+                    webcamURL: settings.webcamURL
                 };
 
                 if(err != 'noPrint'){

@@ -18,5 +18,6 @@ module.exports = {
         'gmailAddr' : process.env.VHC3D_MAIL_GMAILADDR,
         'gmailAppPassword' : process.env.VHC3D_MAIL_GMAILAPPPASSWORD,
         'sysadmin' : process.env.VHC3D_MAIL_SYSADMIN
-    }
+    },
+    'webcamURL' : process.env.VHC3D_WEBCAMURL
 };
