@@ -1,3 +1,14 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r68/three.min.js"></script>
+<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/controls/TrackballControls.js"></script>
+
+<% if(print) {%>
+<script type='text/javascript' >
+  var projectID = '<%= print._id %>';
+</script>
+<script src="/static/js/stl-loader.js"></script>
+<script src="/static/js/stl.js"></script>
+<% } %>
+
 <div class="row">
     <div class="col-md-3">
         <h4>Printer status: <% if(printerStatus === true) { %><span style="color: red;">Gestopt</span><% }else{ %><span style="color: green;">Operationeel</span><% } %></h4>
@@ -32,6 +43,6 @@
 
     </div>
     <div class="col-md-4">
-
+        <div id="view"></div>
     </div>
 </div>
