@@ -10,6 +10,7 @@ var paused = false;
 function createImageLayer() {
   var img = new Image();
   img.style.position = "absolute";
+  img.style.width = "98%";
   img.style.zIndex = -1;
   img.onload = imageOnload;
   img.onclick = imageOnclick;
