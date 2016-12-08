@@ -34,8 +34,8 @@ For the database I choose MongoDB because its NoSQL and I had good experiences w
 
 ## TODO
 
-- [ ] adding more advanced Cura parameters for more experienced users. And predefined profiles.
-- [ ] Make slicing and printer simultaneously possible
+- [ ] Make slicing and printer simultaneously possible.
+- [x] adding more advanced Cura parameters for more experienced users. And predefined profiles.
 - [x] Fine tune the pushoff process
 - [x] Admin dashboard
 - [x] Writing the code in a why that it can use different size 3d printers. And make de size configurable.
