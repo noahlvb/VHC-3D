@@ -168,7 +168,7 @@ new CronJob('01 */1 * * * *', function() {
                     document.save();
 
                     var stl = nodeStl('./' + document.fileLocation);
-                    var requiredBedHeight = ( stl.boundingBox[2] <= 6 ? 6 : Math.max(0, stl.boundingBox[2] - 45));
+                    var requiredBedHeight = ( stl.boundingBox[2] <= 6 ? 2 : Math.max(0, stl.boundingBox[2] - 45));
 
                     request.post({
                         url: settings.octo_addr + 'api/printer/command',
@@ -189,7 +189,7 @@ new CronJob('01 */1 * * * *', function() {
                                 json: true
                             }, function(err, responseTemp, bodyTemp){
                                 if (err) return logger.error(err);
-                                if(bodyTemp.temperature.bed.actual <= 35){
+                                if(bodyTemp.temperature.bed.actual <= 20){
                                     clearInterval(checkForTemp);
                                     request.post({
                                         url: settings.octo_addr + 'api/printer/command',
@@ -199,7 +199,7 @@ new CronJob('01 */1 * * * *', function() {
                                                 "G1 Y200",
                                                 "G1 X97.5",
                                                 String("G1 Z" + requiredBedHeight),
-                                                "G1 Y0 F3000",
+                                                "G1 Y0 F7000",
                                                 "G4 P1000",
                                                 "M140",
                                                 "G1 Z50",
