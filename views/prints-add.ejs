@@ -14,6 +14,13 @@
             <th><br><h4>Cura print parameters</h4></th>
         </tr>
         <tr>
+            <th><label>Standard profilen:</label></th>
+            <th>
+                <select id="profileSelect">
+                </select>
+            </th>
+        </tr>
+        <tr>
             <th><label>Layer Height:</label></th>
             <th><input name="P_layerHeight" type="number" step="any" min="0" value="0.2"></input></th>
         </tr>
@@ -54,3 +61,43 @@
         </tr>
     </table>
 </form>
+
+<script type="text/javascript">
+    var curaProfiles = [
+        {
+            'name': "prototype - korter, goedkoper - redelijk stevig",
+            'parameters': {
+                'P_layerHeight': 0.2,
+                'P_shellThickness': 1,
+                'P_bottomTopThickness': 0.8,
+                'P_fillDensity': 20,
+                'P_printSpeed': 125
+            }
+        },
+        {
+            'name': "Extra stevig - langer, duurder - Extra stevig",
+            'parameters': {
+                'P_layerHeight': 0.1,
+                'P_shellThickness': 2,
+                'P_bottomTopThickness': 1.0,
+                'P_fillDensity': 100,
+                'P_printSpeed': 100
+            }
+        },
+    ];
+
+    $.each(curaProfiles, function(key, value) {
+        $('#profileSelect').append($("<option></option>")
+            .attr("value", key)
+            .text(value.name));
+    });
+
+    $('#profileSelect').change(function(){
+        var selected = $(this).val();
+
+        $.each(curaProfiles[selected].parameters, function(key, value){
+            $("input[name='" + key + "']").attr("value", value);
+        });
+    });
+
+</script>
