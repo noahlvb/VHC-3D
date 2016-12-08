@@ -40,7 +40,7 @@ function startNewPrint() {
                                 document.save();
 
                                 usersDB.findOne({_id: document.owner}, function(err, documentUser){
-                                    documentUser.materialAmountReserved = documentUser.materialAmountReserved - document.materialAmount;
+                                    documentUser.materialAmountReserved = Math.max(0, documentUser.materialAmountReserved - document.materialAmount);
                                     documentUser.save();
                                 });
                             }else if(response.statusCode === 409){
