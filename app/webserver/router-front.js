@@ -18,6 +18,13 @@ Number.prototype.toFixedDown = function(digits) {
 
 module.exports = function (router, passport) {
 
+    router.get('/', function(req, res, next){
+        printsDB.count({status: 1}, function(err, count){
+            router.locals.pendingCounter = count;
+            next();
+        });
+    });
+
     router.use('/prints', require('./router-front/router-prints.js'));
 
     // main page
