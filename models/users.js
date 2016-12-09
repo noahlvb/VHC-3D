@@ -15,6 +15,6 @@ var userSchema = mongoose.Schema({
     monthlyMaterial: Number,
     materialAmount: Number,
     materialAmountReserved: Number
-});
+}, { timestamps: { createdAt: 'created_at' } });
 
 module.exports = mongoose.model('users', userSchema);

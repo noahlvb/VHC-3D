@@ -36,6 +36,6 @@ var printsSchema = mongoose.Schema({
       //1: Brim
       //2: Raft
     P_platformAdhesionType: Number,
-});
+}, { timestamps: { createdAt: 'created_at' } });
 
 module.exports = mongoose.model('prints', printsSchema);

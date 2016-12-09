@@ -24,7 +24,7 @@ module.exports = function (router, passport) {
             next();
         });
     });
-
+    
     router.use('/prints', require('./router-front/router-prints.js'));
 
     // main page
