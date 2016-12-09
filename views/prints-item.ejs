@@ -1,10 +1,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r68/three.min.js"></script>
 <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/controls/TrackballControls.js"></script>
-<script type='text/javascript' >
-  var projectID = '<%= print._id %>';
-</script>
-<script src="/static/js/stl-loader.js"></script>
-<script src="/static/js/stl.js"></script>
 
 <div class="row">
     <div class="col-md-3">
@@ -137,6 +132,7 @@
     </div>
     <div class="col-md-4">
         <div id="view"></div>
+        <div id="webcam"></div>
     </div>
 </div>
 
@@ -156,3 +152,16 @@
         enableForm('print-update-parameters-form');
     }
 </script>
+
+<% if(print.status == 3){ %>
+<script type='text/javascript' >
+  var webcamURL = '<%= webcamURL %>';
+</script>
+<script src="/static/js/renderWebcam.js"></script>
+<% }else{ %>
+<script type='text/javascript' >
+  var projectID = '<%= print._id %>';
+</script>
+<script src="/static/js/stl-loader.js"></script>
+<script src="/static/js/stl.js"></script>
+<% } %>

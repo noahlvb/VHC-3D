@@ -53,7 +53,8 @@ router.get('/:id', account.isLoggedInAsUser, function(req, res){
                             },
                             print : documentPrint,
                             printOwner: documentUser.username,
-                            progress : body.progress.completion.toFixedDown(2)
+                            progress : body.progress.completion.toFixedDown(2),
+                            webcamURL: settings.webcamURL
                         });
                     }else{
                         res.render('prints-item', {
@@ -63,7 +64,8 @@ router.get('/:id', account.isLoggedInAsUser, function(req, res){
                             },
                             print : documentPrint,
                             printOwner: documentUser.username,
-                            progress : 0
+                            progress : 0,
+                            webcamURL: settings.webcamURL
                         });
                     }
                 });
