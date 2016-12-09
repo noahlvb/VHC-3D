@@ -136,6 +136,17 @@
     </div>
 </div>
 
+<div class="panel panel-primary" id="waitForSliceWindow">
+    <div class="panel-heading">
+        <h3 class="panel-title" style="text-align: center">Verwerken!
+            <i class="fa fa-refresh fa-spin" style="font-size:24px"></i>
+        </h3>
+    </div>
+    <div class="panel-body">
+        Je project wordt momenteel verwerkt. Een moment geduld alstublieft.
+    </div>
+</div>
+
 <script type="text/javascript">
     function disableForm(formID){
         $('#' + formID + ' th').children(':input').attr('disabled', 'disabled');
@@ -151,6 +162,12 @@
     if('<%= user.type %>' !== 'normal' && <%= print.status%> == 1){
         enableForm('print-update-parameters-form');
     }
+
+    $('input[value="ReSlice"]').click(function(){
+        $('#blackOverlay').css('display', 'block');
+        $('#waitForSliceWindow').css('display', 'block');
+    });
+
 </script>
 
 <% if(print.status == 3){ %>

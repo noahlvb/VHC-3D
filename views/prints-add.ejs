@@ -62,6 +62,17 @@
     </table>
 </form>
 
+<div class="panel panel-primary" id="waitForSliceWindow">
+    <div class="panel-heading">
+        <h3 class="panel-title" style="text-align: center">Verwerken!
+            <i class="fa fa-refresh fa-spin" style="font-size:24px"></i>
+        </h3>
+    </div>
+    <div class="panel-body">
+        Je project wordt momenteel verwerkt. Een moment geduld alstublieft.
+    </div>
+</div>
+
 <script type="text/javascript">
     var curaProfiles = [
         {
@@ -98,6 +109,11 @@
         $.each(curaProfiles[selected].parameters, function(key, value){
             $("input[name='" + key + "']").attr("value", value);
         });
+    });
+
+    $('input[value="Upload"]').click(function(){
+        $('#blackOverlay').css('display', 'block');
+        $('#waitForSliceWindow').css('display', 'block');
     });
 
 </script>
