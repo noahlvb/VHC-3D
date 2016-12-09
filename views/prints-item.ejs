@@ -1,10 +1,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r68/three.min.js"></script>
 <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/controls/TrackballControls.js"></script>
-<script type='text/javascript' >
-  var projectID = '<%= print._id %>';
-</script>
-<script src="/static/js/stl-loader.js"></script>
-<script src="/static/js/stl.js"></script>
 
 <div class="row">
     <div class="col-md-3">
@@ -137,6 +132,18 @@
     </div>
     <div class="col-md-4">
         <div id="view"></div>
+        <div id="webcam"></div>
+    </div>
+</div>
+
+<div class="panel panel-primary" id="waitForSliceWindow">
+    <div class="panel-heading">
+        <h3 class="panel-title" style="text-align: center">Verwerken!
+            <i class="fa fa-refresh fa-spin" style="font-size:24px"></i>
+        </h3>
+    </div>
+    <div class="panel-body">
+        Je project wordt momenteel verwerkt. Een moment geduld alstublieft.
     </div>
 </div>
 
@@ -155,4 +162,23 @@
     if('<%= user.type %>' !== 'normal' && <%= print.status%> == 1){
         enableForm('print-update-parameters-form');
     }
+
+    $('input[value="ReSlice"]').click(function(){
+        $('#blackOverlay').css('display', 'block');
+        $('#waitForSliceWindow').css('display', 'block');
+    });
+
 </script>
+
+<% if(print.status == 3){ %>
+<script type='text/javascript' >
+  var webcamURL = '<%= webcamURL %>';
+</script>
+<script src="/static/js/renderWebcam.js"></script>
+<% }else{ %>
+<script type='text/javascript' >
+  var projectID = '<%= print._id %>';
+</script>
+<script src="/static/js/stl-loader.js"></script>
+<script src="/static/js/stl.js"></script>
+<% } %>
