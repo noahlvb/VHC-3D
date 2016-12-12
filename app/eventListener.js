@@ -122,7 +122,7 @@ new CronJob('01 */1 * * * *', function() {
                 document.status = 41;
                 document.save();
             });
-            nconf.set('printFault', true);
+            nconf.set('printerFault', true);
             nconf.save(function(err){
                 if (err) return logger.error(err);
             });
@@ -238,8 +238,4 @@ new CronJob('01 */1 * * * *', function() {
             startNewPrint();
         }
     });
-
-    if(nconf.get('printerFault') === true){
-        logger.info("------ Printer Fault!!!!!!! -------");
-    }
 }, null, true, 'Europe/Amsterdam');

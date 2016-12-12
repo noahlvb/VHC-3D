@@ -34,7 +34,7 @@ For the database I choose MongoDB because its NoSQL and I had good experiences w
 
 ## TODO
 
-- [ ] Make slicing and printer simultaneously possible.
+- [x] Make slicing and printer simultaneously possible.
 - [x] adding more advanced Cura parameters for more experienced users. And predefined profiles.
 - [x] Fine tune the pushoff process
 - [x] Admin dashboard
