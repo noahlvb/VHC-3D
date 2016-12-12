@@ -16,7 +16,7 @@ Number.prototype.toFixedDown = function(digits) {
 };
 
 module.exports = function(projectID, hypothesis, callback){
-    delete require.cache[require.resolve("./config/settings")];
+    delete require.cache[require.resolve("./../config/settings")];
     var settings = require("./../config/settings");
 
     printsDB.findOne({ _id: projectID }, function(err, documentPrint){
