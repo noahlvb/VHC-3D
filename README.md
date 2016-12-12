@@ -60,6 +60,7 @@ note that the project is not yet fully production ready, I would like to have it
 
 1. clone/pull the repo.
 2. Set the environment variable as mentioned in the settings file under the config folder.
+    - OctoPI cannot slice and print simultaneously. To enable this feature run a second octoprint on a separate machine from your Main Octoprint machine and configure the second machine in the settings file.
 3. download all the Dependencies using 'npm install'.
 4. run 'node start.js'.
     - it is recommended to use something like PM2 to make sure the app will run forever.

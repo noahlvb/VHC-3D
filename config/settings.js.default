@@ -7,6 +7,8 @@ module.exports = {
     'secret' : process.env.VHC3D_SECRET,
     'octo_addr' : process.env.VHC3D_OCTO_ADDR,
     'octo_key' : process.env.VHC3D_OCTO_KEY,
+    'octo_addr_slice' : process.env.VHC3D_OCTO_ADDR_SLICE,
+    'octo_key_Slice' : process.env.VHC3D_OCTO_KEY_SLICE,
     'googleOauth' : {
         'clientID' : process.env.VHC3D_GOAUTH_CLIENTID,
         'clientSecret' : process.env.VHC3D_GOAUTH_CLIENTSECRET,
