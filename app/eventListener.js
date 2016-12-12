@@ -23,7 +23,7 @@ nconf.load();
 
 function startNewPrint() {
     if(nconf.get('printerFault') !== true){
-        printsDB.find({}).sort({'updatedAt': -1}).findOne({status: 2 }, function(err, document){
+        printsDB.find({}).sort({'updatedAt': 1}).findOne({status: 2 }, function(err, document){
             if(document !== null){
                 require("./slice")(document._id, false, function(response){
                     if(response == 0){

@@ -5,7 +5,6 @@ var nconf = require("nconf");
 
 var printsDB = require("./../models/prints.js");
 var usersDB = require("./../models/users.js");
-var settings = require("./../config/settings");
 
 nconf.use('file', { file: './../config/settings.json' });
 nconf.load();
@@ -17,6 +16,9 @@ Number.prototype.toFixedDown = function(digits) {
 };
 
 module.exports = function(projectID, hypothesis, callback){
+    delete require.cache[require.resolve("./config/settings")];
+    var settings = require("./../config/settings");
+
     printsDB.findOne({ _id: projectID }, function(err, documentPrint){
         usersDB.findOne({ _id: documentPrint.owner}, function(err, documentUser){
 
@@ -25,6 +27,11 @@ module.exports = function(projectID, hypothesis, callback){
 
             if(stl.boundingBox[0] > nconf.get('printerDimensionX') || stl.boundingBox[1] > nconf.get('printerDimensionY') || stl.boundingBox[2] > nconf.get('printerDimensionZ')){
                 return callback(3);
+            }
+
+            if(hypothesis === true && settings.octo_addr_slice){
+                settings.octo_addr = settings.octo_addr_slice;
+                settings.octo_key = settings.octo_key_slice;
             }
 
             var formData = {
