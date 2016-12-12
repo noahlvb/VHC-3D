@@ -417,7 +417,7 @@ router.get('/cancel', account.isLoggedInAsUser, function(req, res){
                     "command": "cancel"
                 }
             }, function(err, responseCancel, bodyCancel){
-                nconf.set('printFault', true);
+                nconf.set('printerFault', true);
                 nconf.save(function(err){
                     if (err) return logger.error(err);
                 });
