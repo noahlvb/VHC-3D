@@ -195,6 +195,28 @@ router.get('/list/pending/', account.isLoggedInAsUser, function(req, res){
     }
 });
 
+router.get('/list/waiting/', account.isLoggedInAsUser, function(req, res){
+    if(req.user.type == 'supervisor' || req.user.type == 'admin'){
+        printsDB.find({}).sort({'updatedAt': 1}).find({status: 2}, function(err, result){
+            if (err) return logger.error(err);
+
+            var printsMap = {};
+
+            for (var i = 0; i < result.length; i++ ) {
+                var individualPrint = {};
+                individualPrint["id"]                    = result[i]._id;
+                individualPrint["name"]                  = result[i].name;
+                individualPrint["estimatedPrintTime"]    = result[i].estimatedPrintTime;
+                individualPrint["materialAmount"]        = result[i].materialAmount;
+                individualPrint["rejectingNotice"]       = result[i].rejectingNotice;
+                printsMap[i] = individualPrint;
+            }
+
+            res.json(printsMap);
+        });
+    }
+});
+
 router.get('/list/archived/', account.isLoggedInAsUser, function(req, res){
     printsDB.find({
         $and: [

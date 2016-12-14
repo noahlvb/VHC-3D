@@ -30,6 +30,12 @@
                 </p>
             </div>
         </div>
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title">Wachtrij</h3>
+            </div>
+            <table id="waiting-table" class="table" data-link="row"></table>
+        </div>
     </div>
     <div class="col-md-5" style="padding-top: 39px;">
         <div id="webcam"></div>
@@ -51,3 +57,33 @@
 <script src="/static/js/stl-loader.js"></script>
 <script src="/static/js/stl.js"></script>
 <% } %>
+
+<script type="text/javascript">
+
+//Table Waiting
+$.ajax({
+    dataTypeL: "json",
+    url: "/backend/prints/list/waiting",
+    beforeSend: function( xhr ) {
+        xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+    }
+}).done(function (data) {
+    var waitingPrints = $.parseJSON(data);
+    drawTableNotCommitted(waitingPrints);
+});
+
+function drawTableNotCommitted (waitingPrints) {
+    var table = document.getElementById('waiting-table');
+    var row0 = table.insertRow(0);
+    row0.insertCell(0).innerHTML = '<b>Naam</b>';
+    row0.insertCell(1).innerHTML = '<b>Verwachte tijdsduur</b>';
+    row0.insertCell(2).innerHTML = '<b>acties</b>';
+    for (var i = 0; i < Object.keys(waitingPrints).length; i++) {
+        var row = table.insertRow(1);
+        row.insertCell(0).innerHTML = '<a href="/prints/' + waitingPrints[i].id + '">' + waitingPrints[i].name + '</a>';
+        row.insertCell(1).innerHTML = waitingPrints[i].estimatedPrintTime + ' minuten';
+        row.insertCell(2).innerHTML = '<a href="#" onClick="alert(\'Sorry dit is nog niet mogelijk\')">voorang</a>';
+    }
+}
+
+</script>
