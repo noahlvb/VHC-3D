@@ -12,6 +12,7 @@ var printsSchema = mongoose.Schema({
     //3: printing
     //4: done // 41: failed
     status: Number,
+    priority: Number,
     finished: Boolean,
     archive: Boolean,
     rejectingNotice: String,

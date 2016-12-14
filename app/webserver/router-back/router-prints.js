@@ -197,7 +197,7 @@ router.get('/list/pending/', account.isLoggedInAsUser, function(req, res){
 
 router.get('/list/waiting/', account.isLoggedInAsUser, function(req, res){
     if(req.user.type == 'supervisor' || req.user.type == 'admin'){
-        printsDB.find({}).sort({'updatedAt': 1}).find({status: 2}, function(err, result){
+        printsDB.find({}).sort({'updatedAt': 1, 'priority': -1}).find({status: 2}, function(err, result){
             if (err) return logger.error(err);
 
             var printsMap = {};
@@ -398,6 +398,7 @@ router.get('/:id/accept/:boolean', account.isLoggedInAsUser, function(req, res){
         if(document.status == 1 && document.archive == false){
             if(req.params.boolean == 'true'){
                 document.status = 2;
+                document.priority = 0;
                 document.save();
 
                 req.flash('info', 'project "' + document.name + '" is goedgekeurd');
