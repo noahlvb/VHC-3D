@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+require('@risingstack/trace');
 var mongoose = require("mongoose");
 var fs = require("fs");
 var path = require("path");
