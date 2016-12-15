@@ -24,8 +24,8 @@ router.get('/list', account.isLoggedInAsAdmin, function(req, res){
 			individualUser["email"]						= users[i].email;
             individualUser["type"]     					= users[i].type;
 			individualUser["monthlyMaterial"] 			= users[i].monthlyMaterial;
-			individualUser["materialAmount"] 			= users[i].materialAmount;
-			individualUser["materialAmountReserved"] 	= users[i].materialAmountReserved;
+			individualUser["materialAmount"] 			= users[i].materialAmount.toFixedDown(2);
+			individualUser["materialAmountReserved"] 	= users[i].materialAmountReserved.toFixedDown(2);
             userMap[i] = individualUser;
         }
 

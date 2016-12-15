@@ -5,6 +5,7 @@ var nodemailer = require("nodemailer");
 var nconf = require("nconf");
 
 var printsDB = require("./../../../models/prints");
+var usersDB = require("./../../../models/users");
 var account = require("./../../account");
 var settings = require("./../../../config/settings");
 

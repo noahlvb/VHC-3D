@@ -6,12 +6,6 @@ var printsDB = require("./../../../models/prints");
 var usersDB = require("./../../../models/users");
 var settings = require("./../../../config/settings");
 
-Number.prototype.toFixedDown = function(digits) {
-    var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
-        m = this.toString().match(re);
-    return m ? parseFloat(m[1]) : this.valueOf();
-};
-
 var router = express.Router();
 
 router.get('/add', account.isLoggedInAsUser, function(req, res){
