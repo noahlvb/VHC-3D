@@ -420,7 +420,7 @@ router.get('/:id/accept/:boolean', account.isLoggedInAsUser, function(req, res){
     });
 });
 
-router.get('/cancel', account.isLoggedInAsUser, function(req, res){
+router.post('/cancel', account.isLoggedInAsUser, function(req, res){
     if(req.user.type == 'admin' || req.user.type == 'supervisor'){
         request.get({
             url: settings.octo_addr + 'api/job',
@@ -446,6 +446,7 @@ router.get('/cancel', account.isLoggedInAsUser, function(req, res){
                 });
                 printsDB.findOne({ fileLocation: jobFile }, function(err, document){
                     document.status = 41;
+                    document.rejectingNotice = req.body.stopText;
                     document.save();
 
                     usersDB.findOne({_id: document.owner}, function(err, documentUser){
