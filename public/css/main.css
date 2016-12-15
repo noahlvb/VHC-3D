@@ -18,7 +18,7 @@ input, label, select {
 	opacity: 0.80;
 }
 
-#waitForSliceWindow {
+.popup {
 	z-index: 1002;
 	position: fixed;
 	top: 0;
@@ -26,9 +26,22 @@ input, label, select {
 	right: 0;
 	bottom: 100px;
 	margin: auto;
-	width: 400px;
-	height: 120px;
 	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19) !important;
 	display: none;
 	overflow: auto;
+}
+
+#waitForSliceWindow {
+	width: 400px;
+	height: 120px;
+}
+
+#stopPromt {
+	width: 400px;
+	height: 300px;
+}
+
+#stopPromt textarea {
+	margin-left: 5px;
+	width: 100%;
 }

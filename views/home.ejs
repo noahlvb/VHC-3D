@@ -88,8 +88,12 @@
             var row = table.insertRow(1);
             row.insertCell(0).innerHTML = '<a href="/prints/' + failedPrints[i].id + '">' + failedPrints[i].name + '</a>';
             row.insertCell(1).innerHTML = 'Mislukt';
-            row.insertCell(2).innerHTML = 'Het printing van je project is mislukt. Probeer het later opnieuw (eventueel met nieuwe instellingen of aangepast ontwerp)';
-            row.insertCell(3).innerHTML = '<a href="/prints/' +  failedPrints[i].id + '">instellingen wijzigen</a><br><a href="/backend/prints/' + failedPrints[i].id + '/archive">Archieveren</a>';
+			if(failedPrints[i].rejectingNotice.length > 1){
+				row.insertCell(2).innerHTML = failedPrints[i].rejectingNotice;
+			}else{
+            	row.insertCell(2).innerHTML = 'Het printing van je project is mislukt. Probeer het later opnieuw (eventueel met nieuwe instellingen of aangepast ontwerp)';
+			}
+			row.insertCell(3).innerHTML = '<a href="/prints/' +  failedPrints[i].id + '">instellingen wijzigen</a><br><a href="/backend/prints/' + failedPrints[i].id + '/archive">Archieveren</a>';
         }
     }
 

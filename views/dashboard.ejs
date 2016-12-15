@@ -16,7 +16,7 @@
                     <h5><b>Print tijd:</b> <%= print.estimatedPrintTime %> minuten</h5>
                     <h5><b>Materiaal kosten:</b> <%= print.materialAmount %> gram</h5>
                     <h5><b>Geupload door:</b> <%= printOwner %></h5>
-                    <a href="/backend/prints/cancel" id="dashboardStopButton" class="btn btn-danger btn-block">Print opdracht afbreken</a>
+                    <a href="#" id="dashboardStop" class="btn btn-danger btn-block">Print opdracht afbreken</a>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" aria-valuenow="<%= progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= progress %>%;">
                             <%= progress %>%
@@ -45,6 +45,20 @@
     </div>
 </div>
 
+<div class="panel panel-danger popup" id="stopPromt">
+    <div class="panel-heading">
+        <h3 class="panel-title" style="text-align: center">Print opdracht AFBREKEN</h3>
+    </div>
+    <div class="panel-body">
+        Waarom wil je de print opdracht afbreken?
+        <form id="stopPromtText" method="post" action="/backend/prints/cancel">
+            <textarea name="stopText" form="stopPromtText" rows="4"></textarea>
+            <input type="submit" value="Print opdracht afbreken" class="btn btn-danger btn-block"></a>
+        </form>
+    </div>
+</div>
+
+
 <script type='text/javascript' >
   var webcamURL = '<%= webcamURL %>';
 </script>
@@ -59,6 +73,11 @@
 <% } %>
 
 <script type="text/javascript">
+
+$('#dashboardStop').click(function(){
+    $('#blackOverlay').css('display', 'block');
+    $('#stopPromt').css('display', 'block');
+});
 
 //Table Waiting
 $.ajax({

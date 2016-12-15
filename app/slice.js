@@ -9,12 +9,6 @@ var usersDB = require("./../models/users.js");
 nconf.use('file', { file: './../config/settings.json' });
 nconf.load();
 
-Number.prototype.toFixedDown = function(digits) {
-    var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
-        m = this.toString().match(re);
-    return m ? parseFloat(m[1]) : this.valueOf();
-};
-
 module.exports = function(projectID, hypothesis, callback){
     delete require.cache[require.resolve("./../config/settings")];
     var settings = require("./../config/settings");

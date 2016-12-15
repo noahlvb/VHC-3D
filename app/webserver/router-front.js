@@ -10,12 +10,6 @@ var settings = require("./../../config/settings");
 nconf.use('file', { file: './config/settings.json' });
 nconf.load();
 
-Number.prototype.toFixedDown = function(digits) {
-    var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
-        m = this.toString().match(re);
-    return m ? parseFloat(m[1]) : this.valueOf();
-};
-
 module.exports = function (router, passport) {
 
     router.get('/', function(req, res, next){
@@ -24,7 +18,7 @@ module.exports = function (router, passport) {
             next();
         });
     });
-    
+
     router.use('/prints', require('./router-front/router-prints.js'));
 
     // main page
@@ -80,8 +74,8 @@ module.exports = function (router, passport) {
                     email                   : document.email,
                     type                    : document.type,
                     monthlyMaterial         : document.monthlyMaterial,
-                    materialAmount          : document.materialAmount,
-                    materialAmountReserved  : document.materialAmountReserved
+                    materialAmount          : document.materialAmount.toFixedDown(2),
+                    materialAmountReserved  : document.materialAmountReserved.toFixedDown(2)
                 }
             });
         });

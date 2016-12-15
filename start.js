@@ -1,10 +1,17 @@
 #!/usr/bin/env node
+require('@risingstack/trace');
 var mongoose = require("mongoose");
 var fs = require("fs");
 var path = require("path");
 
 var dir = ['./files', './files/stl', './files/tmp'];
 var configFiles = fs.readdirSync('./config');
+
+Number.prototype.toFixedDown = function(digits) {
+    var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
+        m = this.toString().match(re);
+    return m ? parseFloat(m[1]) : this.valueOf();
+};
 
 dir.forEach(function(element){
     if(!fs.existsSync(element)){
