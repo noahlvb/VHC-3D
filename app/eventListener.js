@@ -1,22 +1,15 @@
 var CronJob = require('cron').CronJob;
 var nconf = require("nconf");
 var request = require("request");
-var nodemailer = require("nodemailer");
 var async = require("async");
 var nodeStl = require("node-stl");
 
 var usersDB = require("./../models/users");
 var printsDB = require("./../models/prints");
 var settings = require("./../config/settings");
+var mailSender = require("./mailSender");
 
 var date = new Date();
-var smtpTransport = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-        user: settings.mail.gmailAddr,
-        pass: settings.mail.gmailAppPassword
-    }
-});
 
 nconf.use('file', { file: './config/settings.json' });
 nconf.load();
@@ -139,12 +132,7 @@ new CronJob('01 */1 * * * *', function() {
             });
 
             usersDB.findOne({_id: document.owner}, function(err, documentUser){
-                smtpTransport.sendMail({
-                    from: settings.mail.gmailAddr,
-                    to: documentUser.email,
-                    subject: 'VHC3D: Print opdracht mislukt',
-                    html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is mislukt en is niet geprint of niet goedgeprint.<br>Je kunt de overblijfselen komen ophalen als je dat wilt.<br><br>Vriendlijke groet VHC 3d print Team</p>'
-                }, function(err, response){
+                mailSender(documentUser.email, 'VHC3D: Print opdracht mislukt', 'printFailed', {username: documentUser.username, printname: document.name, rejectingNotice: document.rejectingNotice}, function(err, response){
                     if(err){
                         logger.error(err);
                     }
@@ -208,12 +196,7 @@ new CronJob('01 */1 * * * *', function() {
                                         }
                                     }, function(err, responsePushOff, bodyPushOff){
                                         usersDB.findOne({_id: document.owner}, function(err, documentUser){
-                                            smtpTransport.sendMail({
-                                                from: settings.mail.gmailAddr,
-                                                to: documentUser.email,
-                                                subject: 'VHC3D: Print opdracht voltooid',
-                                                html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is voltooid.<br>Je kunt de het project komen ophalen.<br><br>Vriendlijke groet VHC 3d print Team</p>'
-                                            }, function(err, response){
+                                            mailSender(documentUser.email, 'VHC3D: Print opdracht voltooid!', 'printSucces', {username: documen.username, printname: document.name}, function(err, response){
                                                 if(err){
                                                     logger.error(err);
                                                 }

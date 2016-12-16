@@ -47,7 +47,7 @@ router.post('/add', account.isLoggedInAsAdmin, function (req, res) {
 
                 data = {
                     username : req.body.username,
-					emails : req.body.email,
+					email : req.body.email,
                     password : hashed.hashy,
                     salty : hashed.salt,
                     type : req.body.selectType,
