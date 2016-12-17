@@ -69,6 +69,7 @@
                 <% }else if (print.status == 0 || print.status == 1 || print.status == 2 || print.status == 21 ) { %>
                     <a href="/backend/prints/<%= print._id %>/delete" class="list-group-item list-group-item-danger">Verwijderen</a>
                 <% } %>
+                <a href="/backend/prints/copy/<%= print._id %>/" class="list-group-item list-group-item-info">Kopieren</a>
             </ul>
         </div>
         <%if (print.rejectingNotice) { %>

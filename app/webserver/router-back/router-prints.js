@@ -111,6 +111,55 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
     });
 });
 
+router.get('/copy/:id/', account.isLoggedInAsUser, function(req, res){
+    printsDB.findOne({_id: req.params.id}, function(err, document){
+        var newDocument = document.toObject();
+        delete newDocument._id;
+        delete newDocument.created_at;
+        delete newDocument.updatedAt;
+        delete newDocument.__v;
+        delete newDocument.randomIdentifier;
+        newDocument.status = 0;
+        newDocument.finished = false;
+        newDocument.archived = false;
+        document.owner = req.user._id;
+
+        var newName;
+        console.log(document.name);
+        console.log(new RegExp(document.name + " ", "i"));
+        printsDB.find({name : new RegExp(document.name + " ", "i")}, function(err, documentPrints){
+            var documentIteration = documentPrints.length;
+            console.log(documentIteration);
+            if(documentIteration == 0){
+                newName = document.name + ' - 1';
+            }else{
+                documentIteration++;
+                if(new RegExp("\(\d\)").test(document.name)){
+                    newName = document.name.substring(0,document.name.lastIndexOf("-")) + ' -' + documentIteration;
+                }else{
+                    newName = document.name + ' - ' + documentIteration;
+                }
+            }
+            newDocument.name = newName;
+
+            usersDB.findOne({_id: req.user._id}, function(err, documentUser){
+                if(documentUser.materialAmount - newDocument.materialAmount > 0 ){
+                    documentUser.materialAmount = documentUser.materialAmount - newDocument.materialAmount;
+                    documentUser.materialAmountReserved = documentUser.materialAmountReserved + newDocument.materialAmount;
+                    documentUser.save();
+                    new printsDB(newDocument).save(function(err, data){
+                        req.flash('info', 'Je printje is succesvol gekopieeerd!');
+                        res.redirect('/prints/' + data._id + '/');
+                    });
+                }else{
+                    req.flash('warning', 'je hebt niet meer genoeg materiaal tot je beschikking');
+                    res.redirect('/');
+                }
+            });
+        });
+    });
+});
+
 router.post('/reslice/:id/', account.isLoggedInAsUser, function(req, res){
     if(req.body.P_layerHeight == false || req.body.P_shellThickness == false || req.body.P_bottomTopThickness == false || req.body.P_fillDensity == false || req.body.P_printSpeed == false){
         req.flash('error', 'niet alle velden zijn ingevuld');
