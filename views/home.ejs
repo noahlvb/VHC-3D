@@ -170,7 +170,7 @@
             if(normalPrints[i].status == 1 || normalPrints[i].status == 2){
                 row.insertCell(4).innerHTML = '<a href="/backend/prints/' + normalPrints[i].id + '/delete">Verwijderen</a>';
             }else if(normalPrints[i].status == 4){
-                row.insertCell(4).innerHTML = '<a href="/backend/prints/' + normalPrints[i].id + '/archive">Archieveren</a>';
+                row.insertCell(4).innerHTML = '<a href="/backend/prints/' + normalPrints[i].id + '/archive">Archieveren</a>, <a href="/backend/prints/copy/' + normalPrints[i].id + '/">Kopieren</a>';
             }
 		}
 	}

@@ -28,8 +28,8 @@ module.exports = function (router, passport) {
             user : {
                 username : req.user.username,
                 type : req.user.type,
-                materialAmount: req.user.materialAmount,
-                materialAmountReserved: req.user.materialAmountReserved
+                materialAmount: req.user.materialAmount.toFixedDown(2),
+                materialAmountReserved: req.user.materialAmountReserved.toFixedDown(2)
             }
         });
     });

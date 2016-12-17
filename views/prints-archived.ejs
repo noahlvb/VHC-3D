@@ -32,6 +32,7 @@
         row0.insertCell(1).innerHTML = '<b>Status</b>';
         row0.insertCell(2).innerHTML = '<b>Verwachte tijdsduur</b>';
         row0.insertCell(3).innerHTML = '<b>Vereist matriaal</b>';
+		row0.insertCell(4).innerHTML = '<b>Snelle acties</b>';
         for (var i = 0; i < Object.keys(normalPrints).length; i++) {
             var row = table.insertRow(1);
             row.insertCell(0).innerHTML = '<a href="/prints/' + normalPrints[i].id + '">' + normalPrints[i].name + '</a>';
@@ -48,6 +49,7 @@
 
             row.insertCell(2).innerHTML = normalPrints[i].estimatedPrintTime + ' minuten';
             row.insertCell(3).innerHTML = normalPrints[i].materialAmount + ' gram';
+			row.insertCell(4).innerHTML = '<a href="/backend/prints/copy/' + normalPrints[i].id + '/">Kopieren</a>';
         }
     }
 </script>

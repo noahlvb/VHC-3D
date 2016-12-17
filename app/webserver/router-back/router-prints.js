@@ -8,6 +8,7 @@ var printsDB = require("./../../../models/prints");
 var usersDB = require("./../../../models/users");
 var account = require("./../../account");
 var settings = require("./../../../config/settings");
+var mailSender = require("./../../mailSender");
 
 var smtpTransport = nodemailer.createTransport({
     service: "Gmail",
@@ -103,6 +104,55 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
                     res.redirect('/');
                 }else{
                     req.flash('info', 'Je printje is succesvol geupload');
+                    res.redirect('/');
+                }
+            });
+        });
+    });
+});
+
+router.get('/copy/:id/', account.isLoggedInAsUser, function(req, res){
+    printsDB.findOne({_id: req.params.id}, function(err, document){
+        var newDocument = document.toObject();
+        delete newDocument._id;
+        delete newDocument.created_at;
+        delete newDocument.updatedAt;
+        delete newDocument.__v;
+        delete newDocument.randomIdentifier;
+        newDocument.status = 0;
+        newDocument.finished = false;
+        newDocument.archived = false;
+        document.owner = req.user._id;
+
+        var newName;
+        console.log(document.name);
+        console.log(new RegExp(document.name + " ", "i"));
+        printsDB.find({name : new RegExp(document.name + " ", "i")}, function(err, documentPrints){
+            var documentIteration = documentPrints.length;
+            console.log(documentIteration);
+            if(documentIteration == 0){
+                newName = document.name + ' - 1';
+            }else{
+                documentIteration++;
+                if(new RegExp("\(\d\)").test(document.name)){
+                    newName = document.name.substring(0,document.name.lastIndexOf("-")) + ' -' + documentIteration;
+                }else{
+                    newName = document.name + ' - ' + documentIteration;
+                }
+            }
+            newDocument.name = newName;
+
+            usersDB.findOne({_id: req.user._id}, function(err, documentUser){
+                if(documentUser.materialAmount - newDocument.materialAmount > 0 ){
+                    documentUser.materialAmount = documentUser.materialAmount - newDocument.materialAmount;
+                    documentUser.materialAmountReserved = documentUser.materialAmountReserved + newDocument.materialAmount;
+                    documentUser.save();
+                    new printsDB(newDocument).save(function(err, data){
+                        req.flash('info', 'Je printje is succesvol gekopieeerd!');
+                        res.redirect('/prints/' + data._id + '/');
+                    });
+                }else{
+                    req.flash('warning', 'je hebt niet meer genoeg materiaal tot je beschikking');
                     res.redirect('/');
                 }
             });
@@ -397,25 +447,39 @@ router.get('/:id/accept/:boolean', account.isLoggedInAsUser, function(req, res){
 
     printsDB.findOne({_id: req.params.id}, function(err, document){
         if(document.status == 1 && document.archive == false){
-            if(req.params.boolean == 'true'){
-                document.status = 2;
-                document.priority = 0;
-                document.save();
+            usersDB.findOne({_id: document.owner}, function(err, documentUser){
+                if(req.params.boolean == 'true'){
+                    document.status = 2;
+                    document.priority = 0;
+                    document.save();
 
-                req.flash('info', 'project "' + document.name + '" is goedgekeurd');
-                res.redirect('/supervisor/pending');
-            }else if(req.params.boolean == 'false'){
-                document.status = 21;
-                document.rejectingNotice = "je project is afgewezen";
-                document.save();
+                    mailSender(documentUser.email, 'VHC3D: Print opdracht goedgekeurd', 'printAccepted', {username: documentUser.username, printname: document.name}, function(err, response){
+                        if(err){
+                            logger.error(err);
+                        }
+                    });
 
-                req.flash('info', 'project "' + document.name + '" is afgekeurd');
-                res.redirect('/supervisor/pending');
-            }else{
-                logger.info('nor false nor true');
-            }
+                    req.flash('info', 'project "' + document.name + '" is goedgekeurd');
+                    res.redirect('/supervisor/pending');
+                }else if(req.params.boolean == 'false'){
+                    document.status = 21;
+                    document.rejectingNotice = "je project is afgewezen";
+                    document.save();
+
+                    mailSender(documentUser.email, 'VHC3D: Print opdracht afgekeurd', 'printRejected', {username: documentUser.username, printname: document.name, rejectingNotice: document.rejectingNotice}, function(err, response){
+                        if(err){
+                            logger.error(err);
+                        }
+                    });
+
+                    req.flash('info', 'project "' + document.name + '" is afgekeurd');
+                    res.redirect('/supervisor/pending');
+                }else{
+                    logger.info('nor false nor true');
+                }
+            });
         }else{
-            req.flash('error', 'Dit project hoort nog niet ingediend te worden!');
+            req.flash('error', 'Dit project hoort nog niet ingediend te zijn!');
             res.redirect('/prints/' + req.params.id);
         }
     });
@@ -451,12 +515,7 @@ router.post('/cancel', account.isLoggedInAsUser, function(req, res){
                     document.save();
 
                     usersDB.findOne({_id: document.owner}, function(err, documentUser){
-                        smtpTransport.sendMail({
-                            from: settings.mail.gmailAddr,
-                            to: documentUser.email,
-                            subject: 'VHC3D: Print opdracht mislukt',
-                            html: '<h4>Hallo ' + documentUser.username + '</h4><br><p>Je print opdracht ' + document.name + ' is mislukt en is niet geprint of niet goedgeprint.<br>Je kunt de overblijfselen komen ophalen als je dat wilt.<br><br>Vriendlijke groet VHC 3d print Team</p>'
-                        }, function(err, response){
+                        mailSender(documentUser.email, 'VHC3D: Print opdracht mislukt', 'printFailed', {username: documentUser.username, printname: document.name, rejectingNotice: document.rejectingNotice}, function(err, response){
                             if(err){
                                 logger.error(err);
                             }
