@@ -121,8 +121,8 @@ router.get('/copy/:id/', account.isLoggedInAsUser, function(req, res){
         delete newDocument.randomIdentifier;
         newDocument.status = 0;
         newDocument.finished = false;
-        newDocument.archived = false;
-        document.owner = req.user._id;
+        newDocument.archive = false;
+        newDocument.owner = req.user._id;
 
         var newName;
         console.log(document.name);
@@ -397,12 +397,8 @@ router.get('/:id/delete', account.isLoggedInAsUser, function(req, res){
                 req.user.materialAmount = req.user.materialAmount + materialAmount;
                 req.user.save();
 
-                fs.unlink('./' + fileLocation, function(err){
-                    if (err) return logger.error(err);
-
-                    req.flash('info', 'je project is verwijderd');
-                    res.redirect('/');
-                });
+                req.flash('info', 'je project is verwijderd');
+                res.redirect('/');
             });
         }else{
             req.flash('error', 'Dit project hoort nog niet verwijderd te worden!');
