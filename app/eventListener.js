@@ -167,14 +167,14 @@ new CronJob('01 */1 * * * *', function() {
                     document.save();
 
                     var stl = nodeStl('./' + document.fileLocation);
-                    var requiredBedHeight = Math.max(1, stl.boundingBox[2] - 45);
+                    var requiredBedHeight = Math.max(stl.boundingBox[2], 30);
 
                     request.post({
                         url: settings.octo_addr + 'api/printer/command',
                         headers: {'X-Api-Key': settings.octo_key},
                         json: {
                             "commands": [
-                                "G90",
+                                "G91",
                                 "G1 Z197",
                                 "M104 S0",
                                 "M140 S0"
