@@ -112,7 +112,12 @@ new CronJob('01 */1 * * * *', function() {
         }
 
         if(bodyPrinter.state.flags.closedOnError === true || bodyPrinter.state.flags.error === true){
-            printsDB.findOne({fileLocation: jobFile, randomIdentifier: randomIdentifier}, function(err, document){
+            printsDB.findOne({
+                $and: [
+                    {fileLocation: jobFile},
+                    {randomIdentifier: randomIdentifier}
+                ]
+            }, function(err, document){
                 document.status = 41;
                 document.save();
             });
@@ -151,20 +156,25 @@ new CronJob('01 */1 * * * *', function() {
             });
 
         }else if(bodyPrinter.state.flags.operational === true && bodyPrinter.state.flags.ready === true && bodyPrinter.state.flags.printing === false && bodyJob.progress.completion == 100){
-            printsDB.findOne({fileLocation: jobFile, randomIdentifier: randomIdentifier}, function(err, document){
+            printsDB.findOne({
+                $and: [
+                    {fileLocation: jobFile},
+                    {randomIdentifier: randomIdentifier}
+                ]
+            }, function(err, document){
                 if(document.finished === false && document.status != 4){
                     document.status = 4;
                     document.save();
 
                     var stl = nodeStl('./' + document.fileLocation);
-                    var requiredBedHeight = Math.max(1, stl.boundingBox[2] - 45);
+                    var requiredBedHeight = Math.max(stl.boundingBox[2], 30);
 
                     request.post({
                         url: settings.octo_addr + 'api/printer/command',
                         headers: {'X-Api-Key': settings.octo_key},
                         json: {
                             "commands": [
-                                "G90",
+                                "G91",
                                 "G1 Z197",
                                 "M104 S0",
                                 "M140 S0"
