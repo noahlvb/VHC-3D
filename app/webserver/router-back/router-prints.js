@@ -492,6 +492,7 @@ router.post('/cancel', account.isLoggedInAsUser, function(req, res){
 
             if(bodyJob.job.file.name !== null){
                 var jobFile = 'files/stl/' + bodyJob.job.file.name.slice(0, -12);
+                var randomIdentifier = bodyJob.job.file.name.slice(25, -6);
             }
 
             request.post({
@@ -505,7 +506,7 @@ router.post('/cancel', account.isLoggedInAsUser, function(req, res){
                 nconf.save(function(err){
                     if (err) return logger.error(err);
                 });
-                printsDB.findOne({ fileLocation: jobFile }, function(err, document){
+                printsDB.findOne({ fileLocation: jobFile, randomIdentifier: randomIdentifier}, function(err, document){
                     document.status = 41;
                     document.rejectingNotice = req.body.stopText;
                     document.save();
