@@ -13,6 +13,18 @@ Number.prototype.toFixedDown = function(digits) {
     return m ? parseFloat(m[1]) : this.valueOf();
 };
 
+Date.prototype.yyyymmdd = function() {
+  var mm = this.getMonth() + 1; // getMonth() is zero-based
+  var dd = this.getDate();
+  var tt = Math.floor(1000 + Math.random() * 9000)
+
+  return [this.getFullYear(),
+          (mm>9 ? '' : '0') + mm,
+          (dd>9 ? '' : '0') + dd,
+          tt
+         ].join('');
+};
+
 dir.forEach(function(element){
     if(!fs.existsSync(element)){
         fs.mkdirSync(element);

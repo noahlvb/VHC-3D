@@ -1,5 +1,5 @@
 var express = require("express");
-var fs = require("fs");
+var fs = require("fs-extra");
 var request = require("request");
 var nodemailer = require("nodemailer");
 var nconf = require("nconf");
@@ -113,6 +113,10 @@ router.post('/add', account.isLoggedInAsUser, function(req, res){
 
 router.get('/copy/:id/', account.isLoggedInAsUser, function(req, res){
     printsDB.findOne({_id: req.params.id}, function(err, document){
+        var date = new Date();
+        var newFileLocation = String('files/stl/stlFile-' + date.yyyymmdd() + '.stl');
+        fs.copySync(cwd + '/' + document.fileLocation, cwd + '/' + newFileLocation);
+
         var newDocument = document.toObject();
         delete newDocument._id;
         delete newDocument.created_at;
@@ -123,6 +127,7 @@ router.get('/copy/:id/', account.isLoggedInAsUser, function(req, res){
         newDocument.finished = false;
         newDocument.archive = false;
         newDocument.owner = req.user._id;
+        newDocument.fileLocation = newFileLocation;
 
         var newName;
         console.log(document.name);
@@ -492,7 +497,6 @@ router.post('/cancel', account.isLoggedInAsUser, function(req, res){
 
             if(bodyJob.job.file.name !== null){
                 var jobFile = 'files/stl/' + bodyJob.job.file.name.slice(0, -12);
-                var randomIdentifier = bodyJob.job.file.name.slice(25, -6);
             }
 
             request.post({
@@ -506,12 +510,7 @@ router.post('/cancel', account.isLoggedInAsUser, function(req, res){
                 nconf.save(function(err){
                     if (err) return logger.error(err);
                 });
-                printsDB.findOne({
-                    $and: [
-                        {fileLocation: jobFile},
-                        {randomIdentifier: randomIdentifier}
-                    ]
-                }, function(err, document){
+                printsDB.findOne({fileLocation: jobFile}, function(err, document){
                     document.status = 41;
                     document.rejectingNotice = req.body.stopText;
                     document.save();
