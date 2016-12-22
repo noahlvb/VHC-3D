@@ -506,7 +506,12 @@ router.post('/cancel', account.isLoggedInAsUser, function(req, res){
                 nconf.save(function(err){
                     if (err) return logger.error(err);
                 });
-                printsDB.findOne({ fileLocation: jobFile, randomIdentifier: randomIdentifier}, function(err, document){
+                printsDB.findOne({
+                    $and: [
+                        {fileLocation: jobFile},
+                        {randomIdentifier: randomIdentifier}
+                    ]
+                }, function(err, document){
                     document.status = 41;
                     document.rejectingNotice = req.body.stopText;
                     document.save();
