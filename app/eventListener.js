@@ -108,16 +108,10 @@ new CronJob('01 */1 * * * *', function() {
 
         if(bodyJob.job.file.name !== null){
             var jobFile = 'files/stl/' + bodyJob.job.file.name.slice(0, -12);
-            var randomIdentifier = bodyJob.job.file.name.slice(25, -6);
         }
 
         if(bodyPrinter.state.flags.closedOnError === true || bodyPrinter.state.flags.error === true){
-            printsDB.findOne({
-                $and: [
-                    {fileLocation: jobFile},
-                    {randomIdentifier: randomIdentifier}
-                ]
-            }, function(err, document){
+            printsDB.findOne({fileLocation: jobFile}, function(err, document){
                 document.status = 41;
                 document.save();
             });
@@ -156,12 +150,7 @@ new CronJob('01 */1 * * * *', function() {
             });
 
         }else if(bodyPrinter.state.flags.operational === true && bodyPrinter.state.flags.ready === true && bodyPrinter.state.flags.printing === false && bodyJob.progress.completion == 100){
-            printsDB.findOne({
-                $and: [
-                    {fileLocation: jobFile},
-                    {randomIdentifier: randomIdentifier}
-                ]
-            }, function(err, document){
+            printsDB.findOne({fileLocation: jobFile}, function(err, document){
                 if(document.finished === false && document.status != 4){
                     document.status = 4;
                     document.save();
