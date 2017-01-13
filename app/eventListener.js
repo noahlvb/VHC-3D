@@ -156,15 +156,15 @@ new CronJob('01 */1 * * * *', function() {
                     document.save();
 
                     var stl = nodeStl('./' + document.fileLocation);
-                    var requiredBedHeight = Math.max(stl.boundingBox[2], 30);
+                    var requiredBedHeight = Math.max(0, stl.boundingBox[2] - 30);
 
                     request.post({
                         url: settings.octo_addr + 'api/printer/command',
                         headers: {'X-Api-Key': settings.octo_key},
                         json: {
                             "commands": [
-                                "G91",
-                                "G1 Z197",
+                                "G90",
+                                "G1 Z210",
                                 "M104 S0",
                                 "M140 S0"
                             ]
@@ -184,14 +184,14 @@ new CronJob('01 */1 * * * *', function() {
                                         headers: {'X-Api-Key': settings.octo_key},
                                         json: {
                                             "commands": [
-                                                "G1 Y200",
-                                                "G1 X97.5",
+                                                'G1 Y200',
+                                                'G1 X97.5',
                                                 String("G1 Z" + requiredBedHeight),
-                                                "G1 Y0 F7000",
-                                                "G4 P1000",
-                                                "M140",
-                                                "G28",
-                                                "G1 Z100"
+                                                'G1 Y0 F7000',
+                                                'G4 P1000',
+                                                'M140',
+                                                'G28',
+                                                'G1 Z100'
                                             ]
                                         }
                                     }, function(err, responsePushOff, bodyPushOff){
