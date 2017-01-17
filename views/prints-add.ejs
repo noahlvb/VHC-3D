@@ -18,27 +18,50 @@
             <th>
                 <select id="profileSelect">
                 </select>
+                <span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true" title="Profilen" data-toggle="popover" data-placement="right"
+                    data-content="Dit zijn van te voren gemaakten profielen om snel instellingen te kiezen">
+                </span>
             </th>
         </tr>
         <tr>
             <th><label>Layer Height:</label></th>
-            <th><input name="P_layerHeight" type="number" step="any" min="0" value="0.2"></input></th>
+            <th><input name="P_layerHeight" type="number" step="any" min="0" value="0.2">
+                <span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true" title="Layer Height" data-toggle="popover" data-placement="right"
+                    data-content="De Layer Height geeft aan hoe dik in Milimeter de onderste en bovenste lagen gaan zijn. Een lagere Layer Height geeft meer precieze maar duurt ook langer en is duurder.">
+                </span>
+            </input></th>
         </tr>
         <tr>
             <th><label>Shell Thickness:</label></th>
-            <th><input name="P_shellThickness" type="number" step="any" min="0" value="1"></input></th>
+            <th><input name="P_shellThickness" type="number" step="any" min="0" value="1">
+                <span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true" title="Shell Thickness" data-toggle="popover" data-placement="right"
+                    data-content="De Shell Thickness geeft aan in Milimeters hoe dik de banden van een print opdracht zijn. Dikkere wanden zijn sterker maar kost ook meer materiaal en duurt langer.">
+                </span>
+            </input></th>
         </tr>
         <tr>
             <th><label>Bottom / Top Thickness:</label></th>
-            <th><input name="P_bottomTopThickness" type="number" step="any" min="0" value="0.8"></input></th>
+            <th><input name="P_bottomTopThickness" type="number" step="any" min="0" value="0.8">
+                <span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true" title="Bottom Top Thickness" data-toggle="popover" data-placement="right"
+                    data-content="De Bottom Top Thickness geeft aan hoe dik de bovenste en onderste laag gaan zijn. Afhankelijk van hoe vaak Layer height in de Bottom Top Thickness past wordt bepaalt hoeveel lagen er zijn aan de onderkant en boven kan van een printje.">
+                </span>
+            </input></th>
         </tr>
         <tr>
             <th><label>Fill Density:</label></th>
-            <th><input name="P_fillDensity" type="number" step="any" min="0" value="20"></input></th>
+            <th><input name="P_fillDensity" type="number" step="any" min="0" value="20">
+                <span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true" title="Fill density" data-toggle="popover" data-placement="right"
+                    data-content="De Fill density is het percentage waarmee een object wordt opgevuld. Hogere Fill density is sterker maar kost ook meer materiaal en duurt langer.">
+                </span>
+            </input></th>
         </tr>
         <tr>
             <th><label>Print Speed:</label></th>
-            <th><input name="P_printSpeed" type="number" step="any" min="0" value="100"></input></th>
+            <th><input name="P_printSpeed" type="number" step="any" min="0" value="125">
+                <span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true" title="Print speed" data-toggle="popover" data-placement="right"
+                    data-content="Dit is de snelheid waarmee een printer te werk gaat in Miliseconden. Een hogere snelheid betekend een kortere print opdracht maar ook minder precieze.">
+                </span>
+            </input></th>
         </tr>
         <tr>
             <th><label>Support Type:</label></th>
@@ -46,7 +69,11 @@
                 <option value="0" selected>None</option>
                 <option value="1">Touching Buildplate</option>
                 <option value="2">Everywhere</option>
-            </select></th>
+            </select>
+            <span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true" title="Support Type" data-toggle="popover" data-placement="right"
+                data-content="Dit geeft aan wat voor ondersteuning er wordt gebouwd voor de print opdracht zo dat je bijvoorbeeld hoeken kan maken van groter dan 45 graden. Touching Buildplate: Bouw een ondersteuning onder het object maar niet useen het object zelf. Everywhere: Overal waar ondersteuning nodig is wordt er ondersteuning gebouwd.">
+            </span>
+            </th>
         </tr>
         <tr>
             <th><label>Platform Adhesion Type:</label></th>
@@ -115,5 +142,7 @@
         $('#blackOverlay').css('display', 'block');
         $('#waitForSliceWindow').css('display', 'block');
     });
+
+    $("[data-toggle=popover]").popover({ trigger: "hover" });
 
 </script>
