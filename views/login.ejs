@@ -4,18 +4,18 @@
 
 <div class="container" style="width: 500px;">
     <form class="form-signin" action='/auth/local', method='post'>
-        <h2 class="form-signin-heading">Inloggen met school mail:</h2>
+        <h2 class="form-signin-heading"><%= __('LOGIN_gappsText')%></h2>
         <br>
         <a class="btn btn-block btn-social btn-google" style="width: 260px;" onClick="location.href='/auth/google'">
-            <span class="fa fa-google-plus"></span> Gebruik google om in te loggen
+            <span class="fa fa-google-plus"></span> <%= __('LOGIN_gappsButton')%>
         </a>
         <hr>
-        <h4>Inloggen met gebruikers naam:</h4>
-        <label for="inputNaam" class="sr-only">Naam: </label>
-        <input type="text" id="inputNaam" name='username' class="form-control" placeholder="Naam" required="" autofocus="">
-        <label for="inputPassword" class="sr-only">Wachtwoord</label>
-        <input type="password" id="inputPassword" name='password' class="form-control" placeholder="Wachtwoord" required="">
+        <h4><%= __('LOGIN_normalUserText')%></h4>
+        <label for="inputNaam" class="sr-only">username: </label>
+        <input type="text" id="inputNaam" name='username' class="form-control" placeholder="<%= __('LOGIN_normalUserPlaceholderName')%>" required="" autofocus="">
+        <label for="inputPassword" class="sr-only">Password: </label>
+        <input type="password" id="inputPassword" name='password' class="form-control" placeholder="<%= __('LOGIN_normalUserPlaceholderPass')%>" required="">
         <br>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">inloggen</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit"><%= __('LOGIN_normalUserButton')%></button>
     </form>
 </div>

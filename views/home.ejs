@@ -11,33 +11,33 @@
         <div class="panel panel-info">
             <div class="panel-heading"><h3 class="panel-title">Info</h3></div>
             <div class="panel-body">
-                <p><b>Hier zie je hoeveel materiaal je tot je beschikking hebt. Materiaal wordt gereserveerd als het is gebruikt in een project dat nog niet in de wachtrij staat.</b> Als je een project afbreekt krijg je het materiaal terug</p>
+                <p><%= __('HOME_materialInfo')%></p>
             </div>
 
             <ul class="list-group">
-                <li class="list-group-item"><b>Beschikbare materiaal:</b> <%= user.materialAmount %> gram</li>
-                <li class="list-group-item"><b>Gereserveerd materiaal:</b> <%= user.materialAmountReserved %> gram</li>
+                <li class="list-group-item"><b><%= __('HOME_materialAvaliable')%></b> <%= user.materialAmount %> gram</li>
+                <li class="list-group-item"><b><%= __('HOME_materialReserved')%></b> <%= user.materialAmountReserved %> gram</li>
             </ul>
         </div>
     </div>
     <div class="col-md-9">
         <div id="attention-table-panel" style="display: none" class="panel panel-danger">
-            <div class="panel-heading">Aandacht vereist</div>
+            <div class="panel-heading"><%= __('HOME_attentionTable')%></div>
             <table id="attention-table" class="table" data-link="row">
                 <tr>
-                    <td><b>Naam</b></td>
-                    <td><b>Type</b></td>
+                    <td><b><%= __('HOME_tableName')%></b></td>
+                    <td><b><%= __('HOME_tableStatus')%></b></td>
                     <td style="width: 50%"><b>Info</b></td>
-                    <td><b>snelle acties</b></td>
+                    <td><b><%= __('HOME_tableAction')%></b></td>
                 </tr>
             </table>
         </div>
         <div class="panel panel-default">
-            <div class="panel-heading">Nog niet ingestuurd</div>
+            <div class="panel-heading"><%= __('HOME_pendingTable')%></div>
             <table id="notCommitted-table" class="table" data-link="row"></table>
         </div>
         <div class="panel panel-primary">
-            <div class="panel-heading">Print opdrachten</div>
+            <div class="panel-heading"><%= __('HOME_normalTable')%></div>
             <table id="normal-table" class="table" data-link="row"></table>
         </div>
     </div>
@@ -63,9 +63,9 @@
 
             var row = table.insertRow(1);
             row.insertCell(0).innerHTML = '<a href="/prints/' + rejectedPrints[i].id + '">' + rejectedPrints[i].name + '</a>';
-            row.insertCell(1).innerHTML = 'Afgewezen';
+            row.insertCell(1).innerHTML = '<%= __("HOME_tableRejected")%>';
             row.insertCell(2).innerHTML = rejectedPrints[i].rejectingNotice;
-            row.insertCell(3).innerHTML = '<a href="/prints/' +  rejectedPrints[i].id + '">instellingen wijzigen</a><br><a href="/backend/prints/' + rejectedPrints[i].id + '/delete">Verwijderen</a>';
+            row.insertCell(3).innerHTML = '<a href="/prints/' +  rejectedPrints[i].id + '"><%= __("HOME_tableSettings")%></a><br><a href="/backend/prints/' + rejectedPrints[i].id + '/delete"><%= __("HOME_tableDelete")%></a>';
         }
     }
 
@@ -87,13 +87,13 @@
             $("#attention-table-panel").show();
             var row = table.insertRow(1);
             row.insertCell(0).innerHTML = '<a href="/prints/' + failedPrints[i].id + '">' + failedPrints[i].name + '</a>';
-            row.insertCell(1).innerHTML = 'Mislukt';
+            row.insertCell(1).innerHTML = '<%= __("HOME_tableFailed")%>';
 			if(failedPrints[i].rejectingNotice.length > 1){
 				row.insertCell(2).innerHTML = failedPrints[i].rejectingNotice;
 			}else{
             	row.insertCell(2).innerHTML = 'Het printing van je project is mislukt. Probeer het later opnieuw (eventueel met nieuwe instellingen of aangepast ontwerp)';
 			}
-			row.insertCell(3).innerHTML = '<a href="/prints/' +  failedPrints[i].id + '">instellingen wijzigen</a><br><a href="/backend/prints/' + failedPrints[i].id + '/archive">Archieveren</a>';
+			row.insertCell(3).innerHTML = '<a href="/prints/' +  failedPrints[i].id + '"><%= __("HOME_tableSettings")%></a><br><a href="/backend/prints/' + failedPrints[i].id + '/archive"><%= __("HOME_tableArchive")%></a>';
         }
     }
 
@@ -112,20 +112,20 @@
     function drawTableNotCommitted (notCommittedPrints) {
 		var table = document.getElementById('notCommitted-table');
 		var row0 = table.insertRow(0);
-		row0.insertCell(0).innerHTML = '<b>Naam</b>';
-		row0.insertCell(1).innerHTML = '<b>Verwachte tijdsduur</b>';
-        row0.insertCell(2).innerHTML = '<b>Vereist matriaal</b>';
-		row0.insertCell(3).innerHTML = '<b> Snelle acties</b>';
+		row0.insertCell(0).innerHTML = '<b><%= __("HOME_tableName")%></b>';
+		row0.insertCell(1).innerHTML = '<b><%= __("HOME_tableTime")%></b>';
+        row0.insertCell(2).innerHTML = '<b><%= __("HOME_tableMaterial")%></b>';
+		row0.insertCell(3).innerHTML = '<b><%= __("HOME_tableAction")%></b>';
 		for (var i = 0; i < Object.keys(notCommittedPrints).length; i++) {
 			var row = table.insertRow(1);
 			row.insertCell(0).innerHTML = '<a href="/prints/' + notCommittedPrints[i].id + '">' + notCommittedPrints[i].name + '</a>';
-			row.insertCell(1).innerHTML = notCommittedPrints[i].estimatedPrintTime + ' minuten';
+			row.insertCell(1).innerHTML = notCommittedPrints[i].estimatedPrintTime + ' minutes';
             row.insertCell(2).innerHTML = notCommittedPrints[i].materialAmount + ' gram';
 
             if(notCommittedPrints[i].materialAmount > 0){
-                row.insertCell(3).innerHTML = '<a href="/backend/prints/' + notCommittedPrints[i].id + '/apply">Indienden</a>';
+                row.insertCell(3).innerHTML = '<a href="/backend/prints/' + notCommittedPrints[i].id + '/apply"><%= __("HOME_tableApply")%></a>';
             }else{
-                row.insertCell(3).innerHTML = '<a href="/prints/' +  notCommittedPrints[i].id + '">instellingen wijzigen</a>';
+                row.insertCell(3).innerHTML = '<a href="/prints/' +  notCommittedPrints[i].id + '"><%= __("HOME_tableSettings")%></a>';
             }
 		}
 	}
@@ -145,32 +145,32 @@
     function drawTableNormal (normalPrints) {
 		var table = document.getElementById('normal-table');
 		var row0 = table.insertRow(0);
-		row0.insertCell(0).innerHTML = '<b>Naam</b>';
-        row0.insertCell(1).innerHTML = '<b>Status</b>';
-        row0.insertCell(2).innerHTML = '<b>Verwachte tijdsduur</b>';
-		row0.insertCell(3).innerHTML = '<b>Vereist matriaal</b>';
-		row0.insertCell(4).innerHTML = '<b>Snelle acties</b>';
+		row0.insertCell(0).innerHTML = '<b><%= __("HOME_tableName")%></b>';
+        row0.insertCell(1).innerHTML = '<b><%= __("HOME_tableStatus")%></b>';
+        row0.insertCell(2).innerHTML = '<b><%= __("HOME_tableTime")%></b>';
+		row0.insertCell(3).innerHTML = '<b><%= __("HOME_tableMaterial")%></b>';
+		row0.insertCell(4).innerHTML = '<b><%= __("HOME_tableAction")%></b>';
 		for (var i = 0; i < Object.keys(normalPrints).length; i++) {
 			var row = table.insertRow(1);
 			row.insertCell(0).innerHTML = '<a href="/prints/' + normalPrints[i].id + '">' + normalPrints[i].name + '</a>';
 
             if(normalPrints[i].status == 1){
-                row.insertCell(1).innerHTML = '<b style="color: grey">In afwachting</b>';
+                row.insertCell(1).innerHTML = '<b style="color: grey"><%= __("HOME_tablePending")%></b>';
             }else if(normalPrints[i].status == 2){
-                row.insertCell(1).innerHTML = '<b style="color: orange">geaccepteerd | In wachtrij</b>';
+                row.insertCell(1).innerHTML = '<b style="color: orange"><%= __("HOME_tableWaiting")%></b>';
             }else if(normalPrints[i].status == 3){
-                row.insertCell(1).innerHTML = '<b style="color: blue">Wordt geprint</b>';
+                row.insertCell(1).innerHTML = '<b style="color: blue"><%= __("HOME_tablePrinting")%></b>';
             }else if(normalPrints[i].status == 4){
-                row.insertCell(1).innerHTML = '<b style="color: green">Klaar</b>';
+                row.insertCell(1).innerHTML = '<b style="color: green"><%= __("HOME_tableDone")%></b>';
             }
 
-            row.insertCell(2).innerHTML = normalPrints[i].estimatedPrintTime + ' minuten';
+            row.insertCell(2).innerHTML = normalPrints[i].estimatedPrintTime + ' minutes';
             row.insertCell(3).innerHTML = normalPrints[i].materialAmount + ' gram';
 
             if(normalPrints[i].status == 1 || normalPrints[i].status == 2){
-                row.insertCell(4).innerHTML = '<a href="/backend/prints/' + normalPrints[i].id + '/delete">Verwijderen</a>';
+                row.insertCell(4).innerHTML = '<a href="/backend/prints/' + normalPrints[i].id + '/delete"><%= __("HOME_tableDelete")%></a>';
             }else if(normalPrints[i].status == 4){
-                row.insertCell(4).innerHTML = '<a href="/backend/prints/' + normalPrints[i].id + '/archive">Archieveren</a>, <a href="/backend/prints/copy/' + normalPrints[i].id + '/">Kopieren</a>';
+                row.insertCell(4).innerHTML = '<a href="/backend/prints/' + normalPrints[i].id + '/archive"><%= __("HOME_tableArchive")%></a>, <a href="/backend/prints/copy/' + normalPrints[i].id + '/"><%= __("HOME_tableCopy")%></a>';
             }
 		}
 	}

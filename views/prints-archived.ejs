@@ -6,9 +6,9 @@
 
 </style>
 
-<h3>Gearchiveerde project</h3>
+<h3><%= __('PRINTSARCHIVE_title')%></h3>
 <div class="panel panel-default">
-    <div class="panel-heading">gearchiveerde project</div>
+    <div class="panel-heading"><%= __('PRINTSARCHIVE_title')%></div>
     <table id="archived-table" class="table" data-link="row"></table>
 </div>
 
@@ -28,28 +28,28 @@
     function drawTableNormal (normalPrints) {
         var table = document.getElementById('archived-table');
         var row0 = table.insertRow(0);
-        row0.insertCell(0).innerHTML = '<b>Naam</b>';
-        row0.insertCell(1).innerHTML = '<b>Status</b>';
-        row0.insertCell(2).innerHTML = '<b>Verwachte tijdsduur</b>';
-        row0.insertCell(3).innerHTML = '<b>Vereist matriaal</b>';
-		row0.insertCell(4).innerHTML = '<b>Snelle acties</b>';
+        row0.insertCell(0).innerHTML = '<b><%= __("PRINTSARCHIVE_tableName")%></b>';
+        row0.insertCell(1).innerHTML = '<b><%= __("PRINTSARCHIVE_tableStatus")%></b>';
+        row0.insertCell(2).innerHTML = '<b><%= __("PRINTSARCHIVE_tableTime")%></b>';
+        row0.insertCell(3).innerHTML = '<b><%= __("PRINTSARCHIVE_tableMaterial")%></b>';
+		row0.insertCell(4).innerHTML = '<b><%= __("PRINTSARCHIVE_tableAction")%></b>';
         for (var i = 0; i < Object.keys(normalPrints).length; i++) {
             var row = table.insertRow(1);
             row.insertCell(0).innerHTML = '<a href="/prints/' + normalPrints[i].id + '">' + normalPrints[i].name + '</a>';
 
             if(normalPrints[i].status == 1){
-                row.insertCell(1).innerHTML = '<b style="color: grey">In afwachting</b>';
+                row.insertCell(1).innerHTML = '<b style="color: grey"><%= __("PRINTSARCHIVE_tableStatusWaiting")%></b>';
             }else if(normalPrints[i].status == 2){
-                row.insertCell(1).innerHTML = '<b style="color: orange">geaccepteerd | In wachtrij</b>';
+                row.insertCell(1).innerHTML = '<b style="color: orange"><%= __("PRINTSARCHIVE_tableStatusAccepted")%></b>';
             }else if(normalPrints[i].status == 3){
-                row.insertCell(1).innerHTML = '<b style="color: blue">Wordt geprint</b>';
+                row.insertCell(1).innerHTML = '<b style="color: blue"><%= __("PRINTSARCHIVE_tableStatusPrinting")%></b>';
             }else if(normalPrints[i].status == 4){
-                row.insertCell(1).innerHTML = '<b style="color: green">Klaar</b>';
+                row.insertCell(1).innerHTML = '<b style="color: green"><%= __("PRINTSARCHIVE_tableStatusDone")%></b>';
             }
 
-            row.insertCell(2).innerHTML = normalPrints[i].estimatedPrintTime + ' minuten';
+            row.insertCell(2).innerHTML = normalPrints[i].estimatedPrintTime + ' minutes';
             row.insertCell(3).innerHTML = normalPrints[i].materialAmount + ' gram';
-			row.insertCell(4).innerHTML = '<a href="/backend/prints/copy/' + normalPrints[i].id + '/">Kopieren</a>';
+			row.insertCell(4).innerHTML = '<a href="/backend/prints/copy/' + normalPrints[i].id + '/"><%= __("PRINTSARCHIVE_tableCopy")%></a>';
         }
     }
 </script>

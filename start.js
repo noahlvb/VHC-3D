@@ -39,10 +39,10 @@ configFiles.forEach(function(element){
     }
 });
 setTimeout(function(){
+    cwd = __dirname;
     var server = require('./app');
     var settings = require("./config/settings");
     logger = require('./app/logger');
-    cwd = __dirname;
 
     mongoose.connect(settings.db, {auto_reconnect: true});
     mongoose.connection.on('error', console.error.bind(console, 'connection error:'));

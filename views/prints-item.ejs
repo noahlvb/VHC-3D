@@ -11,16 +11,16 @@
 
 <div class="row">
     <div class="col-md-3">
-        <h3>Print opdracht: <%= print.name %></h3>
+        <h3><%= __('PRINTITEM_infoName')%> <%= print.name %></h3>
     </div>
     <div class="col-md-5">
-        <h4>Print tijd: <b><%= print.estimatedPrintTime %></b> minuten</h4>
-        <h4> Materiaal kosten: <b><%= print.materialAmount %></b> gram</h4>
+        <h4><%= __('PRINTITEM_infoTime')%> <b><%= print.estimatedPrintTime %></b> minutes</h4>
+        <h4><%= __('PRINTITEM_infoMaterial')%> <b><%= print.materialAmount %></b> gram</h4>
     </div>
     <div class="col-md-4">
         <%if (user.type !== 'normal') { %>
             <br>
-            <h4> Geupload door: <b><%= printOwner %></b></h4>
+            <h4> <%= __('PRINTITEM_infoOwner')%> <b><%= printOwner %></b></h4>
         <% } %>
     </div>
 </div>
@@ -32,58 +32,58 @@
             <div class="panel-body">
                 <p>
                     <%if (print.status == 0) {%>
-                        <h4><b style="color: grey">Nog niet ingediend</b></h4><br>
-                        Je project is momenteel nog niet ingediend
+                        <h4><b style="color: grey"><%= __('PRINTITEM_infoStatusNotcommited')%></b></h4><br>
+                        <%= __('PRINTITEM_infoStatusNotcommitedDesc')%>
                     <% } else if (print.status == 1) { %>
-                        <h4><b style="color: grey">In afwachting</b></h4><br>
-                        In afwachting van goedkeuring
+                        <h4><b style="color: grey"><%= __('PRINTITEM_infoStatusPending')%></b></h4><br>
+                        <%= __('PRINTITEM_infoStatusPendingDesc')%>
                     <% } else if (print.status == 2) { %>
-                        <h4><b style="color: orange">geaccepteerd | In wachtrij</b><h4><br>
-                        Je project is goedgekeurd en in de wachtrij voor de printer
+                        <h4><b style="color: orange"><%= __('PRINTITEM_infoStatusAccepted')%></b><h4><br>
+                        <%= __('PRINTITEM_infoStatusAcceptedDesc')%>
                     <% } else if (print.status == 21) { %>
-                        <h4><b style="color: red">Afgewezen</b></h4><br>
-                        Je project is afgewezen
+                        <h4><b style="color: red"><%= __('PRINTITEM_infoStatusRejected')%></b></h4><br>
+                        <%= __('PRINTITEM_infoStatusRejectedDesc')%>
                     <% } else if (print.status == 3) { %>
-                        <h4><b style="color: blue">Wordt geprint</b></h4>
+                        <h4><b style="color: blue"><%= __('PRINTITEM_infoStatusPrinting')%></b></h4>
                         <div class="progress">
                             <div class="progress-bar" role="progressbar" aria-valuenow="<%= progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= progress %>%;">
                                 <%= progress %>%
                             </div>
                         </div>
-                        Je project wordt momenteel geprint
+                        <%= __('PRINTITEM_infoStatusPrintingDesc')%>
                     <% } else if (print.status == 4) { %>
-                        <h4><b style="color: green">Klaar</b></h4><br>
-                        Je project is klaar
+                        <h4><b style="color: green"><%= __('PRINTITEM_infoStatusDone')%></b></h4><br>
+                        <%= __('PRINTITEM_infoStatusDoneDesc')%>
                     <% } else if (print.status == 41) { %>
-                        <h4><b style="color: red">Mislukt</b></h4><br>
-                        Er is iets mis gegaan tijdens het printen van je project
+                        <h4><b style="color: red"><%= __('PRINTITEM_infoStatusFailed')%></b></h4><br>
+                        <%= __('PRINTITEM_infoStatusFailedDesc')%>
                     <% } %>
-                    <b><a href="/prints/download/<%= print._id %>"><h5>Download STL bestand</h5></a></b>
+                    <b><a href="/prints/download/<%= print._id %>"><h5>Download STL</h5></a></b>
                 </p>
             </div>
 
             <ul class="list-group">
                 <%if (print.status == 0) {%>
-                    <b><a href="/backend/prints/<%= print._id %>/apply" class="list-group-item list-group-item-success">Indienden</a></b>
+                    <b><a href="/backend/prints/<%= print._id %>/apply" class="list-group-item list-group-item-success"><%= __('PRINTITEM_buttonApply')%></a></b>
                 <% } %>
 
                 <%if (user.type !== 'normal' && print.status == 1) { %>
-                    <a href="/backend/prints/<%= print._id %>/accept/true" class="list-group-item list-group-item-success">Goedkeuren</a>
-                    <a href="/backend/prints/<%= print._id %>/accept/false" class="list-group-item list-group-item-danger">Afkeuren</a>
+                    <a href="/backend/prints/<%= print._id %>/accept/true" class="list-group-item list-group-item-success"><%= __('PRINTITEM_buttonAccept')%></a>
+                    <a href="/backend/prints/<%= print._id %>/accept/false" class="list-group-item list-group-item-danger"><%= __('PRINTITEM_buttonReject')%></a>
                 <% } %>
 
                 <%if (print.archive == false && print.status == 4 || print.archive == false && print.status == 41) {%>
-                    <a href="/backend/prints/<%= print._id %>/archive" class="list-group-item list-group-item-info">Archieveren</a>
+                    <a href="/backend/prints/<%= print._id %>/archive" class="list-group-item list-group-item-info"><%= __('PRINTITEM_buttonArchive')%></a>
                 <% }else if (print.status == 0 || print.status == 1 || print.status == 2 || print.status == 21 ) { %>
-                    <a href="/backend/prints/<%= print._id %>/delete" class="list-group-item list-group-item-danger">Verwijderen</a>
+                    <a href="/backend/prints/<%= print._id %>/delete" class="list-group-item list-group-item-danger"><%= __('PRINTITEM_buttonDelete')%></a>
                 <% } %>
-                <a href="/backend/prints/copy/<%= print._id %>/" class="list-group-item list-group-item-info">Kopieren</a>
+                <a href="/backend/prints/copy/<%= print._id %>/" class="list-group-item list-group-item-info"><%= __('PRINTITEM_buttonCopy')%></a>
             </ul>
         </div>
         <%if (print.rejectingNotice) { %>
             <div class="panel panel-danger">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Afwijzings bericht</h3>
+                    <h3 class="panel-title"><%= __('PRINTITEM_rejectionNotice')%></h3>
                 </div>
                 <div class="panel-body">
                     <%= print.rejectingNotice %>
@@ -171,12 +171,12 @@
 
 <div class="panel panel-primary popup" id="waitForSliceWindow">
     <div class="panel-heading">
-        <h3 class="panel-title" style="text-align: center">Verwerken!
+        <h3 class="panel-title" style="text-align: center"><%= __('PRINTITEM_popupProcessingTitle')%>
             <i class="fa fa-refresh fa-spin" style="font-size:24px"></i>
         </h3>
     </div>
     <div class="panel-body">
-        Je project wordt momenteel verwerkt. Een moment geduld alstublieft.
+        <%= __('PRINTITEM_popupProcessingDesc')%>
     </div>
 </div>
 

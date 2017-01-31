@@ -1,20 +1,20 @@
-<h3>Upload 3D model</h3>
+<h3><%= __('PRINTSADD_header')%></h3>
 <br>
 <form id="print-add-form" method="post" action="/backend/prints/add" enctype="multipart/form-data">
     <table>
         <tr>
-			<th><label>Project naam:</label></th>
+			<th><label><%= __('PRINTSADD_formName')%></label></th>
 			<th><input name="name" type='text'></input></th>
 		</tr>
         <tr>
-            <th><label>STL bestand:</label></th>
+            <th><label><%= __('PRINTSADD_formFile')%></label></th>
             <th><input name="stlFile" type="file" accepts=".stl"></input></th>
         </tr>
         <tr>
-            <th><br><h4>Cura print parameters</h4></th>
+            <th><br><h4><%= __('PRINTSADD_formCuraPar')%></h4></th>
         </tr>
         <tr>
-            <th><label>Standard profilen:</label></th>
+            <th><label><%= __('PRINTSADD_formCuraProfile')%></label></th>
             <th>
                 <select id="profileSelect">
                 </select>
@@ -91,19 +91,19 @@
 
 <div class="panel panel-primary popup" id="waitForSliceWindow">
     <div class="panel-heading">
-        <h3 class="panel-title" style="text-align: center">Verwerken!
+        <h3 class="panel-title" style="text-align: center"><%= __('PRINTSADD_popup')%>
             <i class="fa fa-refresh fa-spin" style="font-size:24px"></i>
         </h3>
     </div>
     <div class="panel-body">
-        Je project wordt momenteel verwerkt. Een moment geduld alstublieft.
+        <%= __('PRINTSADD_popupInfo')%>
     </div>
 </div>
 
 <script type="text/javascript">
     var curaProfiles = [
         {
-            'name': "prototype - korter, goedkoper - redelijk stevig",
+            'name': "<%= __('PRINTSADD_formCuraProfilePrototype')%>",
             'parameters': {
                 'P_layerHeight': 0.2,
                 'P_shellThickness': 1,
@@ -113,7 +113,7 @@
             }
         },
         {
-            'name': "Extra stevig - langer, duurder - Extra stevig",
+            'name': "<%= __('PRINTSADD_formCuraProflieExtraStrong')%>",
             'parameters': {
                 'P_layerHeight': 0.1,
                 'P_shellThickness': 2,
