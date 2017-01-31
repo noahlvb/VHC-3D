@@ -1,5 +1,5 @@
 <div class="panel panel-default">
-    <div class="panel-heading">Toestemming vereist</div>
+    <div class="panel-heading"><%= __('PRINTPENDING_headerTitle')%></div>
     <table id="pending-table" class="table" data-link="row"></table>
 </div>
 
@@ -19,13 +19,13 @@
     function pendingCommitted (pendingPrints) {
         var table = document.getElementById('pending-table');
         var row0 = table.insertRow(0);
-        row0.insertCell(0).innerHTML = '<b>Naam</b>';
-        row0.insertCell(1).innerHTML = '<b>Verwachte tijdsduur</b>';
-        row0.insertCell(2).innerHTML = '<b>Vereist matriaal</b>';
+        row0.insertCell(0).innerHTML = '<b><%= __("PRINTPENDING_tableName")%></b>';
+        row0.insertCell(1).innerHTML = '<b><%= __("PRINTPENDING_tableTime")%></b>';
+        row0.insertCell(2).innerHTML = '<b><%= __("PRINTPENDING_tableMaterial")%></b>';
         for (var i = 0; i < Object.keys(pendingPrints).length; i++) {
             var row = table.insertRow(1);
             row.insertCell(0).innerHTML = '<a href="/prints/' + pendingPrints[i].id + '">' + pendingPrints[i].name + '</a>';
-            row.insertCell(1).innerHTML = pendingPrints[i].estimatedPrintTime + ' minuten';
+            row.insertCell(1).innerHTML = pendingPrints[i].estimatedPrintTime + ' minutes';
             row.insertCell(2).innerHTML = pendingPrints[i].materialAmount + ' gram';
         }
     }

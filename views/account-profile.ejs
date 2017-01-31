@@ -12,18 +12,18 @@
 
 <h3><%= user_profile.username %>'s profile</h3>
 <ul class="nav nav-tabs" role="tablist">
-  <li class="active"><a href="#">Person</a></li>
-  <li><a href="#">test</a></li>
+  <li class="active"><a href="#"><%= __('ACCOUNTPROFILE_tabPerson')%></a></li>
+  <li><a href="#"><%= __('ACCOUNTPROFILE_tabProjects')%></a></li>
 </ul>
 <div class="panel panel-default">
 	<div class="list-group">
 		<a href="#" class="list-group-item">id: <%= user_profile.id%></a>
-		<a href="#edit_username" class="list-group-item">name: <%= user_profile.username%></a>
-		<a href="#" class="list-group-item">email: <%= user_profile.email%></a>
-		<a href="#edit_type" class="list-group-item">type: <%= user_profile.type%></a>
-		<a href="#edit_monthlyMaterial" class="list-group-item">Maandelijks materiaal: <%= user_profile.monthlyMaterial%></a>
-		<a href="#edit_materialAmount" class="list-group-item">Materiaal tot beschikking: <%= user_profile.materialAmount%></a>
-		<a href="#" class="list-group-item">Gereserveerd materiaal: <%= user_profile.materialAmountReserved%></a>
+		<a href="#edit_username" class="list-group-item"><%= __('ACCOUNTPROFILE_infoUsername')%> <%= user_profile.username%></a>
+		<a href="#" class="list-group-item"><%= __('ACCOUNTPROFILE_infoEmail')%> <%= user_profile.email%></a>
+		<a href="#edit_type" class="list-group-item"><%= __('ACCOUNTPROFILE_infoType')%> <%= user_profile.type%></a>
+		<a href="#edit_monthlyMaterial" class="list-group-item"><%= __('ACCOUNTPROFILE_infoMonthMaterial')%> <%= user_profile.monthlyMaterial%> gram</a>
+		<a href="#edit_materialAmount" class="list-group-item"><%= __('ACCOUNTPROFILE_infoMaterial')%> <%= user_profile.materialAmount%> gram</a>
+		<a href="#" class="list-group-item"><%= __('ACCOUNTPROFILE_infoMaterialReserved')%> <%= user_profile.materialAmountReserved%> gram</a>
 	</div>
 </div>
 

@@ -1,6 +1,6 @@
- <h2>account management <button type="button" class="btn btn-default" onclick="window.location.href='/admin/account/add'">add user</button></h2>
+ <h2><%= __('ACCOUNT_header')%><button type="button" class="btn btn-default" onclick="window.location.href='/admin/account/add'"><%= __('ACCOUNT_headerAddUser')%></button></h2>
 <div class="panel panel-default">
-	<div class="panel-heading">user's</div>
+	<div class="panel-heading"><%= __('ACCOUNT_headerTable')%></div>
 	<table id="user-table" class="table">
 	</table>
 </div>
@@ -20,18 +20,18 @@
 	function draw_table_users (users) {
 		var table = document.getElementById('user-table');
 		var row0 = table.insertRow(0);
-		row0.insertCell(0).innerHTML = '<b>username</b>';
-        row0.insertCell(1).innerHTML = '<b>Maandelijks materiaal</b>';
-        row0.insertCell(2).innerHTML = '<b>Materiaal(gereserveerd)</b>';
-		row0.insertCell(3).innerHTML = '<b>type</b>';
-		row0.insertCell(4).innerHTML = '<b>actions</b>';
+		row0.insertCell(0).innerHTML = '<b><%= __("ACCOUNT_tableName")%></b>';
+        row0.insertCell(1).innerHTML = '<b><%= __("ACCOUNT_tableMonthMaterial")%></b>';
+        row0.insertCell(2).innerHTML = '<b><%= __("ACCOUNT_tableMaterial")%></b>';
+		row0.insertCell(3).innerHTML = '<b><%= __("ACCOUNT_tableType")%></b>';
+		row0.insertCell(4).innerHTML = '<b><%= __("ACCOUNT_tableAction")%></b>';
 		for (var i = 0; i < Object.keys(users).length; i++) {
 			var row = table.insertRow(1);
 			row.insertCell(0).innerHTML = '<a href="/admin/account/profile/' + users[i].id + '/">' + users[i].username + '</a>';
             row.insertCell(1).innerHTML = users[i].monthlyMaterial + ' gram';
             row.insertCell(2).innerHTML = users[i].materialAmount + '(' + users[i].materialAmountReserved + ') gram';
 			row.insertCell(3).innerHTML = users[i].type;
-			row.insertCell(4).innerHTML = '<a href="/backend/account/del/' + users[i].id + '/">delete</a>';
+			row.insertCell(4).innerHTML = '<a href="/backend/account/del/' + users[i].id + '/"><%= __("ACCOUNT_tableDelete")%></a>';
 		}
 	}
 </script>

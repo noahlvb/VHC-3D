@@ -3,36 +3,36 @@
 
 <div class="row">
     <div class="col-md-3">
-        <h4>Printer status: <% if(printerStatus === true) { %><span style="color: red;">Gestopt</span><% }else{ %><span style="color: green;">Operationeel</span><% } %></h4>
+        <h4><%= __('DASHBOARD_status')%> <% if(printerStatus === true) { %><span style="color: red;"><%= __('DASHBOARD_statusStop')%></span><% }else{ %><span style="color: green;"><%= __('DASHBOARD_statusOP')%></span><% } %></h4>
         <a href="/backend/printer/toggle" id="dashboardStopButton" class="btn btn-info btn-block">
-            <% if(printerStatus === true) { %>Printer hervatten<% }else{ %>Printer stopzetten<% } %>
+            <% if(printerStatus === true) { %><%= __('DASHBOARD_statusActionStart')%><% }else{ %><%= __('DASHBOARD_statusActionStop')%><% } %>
         </a>
         <div class="panel panel-info">
-            <div class="panel-heading"><h3 class="panel-title">Huidig project</h3></div>
+            <div class="panel-heading"><h3 class="panel-title"><%= __('DASHBOARD_currentProject')%></h3></div>
             <div class="panel-body">
                 <p>
                     <% if(print) {%>
-                    <h5><b>Print opdracht:</b> <%= print.name %></h5>
-                    <h5><b>Print tijd:</b> <%= print.estimatedPrintTime %> minuten</h5>
-                    <h5><b>Materiaal kosten:</b> <%= print.materialAmount %> gram</h5>
-                    <h5><b>Geupload door:</b> <%= printOwner %></h5>
-                    <a href="#" id="dashboardStop" class="btn btn-danger btn-block">Print opdracht afbreken</a>
+                    <h5><b><%= __('DASHBOARD_printOperation')%></b> <%= print.name %></h5>
+                    <h5><b><%= __('DASHBOARD_printTime')%></b> <%= print.estimatedPrintTime %> minutes</h5>
+                    <h5><b><%= __('DASHBOARD_materialCost')%></b> <%= print.materialAmount %> gram</h5>
+                    <h5><b><%= __('DASHBOARD_uploadedBy')%></b> <%= printOwner %></h5>
+                    <a href="#" id="dashboardStop" class="btn btn-danger btn-block"><%= __('DASHBOARD_break')%></a>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" aria-valuenow="<%= progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= progress %>%;">
                             <%= progress %>%
                         </div>
                     </div>
-                    Je project wordt momenteel geprint
-                    <b><a href="/prints/download/<%= print._id %>"><h5>Download STL bestand</h5></a></b>
+                    <%= __('DASHBOARD_beingPrinted')%>
+                    <b><a href="/prints/download/<%= print._id %>"><h5>Download STL file</h5></a></b>
                     <% }else{ %>
-                    <h4>Er wordt momenteel niets geprint</h4>
+                    <h4><%= __('DASHBOARD_notBeingPrinted')%></h4>
                     <% } %>
                 </p>
             </div>
         </div>
         <div class="panel panel-warning">
             <div class="panel-heading">
-                <h3 class="panel-title">Wachtrij</h3>
+                <h3 class="panel-title"><%= __('DASHBOARD_waiting')%></h3>
             </div>
             <table id="waiting-table" class="table" data-link="row"></table>
         </div>
@@ -47,10 +47,10 @@
 
 <div class="panel panel-danger popup" id="stopPromt">
     <div class="panel-heading">
-        <h3 class="panel-title" style="text-align: center">Print opdracht AFBREKEN</h3>
+        <h3 class="panel-title" style="text-align: center"><%= __('DASHBOARD_breakCAP')%></h3>
     </div>
     <div class="panel-body">
-        Waarom wil je de print opdracht afbreken?
+        <%= __('DASHBOARD_breakInfo')%>
         <form id="stopPromtText" method="post" action="/backend/prints/cancel">
             <textarea name="stopText" form="stopPromtText" rows="4"></textarea>
             <input type="submit" value="Print opdracht afbreken" class="btn btn-danger btn-block"></a>
@@ -94,13 +94,13 @@ $.ajax({
 function drawTableNotCommitted (waitingPrints) {
     var table = document.getElementById('waiting-table');
     var row0 = table.insertRow(0);
-    row0.insertCell(0).innerHTML = '<b>Naam</b>';
-    row0.insertCell(1).innerHTML = '<b>Verwachte tijdsduur</b>';
-    row0.insertCell(2).innerHTML = '<b>acties</b>';
+    row0.insertCell(0).innerHTML = '<b><%= __("DASHBOARD_waitingTableName")%></b>';
+    row0.insertCell(1).innerHTML = '<b><%= __("DASHBOARD_waitingTableTime")%></b>';
+    row0.insertCell(2).innerHTML = '<b><%= __("DASHBOARD_waitingTableActions")%></b>';
     for (var i = 0; i < Object.keys(waitingPrints).length; i++) {
         var row = table.insertRow(1);
         row.insertCell(0).innerHTML = '<a href="/prints/' + waitingPrints[i].id + '">' + waitingPrints[i].name + '</a>';
-        row.insertCell(1).innerHTML = waitingPrints[i].estimatedPrintTime + ' minuten';
+        row.insertCell(1).innerHTML = waitingPrints[i].estimatedPrintTime + ' minutes';
         row.insertCell(2).innerHTML = '<a href="#" onClick="alert(\'Sorry dit is nog niet mogelijk\')">voorang</a>';
     }
 }

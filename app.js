@@ -15,6 +15,7 @@ var http            = require("http"),
     gitRev          = require("git-rev");
 
 var logger = require('./app/logger');
+var lang = require('./app/lang');
 
 // loading Auth system and settings
 var settings = require("./config/settings");
@@ -27,6 +28,7 @@ var server = http.createServer(router);
     router.use(compression());
     router.set('view engine', 'ejs');
     router.set('views', __dirname + '/views');
+    router.use(lang);
     router.use('/static', express.static(__dirname + '/public'));
     router.use(ejsLayouts);
     router.locals.trackingcode = settings.googleAnalytics;
@@ -63,7 +65,7 @@ var server = http.createServer(router);
     router.use(passport.session());
 
 router.use(function (err, req, res, next) {
-    res.status(500).render('error/500');
+    res.status(500).render('error/500', {error: err});
 });
 
 // defining routes
