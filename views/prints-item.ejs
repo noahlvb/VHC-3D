@@ -1,6 +1,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r68/three.min.js"></script>
 <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/controls/TrackballControls.js"></script>
 
+<style type="text/css">
+
+    .popover {
+        width: 300px;
+    }
+
+</style>
+
 <div class="row">
     <div class="col-md-3">
         <h3><%= __('PRINTITEM_infoName')%> <%= print.name %></h3>
@@ -91,23 +99,43 @@
                 </tr>
                 <tr>
                     <th><label>Layer Height:</label></th>
-                    <th><input name="P_layerHeight" type="number" step="any" min="0" value="<%= print.P_layerHeight %>"></input></th>
+                    <th><input name="P_layerHeight" type="number" step="any" min="0" value="<%= print.P_layerHeight %>">
+                        <span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true" title="Layer Height" data-toggle="popover" data-placement="right"
+                            data-content="<%= __('CURAPOPOVER_layerHeight')%>">
+                        </span>
+                    </input></th>
                 </tr>
                 <tr>
                     <th><label>Shell Thickness:</label></th>
-                    <th><input name="P_shellThickness" type="number" step="any" min="0" value="<%= print.P_shellThickness %>"></input></th>
+                    <th><input name="P_shellThickness" type="number" step="any" min="0" value="<%= print.P_shellThickness %>">
+                        <span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true" title="Shell Thickness" data-toggle="popover" data-placement="right"
+                            data-content="<%= __('CURAPOPOVER_shellThickness')%>">
+                        </span>
+                    </input></th>
                 </tr>
                 <tr>
                     <th><label>Bottom / Top Thickness:</label></th>
-                    <th><input name="P_bottomTopThickness" type="number" step="any" min="0" value="<%= print.P_bottomTopThickness %>"></input></th>
+                    <th><input name="P_bottomTopThickness" type="number" step="any" min="0" value="<%= print.P_bottomTopThickness %>">
+                        <span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true" title="Bottom Top Thickness" data-toggle="popover" data-placement="right"
+                            data-content="<%= __('CURAPOPOVER_bottumTopThickness')%>">
+                        </span>
+                    </input></th>
                 </tr>
                 <tr>
                     <th><label>Fill Density:</label></th>
-                    <th><input name="P_fillDensity" type="number" step="any" min="0" value="<%= print.P_fillDensity %>"></input></th>
+                    <th><input name="P_fillDensity" type="number" step="any" min="0" value="<%= print.P_fillDensity %>">
+                        <span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true" title="Fill density" data-toggle="popover" data-placement="right"
+                            data-content="<%= __('CURAPOPOVER_fillDensity')%>">
+                        </span>
+                    </input></th>
                 </tr>
                 <tr>
                     <th><label>Print Speed:</label></th>
-                    <th><input name="P_printSpeed" type="number" step="any" min="0" value="<%= print.P_printSpeed %>"></input></th>
+                    <th><input name="P_printSpeed" type="number" step="any" min="0" value="<%= print.P_printSpeed %>">
+                        <span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true" title="Print speed" data-toggle="popover" data-placement="right"
+                            data-content="<%= __('CURAPOPOVER_printSpeed')%>">
+                        </span>
+                    </input></th>
                 </tr>
                 <tr>
                     <th><label>Support Type:</label></th>
@@ -115,7 +143,11 @@
                         <option value="0" <%if (print.P_support == 0) { %> selected <% } %> >None</option>
                         <option value="1" <%if (print.P_support == 1) { %> selected <% } %> >Touching Buildplate</option>
                         <option value="2" <%if (print.P_support == 2) { %> selected <% } %> >Everywhere</option>
-                    </select></th>
+                    </select>
+                    <span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true" title="Support Type" data-toggle="popover" data-placement="right"
+                        data-content="<%= __('CURAPOPOVER_supportType')%>">
+                    </span>
+                    </th>
                 </tr>
                 <tr>
                     <th><label>Platform Adhesion Type:</label></th>
@@ -168,6 +200,8 @@
         $('#blackOverlay').css('display', 'block');
         $('#waitForSliceWindow').css('display', 'block');
     });
+
+    $("[data-toggle=popover]").popover({ trigger: "hover" });
 
 </script>
 

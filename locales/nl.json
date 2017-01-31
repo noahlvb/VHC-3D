@@ -91,6 +91,14 @@
     "PRINTSADD_popup": "Verwerken",
     "PRINTSADD_popupInfo": "Je project wordt momenteel verwerkt. Een moment geduld alstublieft.",
 
+    "CURAPOPOVER_profile": "Dit zijn van te voren gemaakten profielen om snel instellingen te kiezen",
+    "CURAPOPOVER_layerHeight": "De Layer Height geeft aan hoe dik in Milimeter de onderste en bovenste lagen gaan zijn. Een lagere Layer Height geeft meer precieze maar duurt ook langer en is duurder.",
+    "CURAPOPOVER_shellThickness": "De Shell Thickness geeft aan in Milimeters hoe dik de banden van een print opdracht zijn. Dikkere wanden zijn sterker maar kost ook meer materiaal en duurt langer.",
+    "CURAPOPOVER_bottumTopThickness": "De Bottom Top Thickness geeft aan hoe dik de bovenste en onderste laag gaan zijn. Afhankelijk van hoe vaak Layer height in de Bottom Top Thickness past wordt bepaalt hoeveel lagen er zijn aan de onderkant en boven kan van een printje.",
+    "CURAPOPOVER_fillDensity": "De Fill density is het percentage waarmee een object wordt opgevuld. Hogere Fill density is sterker maar kost ook meer materiaal en duurt langer.",
+    "CURAPOPOVER_printSpeed": "Dit is de snelheid waarmee een printer te werk gaat in Miliseconden. Een hogere snelheid betekend een kortere print opdracht maar ook minder precieze.",
+    "CURAPOPOVER_supportType": "Dit geeft aan wat voor ondersteuning er wordt gebouwd voor de print opdracht zo dat je bijvoorbeeld hoeken kan maken van groter dan 45 graden. Touching Buildplate: Bouw een ondersteuning onder het object maar niet useen het object zelf. Everywhere: Overal waar ondersteuning nodig is wordt er ondersteuning gebouwd.",
+
     "PRINTSARCHIVE_title": "Gearchiveerde projecten",
     "PRINTSARCHIVE_tableName": "Naam",
     "PRINTSARCHIVE_tableStatus": "Status",
