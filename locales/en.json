@@ -110,7 +110,7 @@
     "PRINTSARCHIVE_tableStatusDone": "Finished",
     "PRINTSARCHIVE_tableCopy": "Copying",
 
-    "PRINTITEM_infoName": "Print command:",
+    "PRINTITEM_infoName": "Print task:",
     "PRINTITEM_infoTime": "Print time:",
     "PRINTITEM_infoMaterial": "Material kosts:",
     "PRINTITEM_infoOwner": " Uploaded by:",

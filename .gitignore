@@ -3,3 +3,4 @@ logs/
 config/*.js
 config/*.json
 files/
+env.list
